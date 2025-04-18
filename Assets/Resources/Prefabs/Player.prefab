@@ -624,6 +624,7 @@ GameObject:
   - component: {fileID: 7619986885949155309}
   - component: {fileID: 2475006043002231543}
   - component: {fileID: 758935912782048041}
+  - component: {fileID: -2883122976757897399}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -662,8 +663,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2157236533421577500}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: e7adda870136f9040b82aaa84394d7e7, type: 3}
-  m_Controller: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: ac331b525a4577e46aa9942c1016219d, type: 3}
+  m_Controller: {fileID: 9100000, guid: f993c53d673074c428a687706424d030, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -723,8 +724,20 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &-2883122976757897399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2157236533421577500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b577c7692eff7dd45a9bafb885132e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2157525560745961597
 GameObject:
   m_ObjectHideFlags: 0
