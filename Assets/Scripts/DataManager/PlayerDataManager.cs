@@ -6,6 +6,7 @@ public struct PlayerData
     public int Key;
     public string Name;
     public int Level;
+    public float Exp;
     public float Hp;
     public int HpGold;
     public float AttackPowerRate;
@@ -23,6 +24,13 @@ public class PlayerDataManager : Singleton<PlayerDataManager>
     private void Awake()
     {
         LoadPlayerData();
+    }
+
+    public float GetPlayerTotalExpToLevel(int level)
+    {
+        PlayerData totalExp = _playerDatas[level];
+
+        return totalExp.Exp;
     }
 
     public PlayerData GetPlayerDataByStatLevel(int hpLevel, int attackLevel, int attackSpeedLevel, int speedLevel)
@@ -70,14 +78,15 @@ public class PlayerDataManager : Singleton<PlayerDataManager>
             data.Key = int.Parse(colData[0]);
             data.Name = colData[1];
             data.Level = int.Parse(colData[2]);
-            data.Hp = float.Parse(colData[3]);
-            data.HpGold = int.Parse(colData[4]);
-            data.AttackPowerRate = float.Parse(colData[5]);
-            data.AttackPowerGold = int.Parse(colData[6]); 
-            data.AttackSpeedRate = float.Parse(colData[7]);
-            data.AttackSpeedGold = int.Parse(colData[8]);
-            data.Speed = float.Parse(colData[9]);
-            data.SpeedGold = int.Parse(colData[10]);
+            data.Exp = float.Parse(colData[3]);
+            data.Hp = float.Parse(colData[4]);
+            data.HpGold = int.Parse(colData[5]);
+            data.AttackPowerRate = float.Parse(colData[6]);
+            data.AttackPowerGold = int.Parse(colData[7]); 
+            data.AttackSpeedRate = float.Parse(colData[8]);
+            data.AttackSpeedGold = int.Parse(colData[9]);
+            data.Speed = float.Parse(colData[10]);
+            data.SpeedGold = int.Parse(colData[11]);
 
             _playerDatas.Add(data.Key, data);
         }

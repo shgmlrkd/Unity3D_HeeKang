@@ -17,7 +17,7 @@ public class Skeleton : Monster
     private void Awake()
     {
         _skeletonHpBarPrefab = Resources.Load<GameObject>("Prefabs/MonsterUI/MonsterHpBar");
-        _skeletonHpBarOffset = new Vector3(0.0f, 2.5f, 0.0f);
+        _skeletonHpBarOffset = new Vector3(0.0f, 1.5f, 0.0f);
     }
 
     protected new void Start()

@@ -41,7 +41,7 @@ public class PlayerHpBar : Player
                 _curHp = 0;
             }
 
-            _playerHpBarText.text = $"{_curHp.ToString() + "/" + _maxHp.ToString()}";
+            _playerHpBarText.text = $"{_curHp.ToString() + " / " + _maxHp.ToString()}";
         }
     }
 

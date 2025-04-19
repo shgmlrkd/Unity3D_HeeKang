@@ -4,6 +4,8 @@ public class Player : MonoBehaviour
 {
     protected PlayerData _playerData;
 
+    protected float _maxExp;
+    protected float _curExp = 0.0f;
     protected float _maxHp;
     protected float _curHp;
     protected float _speed;
@@ -15,6 +17,7 @@ public class Player : MonoBehaviour
     protected int _attackPowerGold;
     protected int _attackSpeedGold;
 
+    protected int _expLevel = 1;
     protected int _hpLevel = 1;
     protected int _attackPowerLevel = 1;
     protected int _attackSpeedLevel = 1;
@@ -23,6 +26,7 @@ public class Player : MonoBehaviour
     protected virtual void Start()
     {
         _playerData = PlayerDataManager.Instance.GetPlayerDataByStatLevel(_hpLevel, _attackPowerLevel, _attackSpeedLevel, _speedLevel);
+        _maxExp = PlayerDataManager.Instance.GetPlayerTotalExpToLevel(_expLevel);
         SetPlayerData();
     }
 
