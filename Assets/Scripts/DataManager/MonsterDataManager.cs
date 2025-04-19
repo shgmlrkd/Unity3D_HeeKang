@@ -5,32 +5,28 @@ public struct MonsterData
 {
     public int Key;
     public string Name;
-    public string Type;
+    public int Type;
     public float Hp;
-    public float MoveSpeed;
-    public int AttackPower;
-    public float AttackInterval;
-    public int Distance;
-    public int LifeTime;
-    public int PlayerLevel;
-    public float SpawnInterval;
     public int Exp;
+    public float MoveSpeed;
+    public float RotateSpeed;
+    public float AttackPower;
+    public float AttackInterval;
+    public float AttackDistance;
+    public float LifeTime;
+    public float SpawnInterval;
+    public float SpawnStartTime;
+    public float SpawnEndTime;
+    public float StatScaleFactor;
 }
 
-public class MonsterDataManager : MonoBehaviour
+public class MonsterDataManager : Singleton<MonsterDataManager>
 {
-    private static MonsterDataManager _instance;
-
-    public static MonsterDataManager Instance
-    {
-        get { return _instance; }
-    }
-
     private Dictionary<int, MonsterData> _monsterDatas = new Dictionary<int, MonsterData>();
+    private Dictionary<string, float> _monsterSpawnIntervalDatas = new Dictionary<string, float>();
+
     private void Awake()
     {
-        _instance = this;
-
         LoadMonsterData();
     }
 
@@ -39,9 +35,14 @@ public class MonsterDataManager : MonoBehaviour
         return _monsterDatas[key];
     }
 
+    public float GetMonsterSpawnIntervalData(string monsterName)
+    {
+        return _monsterSpawnIntervalDatas[monsterName];
+    }
+
     private void LoadMonsterData()
     {
-        TextAsset textAsset = Resources.Load<TextAsset>("GameDataFolder/MonsterTable");
+        TextAsset textAsset = Resources.Load<TextAsset>("TableData/MonsterDataTable");
 
         string[] rowData = textAsset.text.Split("\r\n");
 
@@ -53,20 +54,25 @@ public class MonsterDataManager : MonoBehaviour
                 return;
 
             MonsterData data;
+
             data.Key = int.Parse(colData[0]);
             data.Name = colData[1];
-            data.Type = colData[2];
+            data.Type = int.Parse(colData[2]);
             data.Hp = float.Parse(colData[3]);
-            data.MoveSpeed = float.Parse(colData[4]);
-            data.AttackPower = int.Parse(colData[5]);
-            data.AttackInterval = float.Parse(colData[6]);
-            data.Distance = int.Parse(colData[7]);
-            data.LifeTime = int.Parse(colData[8]);
-            data.PlayerLevel = int.Parse(colData[9]);
-            data.SpawnInterval = float.Parse(colData[10]);
-            data.Exp = int.Parse(colData[11]);
+            data.Exp = int.Parse(colData[4]);
+            data.MoveSpeed = float.Parse(colData[5]);
+            data.RotateSpeed = float.Parse(colData[6]);
+            data.AttackPower = float.Parse(colData[7]);
+            data.AttackInterval = float.Parse(colData[8]);
+            data.AttackDistance = float.Parse(colData[9]);
+            data.LifeTime = float.Parse(colData[10]);
+            data.SpawnInterval = float.Parse(colData[11]);
+            data.SpawnStartTime = float.Parse(colData[12]);
+            data.SpawnEndTime = float.Parse(colData[13]);
+            data.StatScaleFactor = float.Parse(colData[14]);
 
             _monsterDatas.Add(data.Key, data);
+            _monsterSpawnIntervalDatas.Add(data.Name, data.SpawnInterval);
         }
     }
 }

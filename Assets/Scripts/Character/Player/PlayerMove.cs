@@ -1,17 +1,16 @@
 using UnityEngine;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : Player
 {
     private Animator _playerAnim;
 
-    private float _playerMoveSpeed = 6.0f;
     private float _playerRotateSpeed = 12.0f;
     private bool _isRunning = false;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         _playerAnim = GetComponent<Animator>();
-        //_playerMoveSpeed = PlayerDataManager.Instance.GetPlayerData(1).Speed;
     }
 
     void Update()
@@ -26,7 +25,7 @@ public class PlayerMove : MonoBehaviour
         if (inputDir.sqrMagnitude > 0)
         {
             _isRunning = true;
-            transform.Translate(inputDir.normalized * _playerMoveSpeed * Time.deltaTime, Space.World);
+            transform.Translate(inputDir.normalized * _speed * Time.deltaTime, Space.World);
 
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(inputDir), Time.deltaTime * _playerRotateSpeed);
         }
@@ -36,10 +35,5 @@ public class PlayerMove : MonoBehaviour
         }
 
         _playerAnim.SetBool("IsRunning", _isRunning);
-    }
-
-    public void PlayerSpeedUp(int level)
-    {
-        _playerMoveSpeed = PlayerDataManager.Instance.GetPlayerData(level).Speed;
     }
 }

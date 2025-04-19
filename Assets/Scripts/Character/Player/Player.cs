@@ -1,0 +1,49 @@
+using UnityEngine;
+
+public class Player : MonoBehaviour
+{
+    protected PlayerData _playerData;
+
+    protected float _maxHp;
+    protected float _curHp;
+    protected float _speed;
+    protected float _attackPowerRate;
+    protected float _attackSpeedRate;
+
+    protected int _hpGold;
+    protected int _speedGold;
+    protected int _attackPowerGold;
+    protected int _attackSpeedGold;
+
+    protected int _hpLevel = 1;
+    protected int _attackPowerLevel = 1;
+    protected int _attackSpeedLevel = 1;
+    protected int _speedLevel = 1;
+
+    protected virtual void Start()
+    {
+        _playerData = PlayerDataManager.Instance.GetPlayerDataByStatLevel(_hpLevel, _attackPowerLevel, _attackSpeedLevel, _speedLevel);
+        SetPlayerData();
+    }
+
+    protected void SetPlayerData()
+    {
+        // 플레이어 스탯
+        _maxHp = _playerData.Hp;
+        _curHp = _maxHp;
+        _speed = _playerData.Speed;
+        _attackPowerRate = _playerData.AttackPowerRate;
+        _attackSpeedRate = _playerData.AttackSpeedRate;
+
+        // 강화 할 때 필요한 골드
+        _hpGold = _playerData.HpGold;
+        _speedGold = _playerData.SpeedGold;
+        _attackPowerGold = _playerData.AttackPowerGold;
+        _attackSpeedGold = _playerData.AttackSpeedGold;
+    }
+
+    protected void LevelUp()
+    {
+
+    }
+}

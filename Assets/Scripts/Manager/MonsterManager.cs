@@ -9,7 +9,7 @@ public class MonsterManager : Singleton<MonsterManager>
     private LayerMask _groundLayer;
 
     private float _offset = 0.2f;
-    //private float _spawnInterval;
+    private float _spawnInterval;
 
     private enum ScreenSide
     {
@@ -32,7 +32,7 @@ public class MonsterManager : Singleton<MonsterManager>
         while (true)
         {
             SpawnMonster();
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(_spawnInterval);
         }
     }
 
@@ -66,7 +66,7 @@ public class MonsterManager : Singleton<MonsterManager>
         GameObject monsterPrefab = Resources.Load<GameObject>($"Prefabs/Monster/{monsterName}");
         PoolingManager.Instance.Add(monsterName, poolSize, monsterPrefab, transform);
         _monsterPool = PoolingManager.Instance.GetObjects(monsterName);
-        //_spawnInterval = 
+        _spawnInterval = MonsterDataManager.Instance.GetMonsterSpawnIntervalData(monsterName);
     }
 
     Vector3 GetRandomOffscreenWorldPos()

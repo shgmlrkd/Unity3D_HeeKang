@@ -17,20 +17,12 @@ public struct WeaponData
     public float LifeTime;
 }
 
-public class WeaponDataManager : MonoBehaviour
+public class WeaponDataManager : Singleton<WeaponDataManager>
 {
-    private static WeaponDataManager _instance;
-
-    public static WeaponDataManager Instance
-    {
-        get { return _instance; }
-    }
-
     private Dictionary<int, WeaponData> _weaponDatas = new Dictionary<int, WeaponData>();
+
     private void Awake()
     {
-        _instance = this;
-
         LoadWeaponData();
     }
 
@@ -41,7 +33,7 @@ public class WeaponDataManager : MonoBehaviour
 
     private void LoadWeaponData()
     {
-        TextAsset textAsset = Resources.Load<TextAsset>("GameDataFolder/WeaponDataTable");
+        TextAsset textAsset = Resources.Load<TextAsset>("TableData/WeaponDataTable");
 
         string[] rowData = textAsset.text.Split("\r\n");
 

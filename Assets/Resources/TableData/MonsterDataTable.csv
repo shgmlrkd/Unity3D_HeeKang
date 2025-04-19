@@ -1,0 +1,5 @@
+Key,Name,Type,Hp,Exp,MoveSpeed,RotateSpeed,AttackPower,AttackInterval,AttackDistance,LifeTime,SpawnInterval,SpawnStartTime,SpawnEndTime,StatScaleFactor
+101,Skeleton,0,5,1,3,5,4,2.5,0,0,2,0,300,100
+102,Slime,0,5,1,3,5,4,2.5,0,0,2,0,300,100
+103,TurtleShell,0,5,1,3,5,4,2.5,0,0,2,0,300,100
+104,Lich,1,3,1,3,5,4,2.5,5,4,2,0,300,100

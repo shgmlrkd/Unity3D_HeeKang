@@ -1,64 +1,85 @@
 using System.Collections.Generic;
-//using System.Globalization;
 using UnityEngine;
+
 public struct PlayerData
 {
     public int Key;
+    public string Name;
     public int Level;
+    public float Hp;
+    public int HpGold;
+    public float AttackPowerRate;
+    public int AttackPowerGold;
+    public float AttackSpeedRate;
+    public int AttackSpeedGold;
     public float Speed;
-    public float Experience;
-    public int Hp;
+    public int SpeedGold;
 }
 
-public class PlayerDataManager : MonoBehaviour
+public class PlayerDataManager : Singleton<PlayerDataManager>
 {
-    public static PlayerDataManager Instance { get; private set; }
-    private Dictionary<int, PlayerData> _playerDataDict = new Dictionary<int, PlayerData>();
-    public PlayerData GetPlayerData(int key)
-    {
-        return _playerDataDict[key];
-    }
+    private Dictionary<int, PlayerData> _playerDatas = new Dictionary<int, PlayerData>();
+
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        LoadCSV();
+        LoadPlayerData();
     }
-    private void LoadCSV()
-    {
-        TextAsset csvFile = Resources.Load<TextAsset>("GameDataFolder/PlayerData");
-        if (csvFile == null)
-        {
-            Debug.LogError("PlayerData.csv not found in Resources folder.");
-            return;
-        }
 
-        string[] lines = csvFile.text.Split("\r\n");
-        for (int i = 1; i < lines.Length; i++)
+    public PlayerData GetPlayerDataByStatLevel(int hpLevel, int attackLevel, int attackSpeedLevel, int speedLevel)
+    {
+        PlayerData result = new PlayerData();
+
+        PlayerData hpData = _playerDatas[hpLevel];
+        PlayerData attackData = _playerDatas[attackLevel];
+        PlayerData attackSpeedData = _playerDatas[attackSpeedLevel];
+        PlayerData speedData = _playerDatas[speedLevel];
+
+        result.Hp = hpData.Hp;
+        result.HpGold = hpData.HpGold;
+
+        result.AttackPowerRate = attackData.AttackPowerRate;
+        result.AttackPowerGold = attackData.AttackPowerGold;
+
+        result.AttackSpeedRate = attackSpeedData.AttackSpeedRate;
+        result.AttackSpeedGold = attackSpeedData.AttackSpeedGold;
+
+        result.Speed = speedData.Speed;
+        result.SpeedGold = speedData.SpeedGold;
+
+        return result;
+    }
+
+    private void LoadPlayerData()
+    {
+        TextAsset textAsset = Resources.Load<TextAsset>("TableData/PlayerDataTable");
+
+        string[] rowData = textAsset.text.Split("\r\n");
+
+        for (int i = 1; i < rowData.Length; i++)
         {
-            string line = lines[i].Trim();
-            if (string.IsNullOrEmpty(line))
+            if (string.IsNullOrWhiteSpace(rowData[i]))
                 continue;
 
-            string[] values = line.Split(',');
+            string[] colData = rowData[i].Split(",");
 
-            PlayerData data = new PlayerData
-            {
-                Key = int.Parse(values[0]),
-                Level = int.Parse(values[1]),
-                Speed = float.Parse(values[2]),
-                Experience = float.Parse(values[3]),
-                Hp = int.Parse(values[4])
-            };
+            if (colData.Length <= 1)
+                return;
 
-            _playerDataDict[data.Level] = data;
+            PlayerData data;
+
+            data.Key = int.Parse(colData[0]);
+            data.Name = colData[1];
+            data.Level = int.Parse(colData[2]);
+            data.Hp = float.Parse(colData[3]);
+            data.HpGold = int.Parse(colData[4]);
+            data.AttackPowerRate = float.Parse(colData[5]);
+            data.AttackPowerGold = int.Parse(colData[6]); 
+            data.AttackSpeedRate = float.Parse(colData[7]);
+            data.AttackSpeedGold = int.Parse(colData[8]);
+            data.Speed = float.Parse(colData[9]);
+            data.SpeedGold = int.Parse(colData[10]);
+
+            _playerDatas.Add(data.Key, data);
         }
-        Debug.Log($"Loaded {_playerDataDict.Count} player data entries.");
     }
 }
