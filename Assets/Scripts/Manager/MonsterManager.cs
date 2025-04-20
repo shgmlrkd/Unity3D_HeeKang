@@ -8,7 +8,7 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private LayerMask _groundLayer;
 
-    private float _offset = 0.2f;
+    private float _offset = 0.15f;
     private float _spawnInterval;
 
     private enum ScreenSide
