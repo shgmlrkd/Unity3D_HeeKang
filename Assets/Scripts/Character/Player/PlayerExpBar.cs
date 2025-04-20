@@ -13,7 +13,7 @@ public class PlayerExpBar : Player
         PlayerExpBar, PlayerExpBarText = 4
     }
 
-    protected override void Start()
+    private void Start()
     {
         base.Start();
         _playerExpBar = GameObject.Find("PlayerExpBar").GetComponentsInChildren<Transform>();

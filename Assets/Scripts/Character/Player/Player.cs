@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     protected int _attackSpeedLevel = 1;
     protected int _speedLevel = 1;
 
-    protected virtual void Start()
+    protected void Start()
     {
         _playerData = PlayerDataManager.Instance.GetPlayerDataByStatLevel(_hpLevel, _attackPowerLevel, _attackSpeedLevel, _speedLevel);
         _maxExp = PlayerDataManager.Instance.GetPlayerTotalExpToLevel(_expLevel);

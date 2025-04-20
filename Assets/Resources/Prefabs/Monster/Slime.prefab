@@ -203,7 +203,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4139641228497306034}
   - component: {fileID: 635331877768772137}
-  - component: {fileID: 2743125499745465914}
+  - component: {fileID: -4579694637289334352}
   - component: {fileID: 4306551072692123329}
   m_Layer: 6
   m_Name: Slime
@@ -251,8 +251,8 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!135 &2743125499745465914
-SphereCollider:
+--- !u!136 &-4579694637289334352
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -269,9 +269,11 @@ SphereCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.62
-  m_Center: {x: 0, y: 0.36, z: 0}
+  serializedVersion: 2
+  m_Radius: 0.7
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!54 &4306551072692123329
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class PlayerGetDamage : Player
     private float _flashOnTimer = 0.0f;
     private bool _getDamaged = false;
 
-    protected new void Start()
+    private void Start()
     {
         _playerHpBar = GetComponent<PlayerHpBar>();
         _playerMaterials = GetComponentsInChildren<Renderer>();
@@ -25,12 +25,12 @@ public class PlayerGetDamage : Player
             {
                 _flashOnTimer -= _colorFlashTime;
                 _getDamaged = false;
-                RestoreOriginalColor();
+                ResetOriginalColor();
             }
         }
     }
 
-    private void RestoreOriginalColor()
+    private void ResetOriginalColor()
     {
         // 플레이어 모델 색상 원래대로 복구
         foreach (Renderer playerMaterial in _playerMaterials)

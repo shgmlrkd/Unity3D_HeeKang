@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Monster
+  - Weapon
   layers:
   - Default
   - TransparentFX

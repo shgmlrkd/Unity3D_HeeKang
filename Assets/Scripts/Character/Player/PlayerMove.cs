@@ -7,7 +7,7 @@ public class PlayerMove : Player
     private float _playerRotateSpeed = 12.0f;
     private bool _isRunning = false;
 
-    protected override void Start()
+    private void Start()
     {
         base.Start();
         _playerAnim = GetComponent<Animator>();

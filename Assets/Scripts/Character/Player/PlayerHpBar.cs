@@ -13,7 +13,7 @@ public class PlayerHpBar : Player
         PlayerHpBar, PlayerHpBarText = 4
     }
 
-    protected override void Start()
+    private void Start()
     {
         base.Start();
         _playerHpBar = GameObject.Find("PlayerHpBar").GetComponentsInChildren<Transform>();

@@ -7,8 +7,15 @@ public class Ground : MonoBehaviour
 
     private Vector3 _groundDir;
     private Vector3 _groundSize;
-    
+    public Vector3 GroundSize
+    {
+        get { return _groundSize; }
+    }
+
+    private Vector3 _groundMoveOffset;
+
     private float _offset = 0.5f;
+    private int _movementScale = 2;
 
     void Start()
     {
@@ -86,7 +93,7 @@ public class Ground : MonoBehaviour
         }
 
         // 원래 사이즈의 2배 이동해야 반대 방향으로 감
-        Vector3 moveOffset = Vector3.Scale(_groundDir, _groundSize) * 2;
-        transform.position += moveOffset;
+        _groundMoveOffset = Vector3.Scale(_groundDir, _groundSize) * _movementScale;
+        transform.position += _groundMoveOffset;
     }
 }

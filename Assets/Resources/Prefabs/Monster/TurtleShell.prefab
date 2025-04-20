@@ -159,11 +159,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3512382314623983595}
   - component: {fileID: 4204180201864991173}
-  - component: {fileID: 8319272424035197731}
+  - component: {fileID: 9117793635946515028}
   - component: {fileID: 3202463437933020261}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TurtleShell
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -207,8 +207,8 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!135 &8319272424035197731
-SphereCollider:
+--- !u!136 &9117793635946515028
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -225,9 +225,11 @@ SphereCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.8
-  m_Center: {x: 0, y: 0.37, z: 0}
+  serializedVersion: 2
+  m_Radius: 0.75
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!54 &3202463437933020261
 Rigidbody:
   m_ObjectHideFlags: 0
