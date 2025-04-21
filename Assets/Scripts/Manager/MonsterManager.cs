@@ -39,6 +39,7 @@ public class MonsterManager : Singleton<MonsterManager>
     private void SpawnMonster()
     {
         Vector3 spawnPos = GetRandomOffscreenWorldPos();
+        spawnPos.y = 0.0f;
 
         for (int i = 0; i < _monsterPool.Count; i++)
         {

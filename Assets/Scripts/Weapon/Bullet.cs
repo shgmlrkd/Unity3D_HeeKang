@@ -25,7 +25,6 @@ public class Bullet : ThrowWeapon
     {
         if (other.CompareTag("Monster"))
         {
-            base.OnTriggerEnter(other);
             gameObject.SetActive(false);
         }
     }
