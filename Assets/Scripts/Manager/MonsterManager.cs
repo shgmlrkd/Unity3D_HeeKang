@@ -104,7 +104,7 @@ public class MonsterManager : Singleton<MonsterManager>
         // 몬스터 풀을 돌려서 활성화 된 애들 중 가장 가까운거 찾기
         foreach (GameObject monster in _monsterPool)
         {
-            if (!monster.activeSelf) continue;
+            if (!monster.gameObject.GetComponent<Collider>().enabled) continue;
 
             // 플레이어와 몬스터의 거리 구하기
             float dist = Vector3.Distance(pos, monster.transform.position);

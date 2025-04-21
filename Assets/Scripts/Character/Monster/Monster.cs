@@ -19,6 +19,7 @@ public class Monster : MonoBehaviour
     protected Vector3 _moveOffset;
     protected Vector3 _monsterHpBarOffset;
     protected MonsterData _monsterData;
+    protected AnimatorStateInfo _monsterAnimStateInfo;
 
     protected float _maxHp;
     protected float _curHp;
@@ -57,6 +58,11 @@ public class Monster : MonoBehaviour
     private bool _isFadeOut = false;
     private bool _isHpBarVisible = false;
     private bool _isStatSettingEnd = false;
+
+    protected void Awake()
+    {
+        _monsterHpBarPrefab = Resources.Load<GameObject>("Prefabs/MonsterUI/MonsterHpBar");
+    }
 
     protected void Start()
     {
@@ -125,7 +131,12 @@ public class Monster : MonoBehaviour
 
     protected void Update()
     {
+        // 체력바 위치는 항상 갱신
+        ShowHpBar();
+        // 체력바 페이드 아웃 연출
         FadeOutMonsterHpBar();
+        // 플레이어와 거리가 너무 멀면 반대편으로 보내기
+        Reposition();
     }
 
     // 몬스터 데이터 세팅
@@ -155,6 +166,72 @@ public class Monster : MonoBehaviour
         _isStatSettingEnd = true;
     }
 
+    protected void Reposition()
+    {
+        Vector3 playerPos = _player.transform.position;
+        Vector3 skeletonPos = transform.position;
+        // 플레이어와의 거리
+        float distance = Vector3.Distance(playerPos, skeletonPos);
+        // 플레이어로 향하는 방향
+        Vector3 dir = (_player.transform.position - transform.position).normalized;
+        dir.y = 0.0f;
+
+        // 거리가 기준치 이상 차이나면
+        if (distance >= _distanceThreshold)
+        {
+            // 반대 방향으로 이동
+            transform.position += Vector3.Scale(dir, _moveOffset);
+        }
+    }
+    
+    // 콜라이더가 꺼지면 공격 불가능
+    protected void StopAttack()
+    {
+        if (!_monsterCollider.enabled)
+        {
+            _isAttackAble = false;
+            _attackTimer = 0.0f;
+        }
+    }
+
+    // 체력 상태 갱신해서 보여주기
+    protected void ShowHpBar()
+    {
+        Vector3 worldPos = transform.position + _monsterHpBarOffset;
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+
+        if (screenPos.z > 0)
+        {
+            _monsterHpBarSlider.transform.position = screenPos;
+            _monsterHpBarSlider.value = _curHp / _maxHp;
+        }
+    }
+
+    protected void Move()
+    {
+        // 플레이어 방향으로 이동, 회전
+        Vector3 direction = (_player.position - transform.position).normalized;
+        direction.y = 0;
+
+        if (direction.sqrMagnitude > 0)
+        {
+            transform.Translate(direction * _speed * Time.deltaTime, Space.World);
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * _rotSpeed);
+        }
+    }
+
+    private bool HasParameter(Animator animator, string paramName)
+    {
+        // 파라미터에 매개변수로 들어온 paramName이 있는지 확인
+        foreach (AnimatorControllerParameter param in animator.parameters)
+        {
+            if (param.name == paramName)
+                return true;
+        }
+        return false;
+    }
+
     private void MonsterGetDamage(float damage)
     {
         // 피격
@@ -170,9 +247,13 @@ public class Monster : MonoBehaviour
             _monsterAnimator.SetTrigger("Dead");
         }
         else
-        {   
-            // 맞는 애니메이션
-            _monsterAnimator.SetTrigger("Hit");
+        {
+            // Hit이라는 파라미터가 애니메이션에 있는지 체크
+            if (HasParameter(_monsterAnimator, "Hit"))
+            {
+                // 맞는 애니메이션
+                _monsterAnimator.SetTrigger("Hit");
+            }
         }
     }
 

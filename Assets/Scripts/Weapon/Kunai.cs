@@ -29,8 +29,6 @@ public class Kunai : ThrowWeapon
     {
         if(other.CompareTag("Monster"))
         {
-            base.OnTriggerEnter(other);
-
             if ( _pierce == _weaponPierce)
             {
                 gameObject.SetActive(false);
