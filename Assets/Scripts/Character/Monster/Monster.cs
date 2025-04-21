@@ -12,6 +12,7 @@ public class Monster : MonoBehaviour
     protected Animator _monsterAnimator;
     protected Collider _monsterCollider;
 
+    private GameObject _inGameTimer;
     private Transform _groundParent;
     private Image[] _monsterHpBarImages;
 
@@ -27,9 +28,9 @@ public class Monster : MonoBehaviour
     protected float _attackInterval;
     protected float _attackDistance;
     protected float _lifeTime;
-    protected float _spawnInterval;
-    protected float _spawnStartTime;
-    protected float _spawnEndTime;
+    protected float _spawnInterval = float.MinValue;
+    protected float _spawnStartTime = float.MinValue;
+    protected float _spawnEndTime = float.MinValue;
     protected float _stateScaleFactor;
 
     protected float _attackTimer = 0.0f;
@@ -40,6 +41,9 @@ public class Monster : MonoBehaviour
     private readonly float _hpBarVisibleDuration = 2.0f;
     private readonly float _minAlphaValue = 0.05f;
 
+    private float _inGameTime;
+    private float _baseHp;
+    private float _baseAtk;
     private float _hpBarAlphaValue = 1.0f;
     private float _hpBarVisibleTimer = 0.0f;
 
@@ -50,8 +54,9 @@ public class Monster : MonoBehaviour
 
     protected bool _isAttackAble = false;
 
-    private bool _isHpBarVisible = false;
     private bool _isFadeOut = false;
+    private bool _isHpBarVisible = false;
+    private bool _isStatSettingEnd = false;
 
     protected void Start()
     {
@@ -66,8 +71,12 @@ public class Monster : MonoBehaviour
         _monsterHpBarSlider = _monsterHpBar.GetComponent<Slider>();
         _monsterHpBarSlider.gameObject.SetActive(false);
 
+        // 체력바 이미지들 받아오기
         _monsterHpBarImages = _monsterHpBar.GetComponentsInChildren<Image>();
         SetMonsterHpBarAlpha(_one);
+
+        // 인게임 시간을 가져오기 위해 InGamePlayTimer 오브젝트를 찾음
+        _inGameTimer = GameObject.Find("InGamePlayTimer");
 
         // 땅 한개만 찾으면 되기 때문에 빈 오브젝트인 GroundObjects를 찾음 (부모)
         _groundParent = GameObject.Find("GroundObjects").transform;
@@ -80,6 +89,19 @@ public class Monster : MonoBehaviour
 
     protected void OnEnable()
     {
+        // 몬스터의 세팅이 완료되었을 경우, HP와 ATK 갱신
+        if (_isStatSettingEnd)
+        {
+            // 인게임 시간 받아오기
+            _inGameTime = _inGameTimer.GetComponent<InGameTime>().InGameTimer;
+            // HP = 현재 HP × (1 + (게임 경과 시간 / 스케일 배율))
+            // ATKPW = 현재 공격력 × (1 + (게임 경과 시간 / 스케일 배율))
+            _maxHp = _baseHp * (_one + (_inGameTime / _stateScaleFactor));
+            _curHp = _maxHp;
+            _attackPower = _baseAtk * (_one + (_inGameTime / _stateScaleFactor));
+            print(_maxHp + " " + _attackPower);
+        }
+
         // 초기화
         _curHp = _maxHp;
         _hpBarVisibleTimer = 0.0f;
@@ -110,6 +132,7 @@ public class Monster : MonoBehaviour
     protected void SetMonsterData(MonsterData monsterData)
     {
         _maxHp = monsterData.Hp;
+        _baseHp = _maxHp;
         _curHp = _maxHp;
         _exp = monsterData.Exp;
         _type = monsterData.Type;
@@ -117,6 +140,7 @@ public class Monster : MonoBehaviour
         _rotSpeed = monsterData.RotateSpeed;
 
         _attackPower = monsterData.AttackPower;
+        _baseAtk = _attackPower;
         _attackInterval = monsterData.AttackInterval;
         _attackDistance = monsterData.AttackDistance;
 
@@ -127,6 +151,8 @@ public class Monster : MonoBehaviour
         _spawnEndTime = monsterData.SpawnEndTime;
 
         _stateScaleFactor = monsterData.StatScaleFactor;
+
+        _isStatSettingEnd = true;
     }
 
     private void MonsterGetDamage(float damage)
@@ -139,6 +165,8 @@ public class Monster : MonoBehaviour
         {
             _curHp = 0;
             _monsterCollider.enabled = false;
+            GameObject exp = PoolingManager.Instance.Pop("Exp");
+            exp.GetComponent<Exp>().SetExp(_exp, transform.position);
             _monsterAnimator.SetTrigger("Dead");
         }
         else

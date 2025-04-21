@@ -48,6 +48,8 @@ public class Player : MonoBehaviour
 
     protected void LevelUp()
     {
-
+        _expLevel++;
+        _maxExp = PlayerDataManager.Instance.GetPlayerTotalExpToLevel(_expLevel);
+        // 레벨업 했으니 스킬 3개 중 1개 선택하는거 구현 해야함
     }
 }

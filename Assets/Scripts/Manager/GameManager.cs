@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     {
         WeaponManager.Instance.CreateWeapons(_bulletPoolSize, "Bullet");
         MonsterManager.Instance.CreateMonsters(_monsterPoolSize, "Skeleton");
+        ItemManager.Instance.CreateItems(_monsterPoolSize, "Exp");
     }
 
     private void SpawnPlayer()

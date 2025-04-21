@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class InGameTimer : MonoBehaviour
+public class InGameTime : MonoBehaviour
 {
     private TextMeshProUGUI _timerText;
 
@@ -9,17 +9,17 @@ public class InGameTimer : MonoBehaviour
 
     private float _minute;
     private float _second;
-    private float _timer;
-    public float Timer
+    private float _inGameTimer;
+    public float InGameTimer
     {
-        get { return _timer; }
+        get { return _inGameTimer; }
     }
 
     private void Awake()
     {
         _minute = 0.0f;
         _second = 0.0f;
-        _timer = 0.0f;
+        _inGameTimer = 0.0f;
     }
 
     private void Start()
@@ -29,10 +29,10 @@ public class InGameTimer : MonoBehaviour
 
     private void Update()
     {
-        _timer += Time.deltaTime;
+        _inGameTimer += Time.deltaTime;
 
-        _minute = Mathf.FloorToInt(_timer / _oneMinute);
-        _second = Mathf.FloorToInt(_timer % _oneMinute);
+        _minute = Mathf.FloorToInt(_inGameTimer / _oneMinute);
+        _second = Mathf.FloorToInt(_inGameTimer % _oneMinute);
 
         _timerText.text = $"{_minute.ToString("00") + " : " + _second.ToString("00")}";
     }

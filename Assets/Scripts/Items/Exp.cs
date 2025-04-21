@@ -88,9 +88,10 @@ public class Exp : MonoBehaviour
         }
     }
 
-    public void SetExpValue(int value)
+    public void SetExp(int value, Vector3 pos)
     {
         _exp = value;
+        transform.position = pos;
     }
 
     private void OnTriggerEnter(Collider other)
