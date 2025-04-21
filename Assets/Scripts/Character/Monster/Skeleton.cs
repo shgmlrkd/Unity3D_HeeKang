@@ -31,7 +31,10 @@ public class Skeleton : Monster
 
         // 체력바 위치는 항상 갱신
         ShowHpBar();
+        // 플레이어와 거리가 너무 멀면 반대편으로 보내기
         Reposition();
+        // 콜라이더가 꺼지면 공격 멈추기
+        StopAttack();
 
         // 움직일 수 있는 상태에서만 동작
         if (CanMove())
@@ -79,6 +82,15 @@ public class Skeleton : Monster
                 _attackTimer -= _attackInterval;
                 _player.gameObject.GetComponent<PlayerGetDamage>().GetDamage(_attackPower);
             }
+        }
+    }
+
+    private void StopAttack()
+    {
+        if (!_monsterCollider.enabled)
+        {
+            _isAttackAble = false;
+            _attackTimer = 0.0f;
         }
     }
 

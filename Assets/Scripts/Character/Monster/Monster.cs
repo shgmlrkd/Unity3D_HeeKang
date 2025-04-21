@@ -40,10 +40,13 @@ public class Monster : MonoBehaviour
     private readonly float _hpBarVisibleDuration = 2.0f;
     private readonly float _minAlphaValue = 0.05f;
 
+    private float _hpBarAlphaValue = 1.0f;
     private float _hpBarVisibleTimer = 0.0f;
 
     protected int _exp;
     protected int _type;
+
+    private readonly int _one = 1;
 
     protected bool _isAttackAble = false;
 
@@ -64,7 +67,7 @@ public class Monster : MonoBehaviour
         _monsterHpBarSlider.gameObject.SetActive(false);
 
         _monsterHpBarImages = _monsterHpBar.GetComponentsInChildren<Image>();
-        SetMonsterHpBarAlphaToOpaque();
+        SetMonsterHpBarAlpha(_one);
 
         // 땅 한개만 찾으면 되기 때문에 빈 오브젝트인 GroundObjects를 찾음 (부모)
         _groundParent = GameObject.Find("GroundObjects").transform;
@@ -77,35 +80,30 @@ public class Monster : MonoBehaviour
 
     protected void OnEnable()
     {
-        // 체력 초기화
+        // 초기화
         _curHp = _maxHp;
-        
+        _hpBarVisibleTimer = 0.0f;
+
+        _isFadeOut = false;
+        _isHpBarVisible = false;
+        _hpBarAlphaValue = _one;
+
         // null 아니면 충돌체 킴
-        if(_monsterCollider != null)
+        if (_monsterCollider != null)
         {
             _monsterCollider.enabled = true;
         }
         // null 아니면 체력바 비활성화
         if(_monsterHpBarSlider != null)
         {
-            SetMonsterHpBarAlphaToOpaque();
+            SetMonsterHpBarAlpha(_one);
             _monsterHpBarSlider.gameObject.SetActive(false);
         }
     }
 
     protected void Update()
     {
-        if (_isHpBarVisible)
-        {
-            _hpBarVisibleTimer += Time.deltaTime;
-
-            if (_hpBarVisibleTimer >= _hpBarVisibleDuration && !_isFadeOut)
-            {
-                _hpBarVisibleTimer -= _hpBarVisibleDuration;
-                _isFadeOut = true;
-                StartCoroutine(FadeOutHpBar());
-            }
-        }
+        FadeOutMonsterHpBar();
     }
 
     // 몬스터 데이터 세팅
@@ -131,7 +129,7 @@ public class Monster : MonoBehaviour
         _stateScaleFactor = monsterData.StatScaleFactor;
     }
 
-    private void GetDamage(float damage)
+    private void MonsterGetDamage(float damage)
     {
         // 피격
         _curHp -= damage;
@@ -150,72 +148,72 @@ public class Monster : MonoBehaviour
         }
     }
 
-    private void SetMonsterHpBarAlphaToOpaque()
+    // 체력바 알파값 조절
+    private void SetMonsterHpBarAlpha(float alphaValue)
     {
-        // 체력바 알파값 1로 만들기
-        foreach(Image monsterHpBarImage in _monsterHpBarImages)
-        {
-            Color monsterHpBarColor = monsterHpBarImage.color;
-            monsterHpBarColor.a = 1.0f;
-            monsterHpBarImage.color = monsterHpBarColor;
-        }
-    }
-
-    private float SetMonsterHpBarAlphaFadeOut(float fadeSpeed)
-    {
-        float alphaValue = 0.0f;
         foreach (Image monsterHpBarImage in _monsterHpBarImages)
         {
             Color monsterHpBarColor = monsterHpBarImage.color;
-            monsterHpBarColor.a = Mathf.Lerp(monsterHpBarColor.a, 0, Time.deltaTime * fadeSpeed);
+            monsterHpBarColor.a = alphaValue;
             monsterHpBarImage.color = monsterHpBarColor;
-            alphaValue = monsterHpBarColor.a;
         }
-
-        return alphaValue;
     }
 
+    private void FadeOutMonsterHpBar()
+    {
+        if (_isHpBarVisible)
+        {
+            _hpBarVisibleTimer += Time.deltaTime;
+
+            if (_hpBarVisibleTimer >= _hpBarVisibleDuration && !_isFadeOut)
+            {
+                _isFadeOut = true;
+            }
+        }
+
+        // 체력바가 보이고 fade 아웃을 시작했다면 알파 값을 서서히 줄임
+        if (_isFadeOut && _hpBarAlphaValue > _minAlphaValue)
+        {
+            _hpBarAlphaValue -= Time.deltaTime * _fadeSpeed;
+            SetMonsterHpBarAlpha(_hpBarAlphaValue);
+
+            if (_hpBarAlphaValue <= _minAlphaValue)
+            {
+                _monsterHpBarSlider.gameObject.SetActive(false);
+                _isHpBarVisible = false;
+            }
+        }
+    }
+
+    // 몬스터 체력바 끄기 (애니메이션 키)
     public void MonsterHpBarOff()
     {
         _monsterHpBarSlider.gameObject.SetActive(false);
     }
 
+    // 몬스터 끄기 (애니메이션 키)
     public void ActiveOff()
     {
         gameObject.SetActive(false);
-    }
-
-    private IEnumerator FadeOutHpBar()
-    {
-        float alphaValue = float.MaxValue;
-
-        // 알파값이 거의 다 줄으면
-        while (alphaValue > _minAlphaValue)
-        {
-            alphaValue = SetMonsterHpBarAlphaFadeOut(_fadeSpeed);
-            yield return null;
-        }
-        
-        // 체력바 비활성화
-        _monsterHpBarSlider.gameObject.SetActive(false);
-        _isFadeOut = false;
-        _isHpBarVisible = false;
     }
 
     protected void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Weapon"))
         {
-            // 체력바 보이게함
+            // 체력바 타이머 초기화 및 표시 설정
+            _isFadeOut = false;
             _isHpBarVisible = true;
+            _hpBarVisibleTimer = 0.0f;
+            _hpBarAlphaValue = _one;
 
             // 몬스터 체력바 알파값 1로 하고
-            SetMonsterHpBarAlphaToOpaque();
+            SetMonsterHpBarAlpha(_one);
             // 몬스터 체력바 보여주기
             _monsterHpBarSlider.gameObject.SetActive(true);
             // 무기 공격력 만큼 데미지주기
             float damage = other.GetComponent<Weapon>().WeaponAttackPower;
-            GetDamage(damage);
+            MonsterGetDamage(damage);
         }
     }
 }

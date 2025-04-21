@@ -1712,7 +1712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29913e2aa634b944180a4f7be756a509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _monsterPoolSize: 100
+  _monsterPoolSize: 4
   _bulletPoolSize: 50
 --- !u!4 &1573080577
 Transform:
