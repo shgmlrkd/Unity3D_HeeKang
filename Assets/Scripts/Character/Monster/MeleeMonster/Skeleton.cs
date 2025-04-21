@@ -43,7 +43,6 @@ public class Skeleton : MeleeMonster
         bool isInHit = _monsterAnimStateInfo.IsName("Hit");
         bool isInDead = _monsterAnimStateInfo.IsName("Dead");
 
-        print("Hit : " +  isInHit + "  " + "Dead : " + isInDead);
         // Hit이나 Dead 상태가 아니라면 true 반환
         return !(isInHit || isInDead);
     }

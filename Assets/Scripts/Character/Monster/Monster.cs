@@ -105,7 +105,6 @@ public class Monster : MonoBehaviour
             _maxHp = _baseHp * (_one + (_inGameTime / _stateScaleFactor));
             _curHp = _maxHp;
             _attackPower = _baseAtk * (_one + (_inGameTime / _stateScaleFactor));
-            print(_maxHp + " " + _attackPower);
         }
 
         // √ ±‚»≠

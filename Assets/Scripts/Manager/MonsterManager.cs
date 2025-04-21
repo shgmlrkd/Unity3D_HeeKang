@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class MonsterManager : Singleton<MonsterManager>
 {
     private List<GameObject> _monsterPool;
+    private Dictionary<string, MonsterSpawnData> _monsterSpawnDataDict;
 
     private LayerMask _groundLayer;
 
@@ -19,29 +20,29 @@ public class MonsterManager : Singleton<MonsterManager>
     private void Awake()
     {
         _monsterPool = new List<GameObject>();
+        _monsterSpawnDataDict = new Dictionary<string, MonsterSpawnData>();
         _groundLayer = LayerMask.GetMask("Ground");
     }
 
-    private void Start()
+    private IEnumerator SpawnRoutine(MonsterSpawnData data)
     {
-        StartCoroutine(Spawner());
-    }
-
-    private IEnumerator Spawner()
-    {
+        // 각 데이터의 스폰 간격으로 SpawnMonster 실행
         while (true)
         {
-            SpawnMonster();
-            yield return new WaitForSeconds(_spawnInterval);
+            yield return new WaitForSeconds(data.SpawnInterval);
+            SpawnMonster(data);
         }
     }
 
-    private void SpawnMonster()
+    private void SpawnMonster(MonsterSpawnData data)
     {
+        // 카메라 외곽에서 스폰위치 찾음
         Vector3 spawnPos = GetRandomOffscreenWorldPos();
         spawnPos.y = 0.0f;
 
-        for (int i = 0; i < _monsterPool.Count; i++)
+        _monsterPool = data.Pool;
+        // 몬스터 풀 데이터 받아서 스폰
+        for (int i = 0; i < data.Pool.Count; i++)
         {
             if (!_monsterPool[i].activeSelf)
             {
@@ -54,10 +55,17 @@ public class MonsterManager : Singleton<MonsterManager>
 
     public void CreateMonsters(int poolSize, string monsterName)
     {
+        // 몬스터 이름에 맞는 프리팹 로드 후 풀링으로 만들기
         GameObject monsterPrefab = Resources.Load<GameObject>($"Prefabs/Monster/{monsterName}");
         PoolingManager.Instance.Add(monsterName, poolSize, monsterPrefab, transform);
-        _monsterPool = PoolingManager.Instance.GetObjects(monsterName);
-        _spawnInterval = MonsterDataManager.Instance.GetMonsterSpawnIntervalData(monsterName);
+        List<GameObject> pool = PoolingManager.Instance.GetObjects(monsterName);
+        float interval = MonsterDataManager.Instance.GetMonsterSpawnIntervalData(monsterName);
+        // 각 정보를 MonsterSpawnData 클래스에서 초기화
+        MonsterSpawnData data = new MonsterSpawnData(monsterName, interval, pool);
+        // 딕셔너리에 추가
+        _monsterSpawnDataDict.Add(monsterName, data);
+        // MonsterSpawnData에 입력된 스폰 간격에 맞춰 몬스터를 주기적으로 스폰
+        StartCoroutine(SpawnRoutine(data));
     }
 
     private Vector3 GetRandomOffscreenWorldPos()
@@ -102,18 +110,21 @@ public class MonsterManager : Singleton<MonsterManager>
         float minDistance = float.MaxValue;
 
         // 몬스터 풀을 돌려서 활성화 된 애들 중 가장 가까운거 찾기
-        foreach (GameObject monster in _monsterPool)
+        foreach (KeyValuePair<string, MonsterSpawnData> monsterPool in _monsterSpawnDataDict)
         {
-            if (!monster.gameObject.GetComponent<Collider>().enabled) continue;
-
-            // 플레이어와 몬스터의 거리 구하기
-            float dist = Vector3.Distance(pos, monster.transform.position);
-
-            // 더 작으면 갱신
-            if (dist < minDistance)
+            foreach (GameObject monster in monsterPool.Value.Pool)
             {
-                minDistance = dist;
-                closest = monster;
+                if (!monster.gameObject.GetComponent<Collider>().enabled) continue;
+
+                // 플레이어와 몬스터의 거리 구하기
+                float dist = Vector3.Distance(pos, monster.transform.position);
+
+                // 더 작으면 갱신
+                if (dist < minDistance)
+                {
+                    minDistance = dist;
+                    closest = monster;
+                }
             }
         }
 
