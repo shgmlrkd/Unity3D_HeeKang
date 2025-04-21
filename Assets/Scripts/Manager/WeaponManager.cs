@@ -13,4 +13,10 @@ public class WeaponManager : Singleton<WeaponManager>
         GameObject bullet = PoolingManager.Instance.Pop("Bullet");
         bullet.GetComponent<Bullet>().Fire(pos, dir, data);
     }
+
+    public void KunaiFire(Vector3 pos, Vector3 dir, WeaponData data)
+    {
+        GameObject kunai = PoolingManager.Instance.Pop("Kunai");
+        kunai.GetComponent<Kunai>().Fire(pos, dir, data);
+    }
 }

@@ -1,10 +1,13 @@
 using UnityEngine;
 
-public class Bullet : ThrowWeapon
+public class Kunai : ThrowWeapon
 {
+    private int _pierce = 0;
+
     private void OnEnable()
     {
         _timer = 0.0f;
+        _pierce = 0;
     }
 
     public void Fire(Vector3 pos, Vector3 dir, WeaponData data)
@@ -12,10 +15,11 @@ public class Bullet : ThrowWeapon
         gameObject.SetActive(true);
 
         transform.position = pos;
-        _direction = dir.normalized;
+        _direction = dir;
         _weaponSpeed = data.AttackSpeed;
         _weaponAttackPower = data.AttackPower;
         _weaponLifeTimer = data.LifeTime;
+        _weaponPierce = data.Pierce;
         _direction.y = 0.0f;
 
         transform.rotation = Quaternion.LookRotation(_direction);
@@ -23,10 +27,16 @@ public class Bullet : ThrowWeapon
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Monster"))
+        if(other.CompareTag("Monster"))
         {
             base.OnTriggerEnter(other);
-            gameObject.SetActive(false);
+
+            if ( _pierce == _weaponPierce)
+            {
+                gameObject.SetActive(false);
+            }
+
+            _pierce++;
         }
     }
 }

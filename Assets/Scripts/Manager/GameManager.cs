@@ -15,17 +15,18 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int _monsterPoolSize;
     [SerializeField]
-    private int _bulletPoolSize; 
-    /*[SerializeField]
-    private int _kunaiPoolSize; 
+    private int _expPoolSize;
     [SerializeField]
+    private int _bulletPoolSize; 
+    [SerializeField]
+    private int _kunaiPoolSize; 
+    /*[SerializeField]
     private int _fireBallPoolSize;*/
 
     void Awake()
     {
         _instance = this;
         /*
-        WeaponManager.Instance.CreateWeapons(_kunaiPoolSize, "Kunai");
         WeaponManager.Instance.CreateWeapons(_fireBallPoolSize, "FireBall");*/
         SpawnPlayer();
     }
@@ -33,8 +34,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         WeaponManager.Instance.CreateWeapons(_bulletPoolSize, "Bullet");
+        WeaponManager.Instance.CreateWeapons(_kunaiPoolSize, "Kunai");
         MonsterManager.Instance.CreateMonsters(_monsterPoolSize, "Skeleton");
-        ItemManager.Instance.CreateItems(_monsterPoolSize, "Exp");
+        ItemManager.Instance.CreateItems(_expPoolSize, "Exp");
     }
 
     private void SpawnPlayer()
