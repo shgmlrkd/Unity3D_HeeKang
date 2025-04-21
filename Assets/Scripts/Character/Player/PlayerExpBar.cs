@@ -8,6 +8,8 @@ public class PlayerExpBar : Player
     private Transform[] _playerExpBar;
     private TextMeshProUGUI _playerExpBarText;
 
+    private float _toPercent = 100.0f;
+
     private enum ExpBar
     {
         PlayerExpBar, PlayerExpBarText = 4
@@ -22,7 +24,7 @@ public class PlayerExpBar : Player
 
     }
 
-    void Update()
+    private void Update()
     {
         UpdatePlayerExpBarUI();
     }
@@ -37,7 +39,12 @@ public class PlayerExpBar : Player
         // 텍스트로 경험치 비율 보여주기
         if (_playerExpBarText != null)
         {
-            _playerExpBarText.text = $"{(_curExp / _maxExp).ToString("F2") + " %"}";
+            _playerExpBarText.text = $"{(_curExp / _maxExp * _toPercent).ToString("F2") + " %"}";
         }
+    }
+
+    public void SetPlayerCurExp(float exp)
+    {
+        _curExp += exp;
     }
 }
