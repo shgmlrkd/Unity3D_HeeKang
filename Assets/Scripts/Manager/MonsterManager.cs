@@ -114,6 +114,7 @@ public class MonsterManager : Singleton<MonsterManager>
         {
             foreach (GameObject monster in monsterPool.Value.Pool)
             {
+                if (!monster.activeSelf) continue;
                 if (!monster.gameObject.GetComponent<Collider>().enabled) continue;
 
                 // 플레이어와 몬스터의 거리 구하기

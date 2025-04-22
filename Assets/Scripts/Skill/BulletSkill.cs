@@ -50,8 +50,6 @@ public class BulletSkill : Skill
 
         Vector3 dir = target.transform.position - transform.position;
 
-        print(dir.x + " " + dir.y + " " + dir.z);
-
         WeaponManager.Instance.BulletFire(transform.position, dir, _weaponData);
     }
 }
