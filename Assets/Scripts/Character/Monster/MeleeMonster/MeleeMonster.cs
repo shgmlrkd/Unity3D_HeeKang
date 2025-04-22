@@ -15,13 +15,23 @@ public class MeleeMonster : Monster
             }
         }
     }
+
+    public void OnHit()
+    {
+        _isHit = true;
+    }
+
+    public void OnAttackAble()
+    {
+        _isHit = false;
+    }
     
     protected void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
 
         // 플레이어랑 트리거 체크되면 플레이어 데미지 주기
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !_isHit)
         {
             _isAttackAble = true;
             _player.gameObject.GetComponent<PlayerGetDamage>().GetDamage(_attackPower);

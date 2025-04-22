@@ -54,6 +54,7 @@ public class Monster : MonoBehaviour
     private readonly int _one = 1;
 
     protected bool _isAttackAble = false;
+    protected bool _isHit = false;
 
     private bool _isFadeOut = false;
     private bool _isHpBarVisible = false;
@@ -294,13 +295,13 @@ public class Monster : MonoBehaviour
     }
 
     // 몬스터 체력바 끄기 (애니메이션 키)
-    public void MonsterHpBarOff()
+    public void OnMonsterHpBarOff()
     {
         _monsterHpBarSlider.gameObject.SetActive(false);
     }
 
     // 몬스터 끄기 (애니메이션 키)
-    public void ActiveOff()
+    public void OnInActive()
     {
         gameObject.SetActive(false);
     }
