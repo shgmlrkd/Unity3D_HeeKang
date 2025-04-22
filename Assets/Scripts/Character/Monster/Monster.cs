@@ -17,9 +17,10 @@ public class Monster : MonoBehaviour
     private Image[] _monsterHpBarImages;
 
     protected Vector3 _moveOffset;
-    protected Vector3 _monsterHpBarOffset;
     protected MonsterData _monsterData;
     protected AnimatorStateInfo _monsterAnimStateInfo;
+    
+    private Vector3 _monsterHpBarOffset;
 
     protected float _maxHp;
     protected float _curHp;
@@ -63,6 +64,7 @@ public class Monster : MonoBehaviour
     protected void Awake()
     {
         _monsterHpBarPrefab = Resources.Load<GameObject>("Prefabs/MonsterUI/MonsterHpBar");
+        _monsterHpBarOffset = new Vector3(0.0f, 1.5f, 0.0f);
     }
 
     protected void Start()
@@ -157,10 +159,6 @@ public class Monster : MonoBehaviour
 
         _lifeTime = monsterData.LifeTime;
 
-        _spawnInterval = monsterData.SpawnInterval;
-        _spawnStartTime = monsterData.SpawnStartTime;
-        _spawnEndTime = monsterData.SpawnEndTime;
-
         _stateScaleFactor = monsterData.StatScaleFactor;
 
         _isStatSettingEnd = true;
@@ -221,7 +219,7 @@ public class Monster : MonoBehaviour
         }
     }
 
-    private bool HasParameter(Animator animator, string paramName)
+    private bool HasAnimParameter(Animator animator, string paramName)
     {
         // 파라미터에 매개변수로 들어온 paramName이 있는지 확인
         foreach (AnimatorControllerParameter param in animator.parameters)
@@ -232,7 +230,7 @@ public class Monster : MonoBehaviour
         return false;
     }
 
-    private void MonsterGetDamage(float damage)
+    protected virtual void MonsterGetDamage(float damage)
     {
         // 피격
         _curHp -= damage;
@@ -249,7 +247,7 @@ public class Monster : MonoBehaviour
         else
         {
             // Hit이라는 파라미터가 애니메이션에 있는지 체크
-            if (HasParameter(_monsterAnimator, "Hit"))
+            if (HasAnimParameter(_monsterAnimator, "Hit"))
             {
                 // 맞는 애니메이션
                 _monsterAnimator.SetTrigger("Hit");

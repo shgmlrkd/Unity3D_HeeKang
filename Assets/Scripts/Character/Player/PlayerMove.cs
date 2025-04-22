@@ -1,15 +1,16 @@
 using UnityEngine;
 
-public class PlayerMove : Player
+public class PlayerMove : MonoBehaviour
 {
     private Animator _playerAnim;
+    private PlayerStatus _player;
 
     private float _playerRotateSpeed = 12.0f;
     private bool _isRunning = false;
 
     private void Start()
     {
-        base.Start();
+        _player = GetComponent<PlayerStatus>();
         _playerAnim = GetComponent<Animator>();
     }
 
@@ -25,7 +26,7 @@ public class PlayerMove : Player
         if (inputDir.sqrMagnitude > 0)
         {
             _isRunning = true;
-            transform.Translate(inputDir.normalized * _speed * Time.deltaTime, Space.World);
+            transform.Translate(inputDir.normalized * _player.Speed * Time.deltaTime, Space.World);
 
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(inputDir), Time.deltaTime * _playerRotateSpeed);
         }

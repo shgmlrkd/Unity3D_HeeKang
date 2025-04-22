@@ -14,7 +14,6 @@ public class Ground : MonoBehaviour
 
     private Vector3 _groundMoveOffset;
 
-    private float _offset = 0.5f;
     private int _movementScale = 2;
 
     void Start()

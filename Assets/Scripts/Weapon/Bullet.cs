@@ -11,6 +11,7 @@ public class Bullet : ThrowWeapon
     {
         gameObject.SetActive(true);
 
+        pos += _spawnPosYOffset;
         transform.position = pos;
         _direction = dir.normalized;
         _weaponSpeed = data.AttackSpeed;

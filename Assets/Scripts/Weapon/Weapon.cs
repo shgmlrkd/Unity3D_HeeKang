@@ -16,27 +16,7 @@ public class Weapon : MonoBehaviour
     protected float _weaponProjectileCount = 0.0f;
     protected float _weaponColliderRadius;
 
-    /*// 가장 가까운 몬스터 충돌체 가져오기
-    protected Collider ClosestMonsterCollider(float range)
-    {
-        Collider[] monsterColliders = Physics.OverlapSphere(transform.position, range, LayerMask.GetMask("Monster"));
-
-        Collider closestMonsterCollider = null;
-        float minDist = float.MaxValue;
-
-        foreach (Collider collider in monsterColliders)
-        {
-            float dist = Vector3.Distance(transform.position, collider.transform.position);
-
-            if (dist <= minDist)
-            {
-                minDist = dist;
-                closestMonsterCollider = collider;
-            }
-        }
-
-        return closestMonsterCollider;
-    }*/
+    protected readonly Vector3 _spawnPosYOffset = new Vector3(0.0f, 0.5f, 0.0f);
 
     protected void LifeTimer()
     {

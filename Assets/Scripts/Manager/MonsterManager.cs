@@ -4,13 +4,14 @@ using System.Collections.Generic;
 
 public class MonsterManager : Singleton<MonsterManager>
 {
+    private GameObject _inGameTimer;
     private List<GameObject> _monsterPool;
-    private Dictionary<string, MonsterSpawnData> _monsterSpawnDataDict;
+    private Dictionary<string, MonsterSpawnerData> _monsterSpawnDataDict;
 
     private LayerMask _groundLayer;
 
+    private float _inGameTime;
     private float _offset = 0.15f;
-    private float _spawnInterval;
 
     private enum ScreenSide
     {
@@ -20,21 +21,55 @@ public class MonsterManager : Singleton<MonsterManager>
     private void Awake()
     {
         _monsterPool = new List<GameObject>();
-        _monsterSpawnDataDict = new Dictionary<string, MonsterSpawnData>();
+        _monsterSpawnDataDict = new Dictionary<string, MonsterSpawnerData>();
         _groundLayer = LayerMask.GetMask("Ground");
     }
 
-    private IEnumerator SpawnRoutine(MonsterSpawnData data)
+    private void Start()
     {
-        // 각 데이터의 스폰 간격으로 SpawnMonster 실행
-        while (true)
+        // 인게임 시간을 가져오기 위해 InGamePlayTimer 오브젝트를 찾음
+        _inGameTimer = GameObject.Find("InGamePlayTimer");
+    }
+
+    private void Update()
+    {
+        // 인게임 시간 받아오기
+        _inGameTime = _inGameTimer.GetComponent<InGameTime>().InGameTimer;
+    }
+
+    public void CreateMonsters(int poolSize, string monsterName)
+    {
+        // 몬스터 이름에 맞는 프리팹 로드 후 풀링으로 만들기
+        GameObject monsterPrefab = Resources.Load<GameObject>($"Prefabs/Monster/{monsterName}");
+        PoolingManager.Instance.Add(monsterName, poolSize, monsterPrefab, transform);
+        List<GameObject> pool = PoolingManager.Instance.GetObjects(monsterName);
+        // 각 몬스터 스폰 관련 데이터 받기
+        MonsterSpawnData spawnData = MonsterDataManager.Instance.GetMonsterSpawnData(monsterName);
+        // 각 정보를 MonsterSpawnData 클래스에서 초기화
+        MonsterSpawnerData data = new MonsterSpawnerData(monsterName, pool, spawnData);
+        // 딕셔너리에 추가
+        _monsterSpawnDataDict.Add(monsterName, data);
+        // MonsterSpawnData에 입력된 스폰 간격에 맞춰 몬스터를 주기적으로 스폰
+        StartCoroutine(SpawnRoutine(data));
+    }
+
+    private IEnumerator SpawnRoutine(MonsterSpawnerData data)
+    {
+        // 스폰이 시작되기 전에는 계속 기다리기
+        while (_inGameTime < data.SpawnData.SpawnStartTime)
         {
-            yield return new WaitForSeconds(data.SpawnInterval);
+            yield return null;
+        }
+
+        // 각 데이터의 스폰 간격으로 SpawnMonster 실행
+        while (_inGameTime <= data.SpawnData.SpawnEndTime)
+        {
+            yield return new WaitForSeconds(data.SpawnData.SpawnInterval);
             SpawnMonster(data);
         }
     }
 
-    private void SpawnMonster(MonsterSpawnData data)
+    private void SpawnMonster(MonsterSpawnerData data)
     {
         // 카메라 외곽에서 스폰위치 찾음
         Vector3 spawnPos = GetRandomOffscreenWorldPos();
@@ -51,21 +86,6 @@ public class MonsterManager : Singleton<MonsterManager>
                 return;
             }
         }
-    }
-
-    public void CreateMonsters(int poolSize, string monsterName)
-    {
-        // 몬스터 이름에 맞는 프리팹 로드 후 풀링으로 만들기
-        GameObject monsterPrefab = Resources.Load<GameObject>($"Prefabs/Monster/{monsterName}");
-        PoolingManager.Instance.Add(monsterName, poolSize, monsterPrefab, transform);
-        List<GameObject> pool = PoolingManager.Instance.GetObjects(monsterName);
-        float interval = MonsterDataManager.Instance.GetMonsterSpawnIntervalData(monsterName);
-        // 각 정보를 MonsterSpawnData 클래스에서 초기화
-        MonsterSpawnData data = new MonsterSpawnData(monsterName, interval, pool);
-        // 딕셔너리에 추가
-        _monsterSpawnDataDict.Add(monsterName, data);
-        // MonsterSpawnData에 입력된 스폰 간격에 맞춰 몬스터를 주기적으로 스폰
-        StartCoroutine(SpawnRoutine(data));
     }
 
     private Vector3 GetRandomOffscreenWorldPos()
@@ -110,7 +130,7 @@ public class MonsterManager : Singleton<MonsterManager>
         float minDistance = float.MaxValue;
 
         // 몬스터 풀을 돌려서 활성화 된 애들 중 가장 가까운거 찾기
-        foreach (KeyValuePair<string, MonsterSpawnData> monsterPool in _monsterSpawnDataDict)
+        foreach (KeyValuePair<string, MonsterSpawnerData> monsterPool in _monsterSpawnDataDict)
         {
             foreach (GameObject monster in monsterPool.Value.Pool)
             {

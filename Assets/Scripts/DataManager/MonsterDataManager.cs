@@ -14,28 +14,34 @@ public struct MonsterData
     public float AttackInterval;
     public float AttackDistance;
     public float LifeTime;
+    public float StatScaleFactor;
+}
+
+public struct MonsterSpawnData
+{
     public float SpawnInterval;
     public float SpawnStartTime;
     public float SpawnEndTime;
-    public float StatScaleFactor;
 }
 
 public class MonsterDataManager : Singleton<MonsterDataManager>
 {
     private Dictionary<int, MonsterData> _monsterDatas = new Dictionary<int, MonsterData>();
-    private Dictionary<string, float> _monsterSpawnIntervalDatas = new Dictionary<string, float>();
+    private Dictionary<string, MonsterSpawnData> _monsterSpawnIntervalDatas = new Dictionary<string, MonsterSpawnData>();
 
     private void Awake()
     {
         LoadMonsterData();
     }
 
+    // 몬스터에 필요한 데이터
     public MonsterData GetMonsterData(int key)
     {
         return _monsterDatas[key];
     }
 
-    public float GetMonsterSpawnIntervalData(string monsterName)
+    // 몬스터 매니저(몬스터 스폰)에 필요한 데이터
+    public MonsterSpawnData GetMonsterSpawnData(string monsterName)
     {
         return _monsterSpawnIntervalDatas[monsterName];
     }
@@ -52,27 +58,32 @@ public class MonsterDataManager : Singleton<MonsterDataManager>
 
             if (colData.Length <= 1)
                 return;
+            
+            // 몬스터 관련 데이터
+            MonsterData monsterData;
 
-            MonsterData data;
+            monsterData.Key = int.Parse(colData[0]);
+            monsterData.Name = colData[1];
+            monsterData.Type = int.Parse(colData[2]);
+            monsterData.Hp = float.Parse(colData[3]);
+            monsterData.Exp = int.Parse(colData[4]);
+            monsterData.MoveSpeed = float.Parse(colData[5]);
+            monsterData.RotateSpeed = float.Parse(colData[6]);
+            monsterData.AttackPower = float.Parse(colData[7]);
+            monsterData.AttackInterval = float.Parse(colData[8]);
+            monsterData.AttackDistance = float.Parse(colData[9]);
+            monsterData.LifeTime = float.Parse(colData[10]);
+            monsterData.StatScaleFactor = float.Parse(colData[11]);
 
-            data.Key = int.Parse(colData[0]);
-            data.Name = colData[1];
-            data.Type = int.Parse(colData[2]);
-            data.Hp = float.Parse(colData[3]);
-            data.Exp = int.Parse(colData[4]);
-            data.MoveSpeed = float.Parse(colData[5]);
-            data.RotateSpeed = float.Parse(colData[6]);
-            data.AttackPower = float.Parse(colData[7]);
-            data.AttackInterval = float.Parse(colData[8]);
-            data.AttackDistance = float.Parse(colData[9]);
-            data.LifeTime = float.Parse(colData[10]);
-            data.SpawnInterval = float.Parse(colData[11]);
-            data.SpawnStartTime = float.Parse(colData[12]);
-            data.SpawnEndTime = float.Parse(colData[13]);
-            data.StatScaleFactor = float.Parse(colData[14]);
+            // 몬스터 스폰 관련 데이터
+            MonsterSpawnData monsterSpawnData;
 
-            _monsterDatas.Add(data.Key, data);
-            _monsterSpawnIntervalDatas.Add(data.Name, data.SpawnInterval);
+            monsterSpawnData.SpawnInterval = float.Parse(colData[12]);
+            monsterSpawnData.SpawnStartTime = float.Parse(colData[13]);
+            monsterSpawnData.SpawnEndTime = float.Parse(colData[14]);
+
+            _monsterDatas.Add(monsterData.Key, monsterData);
+            _monsterSpawnIntervalDatas.Add(monsterData.Name, monsterSpawnData);
         }
     }
 }

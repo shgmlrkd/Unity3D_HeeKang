@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -25,15 +26,24 @@ public class InGameTime : MonoBehaviour
     private void Start()
     {
         _timerText = GetComponent<TextMeshProUGUI>();
+        StartCoroutine(UpdateTimerCoroutine());
     }
 
     private void Update()
     {
-        _inGameTimer += Time.deltaTime;
-
         _minute = Mathf.FloorToInt(_inGameTimer / _oneMinute);
         _second = Mathf.FloorToInt(_inGameTimer % _oneMinute);
 
         _timerText.text = $"{_minute.ToString("00") + " : " + _second.ToString("00")}";
     }
+
+    private IEnumerator UpdateTimerCoroutine()
+    {
+        while (true)
+        {
+            _inGameTimer += Time.deltaTime;
+            yield return null;
+        }
+    }
+
 }

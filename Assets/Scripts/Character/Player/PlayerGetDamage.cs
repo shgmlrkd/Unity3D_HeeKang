@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerGetDamage : Player
+public class PlayerGetDamage : MonoBehaviour
 {
     private PlayerHpBar _playerHpBar;
     private Renderer[] _playerMaterials;

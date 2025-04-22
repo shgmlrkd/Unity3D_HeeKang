@@ -4,12 +4,11 @@ using UnityEngine.UI;
 
 public class Skeleton : MeleeMonster
 {
-    private int _skeletonKey = 101;
+    private int _skeletonKey = 102;
 
     private void Awake()
     {
         base.Awake();
-        _monsterHpBarOffset = new Vector3(0.0f, 1.5f, 0.0f);
     }
 
     private void Start()

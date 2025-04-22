@@ -10,7 +10,7 @@ public class Exp : MonoBehaviour
     private Vector3 _directionToExp;
 
     private float _rotationSpeed = 100.0f; // 경험치 나왔을 때 회전 속도
-    private float _moveDistance = 0.9f; // 경험치 먹을 때 반대 방향으로 가는 거리 계수
+    private float _moveDistance = 0.4f; // 경험치 먹을 때 반대 방향으로 가는 거리 계수
     private float _timeToReach = 0.35f; // 경험치가 플레이어 반대 방향으로 가는 시간
     private float _pickUpDistance = 0.5f; // 경험치가 플레이어 방향으로 돌아와서 경험치 비활성화 시키는 거리
     private float _timePassed = 0.0f; // 이동 시간이 경과한 시간
