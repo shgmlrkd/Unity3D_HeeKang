@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int _slimePoolSize;
     [SerializeField]
+    private int _turtlePoolSize;
+    [SerializeField]
     private int _expPoolSize;
     [SerializeField]
     private int _bulletPoolSize; 
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour
         WeaponManager.Instance.CreateWeapons(_kunaiPoolSize, "Kunai");
         MonsterManager.Instance.CreateMonsters(_skeletonPoolSize, "Skeleton");
         MonsterManager.Instance.CreateMonsters(_slimePoolSize, "Slime");
+        MonsterManager.Instance.CreateMonsters(_turtlePoolSize, "TurtleShell");
         ItemManager.Instance.CreateItems(_expPoolSize, "Exp");
     }
 

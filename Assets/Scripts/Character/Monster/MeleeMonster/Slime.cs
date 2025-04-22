@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Slime : MeleeMonster
 {
-    private Renderer[] _slimeMaterials;
+    private Renderer[] _slimeMaterial;
 
     private readonly float _colorFlashTime = 0.1f;
     private float _flashOnTimer = 0.0f;
@@ -13,7 +13,7 @@ public class Slime : MeleeMonster
     void Start()
     {
         base.Start();
-        _slimeMaterials = GetComponentsInChildren<Renderer>();
+        _slimeMaterial = GetComponentsInChildren<Renderer>();
         // 키값에 따른 몬스터 데이터 세팅
         SetMonsterData(MonsterDataManager.Instance.GetMonsterData(_slimeKey));
     }
@@ -46,7 +46,7 @@ public class Slime : MeleeMonster
     private void ResetOriginalColor()
     {
         // 슬라임 모델 색상 원래대로 복구
-        foreach (Renderer slimeMaterial in _slimeMaterials)
+        foreach (Renderer slimeMaterial in _slimeMaterial)
         {
             MaterialPropertyBlock block = new MaterialPropertyBlock();
             slimeMaterial.GetPropertyBlock(block);
@@ -62,7 +62,7 @@ public class Slime : MeleeMonster
         _getDamaged = true;
 
         // 슬라임 피격 연출로 모델을 흰색 발광 시킴 
-        foreach (Renderer slimeMaterial in _slimeMaterials)
+        foreach (Renderer slimeMaterial in _slimeMaterial)
         {
             MaterialPropertyBlock block = new MaterialPropertyBlock();
             slimeMaterial.material.EnableKeyword("_EMISSION");

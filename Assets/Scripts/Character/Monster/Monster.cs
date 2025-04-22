@@ -89,7 +89,7 @@ public class Monster : MonoBehaviour
 
         // 땅 한개만 찾으면 되기 때문에 빈 오브젝트인 GroundObjects를 찾음 (부모)
         _groundParent = GameObject.Find("GroundObjects").transform;
-        _ground = _groundParent.GetChild(0).gameObject;
+        _ground = _groundParent.GetChild(0).gameObject; 
         // 땅의 사이즈를 가져옴
         _moveOffset = _ground.GetComponent<Ground>().GroundSize;
         // 플레이어와 몬스터 사이 거리의 기준값을 설정
@@ -103,8 +103,8 @@ public class Monster : MonoBehaviour
         {
             // 인게임 시간 받아오기
             _inGameTime = _inGameTimer.GetComponent<InGameTime>().InGameTimer;
-            // HP = 현재 HP × (1 + (게임 경과 시간 / 스케일 배율))
-            // ATKPW = 현재 공격력 × (1 + (게임 경과 시간 / 스케일 배율))
+            // HP = 처음 HP × (1 + (게임 경과 시간 / 스케일 배율))
+            // ATKPW = 처음 ATKPW × (1 + (게임 경과 시간 / 스케일 배율))
             _maxHp = _baseHp * (_one + (_inGameTime / _stateScaleFactor));
             _curHp = _maxHp;
             _attackPower = _baseAtk * (_one + (_inGameTime / _stateScaleFactor));
