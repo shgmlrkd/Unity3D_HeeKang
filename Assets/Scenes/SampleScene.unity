@@ -1713,12 +1713,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29913e2aa634b944180a4f7be756a509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonPoolSize: 0
-  _slimePoolSize: 0
-  _turtlePoolSize: 1
+  _skeletonPoolSize: 30
+  _slimePoolSize: 30
+  _turtlePoolSize: 30
   _expPoolSize: 200
   _bulletPoolSize: 50
   _kunaiPoolSize: 50
+  _laserPoolSize: 10
 --- !u!4 &1573080577
 Transform:
   m_ObjectHideFlags: 0

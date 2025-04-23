@@ -26,7 +26,7 @@ public class PlayerMove : MonoBehaviour
         if (inputDir.sqrMagnitude > 0)
         {
             _isRunning = true;
-            transform.Translate(inputDir.normalized * _player.Speed * Time.deltaTime, Space.World);
+            transform.Translate(inputDir.normalized * _player.Status.Speed * Time.deltaTime, Space.World);
 
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(inputDir), Time.deltaTime * _playerRotateSpeed);
         }

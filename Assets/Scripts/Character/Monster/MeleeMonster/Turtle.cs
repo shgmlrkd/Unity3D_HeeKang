@@ -3,31 +3,23 @@ using UnityEngine;
 
 public class Turtle : MeleeMonster
 {
-    private Renderer[] _turleMaterial; 
-    private ParticleSystem[] _shieldParticles;
+    private ParticleSystem[] _trailParticles;
 
     private Vector3 _playerPosAtHit; // 맞았을 떄 플레이어 위치 변수
     private Vector3 _directionToPlayer; // 플레이어로 향하는 방향벡터 변수
-    private Vector3 _dashTargetPos; // 돌진 목표 위치
+    private Vector3 _rushTargetPos; // 돌진 목표 위치
 
-    private Color _startColor = Color.white; // 흰색
-    private Color _targetColor = Color.red; // 빨간색
-
-    private readonly float _rageEndDistance = 1.0f;
-    private readonly float _rageSpeedRate = 5.0f;
+    private readonly float _rushEndDistance = 1.0f;
+    private readonly float _rushSpeedRate = 5.0f;
 
     private float _targetDistance;
     private float _particalLifeTime;
-    private float _colorLerpTime = 1.0f;
-    private float _colorLerpTimer = 0.0f;
     private float _distanceOffset = 4.0f;
 
-    private bool _isRagePrepared = false; // 분노했는지 체크하는 변수
-    private bool _getDamaged = false; // 데미지 입었는지 체크하는 변수
-    private bool _isNoDamage = false; // 무적상태 체크하는 변수
-    private bool _isRedColor = false; // 빨간색인지 체크하는 변수
     private bool _isReached = false; // 플레이어가 있었던 위치까지 도달했는지 체크하는 변수
-
+    private bool _getDamaged = false; // 데미지 입었는지 체크하는 변수
+    private bool _isRushPrepared = false; // 했는지 체크하는 변수
+   
     private int _turtleKey = 103;
 
     private void OnEnable()
@@ -36,35 +28,17 @@ public class Turtle : MeleeMonster
 
         base.OnEnable();
 
-        _colorLerpTimer = 0.0f;
-
         // bool 변수 초기화
-        _isRagePrepared = false;
-        _getDamaged = false;
-        _isNoDamage = false;
-        _isRedColor = false;
         _isReached = false;
-
-        // 혹시 모르니 원래 색상 세팅
-        if (_turleMaterial != null)
-        {
-            foreach (Renderer turleMaterial in _turleMaterial)
-            {
-                MaterialPropertyBlock block = new MaterialPropertyBlock();
-                turleMaterial.GetPropertyBlock(block);
-                block.SetColor("_BaseColor", _startColor);
-                turleMaterial.SetPropertyBlock(block);
-            }
-        }
+        _getDamaged = false;
+        _isRushPrepared = false;
     }
 
     private void Start()
     {
         base.Start();
 
-        _turleMaterial = GetComponentsInChildren<Renderer>();
-
-        _shieldParticles = GetComponentsInChildren<ParticleSystem>();
+        _trailParticles = GetComponentsInChildren<ParticleSystem>();
     }
 
     private void Update()
@@ -73,130 +47,98 @@ public class Turtle : MeleeMonster
 
         if (_curHp <= 0) return;
 
-        StopAttack();
-
-        // 데미지 입으면 모델 빨간색으로 바꿈
-        DamageColorEffect();
-        // 무적일 때는 이 함수로 움직임
-        ImmortalMove();
-        // 다시 모델의 원래색으로 바꿈
-        ResetOriginalColor();
-
         Attack();
 
-        if (CanMove() && !_isRedColor)
+        switch ((_monsterCurrentState))
         {
-            Move();
+            case MonsterStatus.Run:
+                if (CanMove())
+                {
+                    Move();
+                }
+                break;
+            case MonsterStatus.Hit:
+                // 데미지 입으면 돌진 목표 지점 설정
+                SetRushTargetPos();
+                break;
+            case MonsterStatus.Rush:
+                // 목표 지점까지 돌진
+                Rush();
+                break;
         }
     }
 
-    private void ImmortalMove()
+    private void Rush()
     {
-        // 빨간색이고 플레이어가 있었던 위치에
-        // 도달하지 못했을 경우 이 방향으로 빠르게 움직임
-        if (_isRedColor && !_isReached)
+        // 도착 할 때까지 돌진
+        if (!_isReached)
         {
-            transform.Translate(_directionToPlayer * _monsterStatus.Speed * _rageSpeedRate * Time.deltaTime, Space.World);
+            transform.Translate(_directionToPlayer * _monsterStatus.Speed * _rushSpeedRate * Time.deltaTime, Space.World);
 
-            // 일정 거리 되면 무적 해제, 분노 해제
-            if (Vector3.Distance(transform.position, _dashTargetPos) <= _rageEndDistance)
+            // 일정 거리 되면 다시 Run 상태
+            if (Vector3.Distance(transform.position, _rushTargetPos) <= _rushEndDistance)
             {
-                _isNoDamage = false;
-                _isRedColor = false;
-                _isRagePrepared = false;
+                _isRushPrepared = false;
                 _isReached = true;
+                _monsterCurrentState = MonsterStatus.Run;
+                _monsterAnimator.SetBool("IsReached", _isReached);
             }
         }
     }
 
-    private void ResetOriginalColor()
+    private void SetRushTargetPos()
     {
-        // 플레이어가 있었던 위치에 도달했다면
-        if (_isReached)
-        {
-            _colorLerpTimer += Time.deltaTime;
-            // 클램프01은 0에서 1사이로 값을 제한함
-            float colorLerpTimer = Mathf.Clamp01(_colorLerpTimer / _colorLerpTime);
-            // 거북이 돌격 후 원래색으로 보간
-            foreach (Renderer turleMaterial in _turleMaterial)
-            {
-                MaterialPropertyBlock block = new MaterialPropertyBlock();
-                turleMaterial.GetPropertyBlock(block);
-                Color currentColor = Color.Lerp(_targetColor, _startColor, colorLerpTimer);
-                block.SetColor("_BaseColor", currentColor);
-                turleMaterial.SetPropertyBlock(block);
-            }
-
-            // 원래색으로 되면 초기화
-            if (colorLerpTimer >= _colorLerpTime)
-            {
-                _isRedColor = false;
-                _isReached = false;
-                _colorLerpTimer = 0.0f;
-            }
-        }
-    }
-
-    private void DamageColorEffect()
-    {
-        // 데미지를 입었으면 그 자리에서 빨간색으로 material 색 변경
+        // 데미지를 입었으면
         if (_getDamaged)
         {
-            _colorLerpTimer += Time.deltaTime;
-            // 클램프01은 0에서 1사이로 값을 제한함
-            float colorLerpTimer = Mathf.Clamp01(_colorLerpTimer / _colorLerpTime);
-            // 거북이 피격 연출로 모델을 빨간색으로 보간
-            foreach (Renderer turleMaterial in _turleMaterial)
-            {
-                MaterialPropertyBlock block = new MaterialPropertyBlock();
-                turleMaterial.GetPropertyBlock(block);
-                Color currentColor = Color.Lerp(_startColor, _targetColor, colorLerpTimer);
-                block.SetColor("_BaseColor", currentColor);
-                turleMaterial.SetPropertyBlock(block);
-            }
-
-            // 분노 상태 준비가 안되었으면 한 번만 실행
-            if (!_isRagePrepared)
-            {
-                PrepareRageState();
-                _isRagePrepared = true;  // PrepareRageState() 실행 후에는 다시 실행되지 않도록 설정
-            }
-
-            // 빨간색으로 되면 초기화
-            if (colorLerpTimer >= _colorLerpTime)
-            {
-                _isRedColor = true;
-                _getDamaged = false;
-                _colorLerpTimer = 0.0f;
-            }
+            // 돌진 상태 준비 (위치 잡기)
+            _isReached = false;
+            SetRushState();
+            _getDamaged = false;
         }
     }
 
-    private void PrepareRageState()
+    private void SetRushState()
     {
         _playerPosAtHit = _player.position;
-        // 플레이어가 있었던 위치로 방향 벡터 구함
+        // 플레이어가 있었던 위치 방향 벡터 구함
         _directionToPlayer = (_playerPosAtHit - transform.position).normalized;
         _directionToPlayer.y = 0.0f;
+        // 플레이어 방향으로 회전
+        if (_directionToPlayer != Vector3.zero)
+        {
+            transform.forward = _directionToPlayer;
+        }
         // 돌진 할 목표 위치 설정
-        _dashTargetPos = _playerPosAtHit + _directionToPlayer * _distanceOffset;
+        _rushTargetPos = _playerPosAtHit + _directionToPlayer * _distanceOffset;
         // 플레이어가 있었던 위치 기준 거리 계산
         _targetDistance = Vector3.Distance(transform.position, _player.position);
-        // 파티클 라이프 타임 구함 (_colorLerpTime 동안 그 자리에 가만히 있기 때문에 이 시간도 더함)
-        _particalLifeTime = _targetDistance / (_monsterStatus.Speed * _rageSpeedRate) + _colorLerpTime;
+        // 파티클 라이프 타임 구함
+        _particalLifeTime = _targetDistance / (_monsterStatus.Speed * _rushSpeedRate);
 
         // 체력이 남아 있다면
         if (_curHp > 0)
         {
-            // 쉴드 파티클 플레이
-            foreach (ParticleSystem shieldparticle in _shieldParticles)
-            {
-                // 파티클 실행 시간을 설정 후 플레이
-                ParticleSystem.MainModule particleLifeTime = shieldparticle.main;
-                particleLifeTime.startLifetime = new ParticleSystem.MinMaxCurve(_particalLifeTime);
-                shieldparticle.Play();
+           // 쉴드 파티클 플레이
+           foreach (ParticleSystem trailParticle in _trailParticles)
+           {
+                // 파티클이 안켜졌다면
+                if (!trailParticle.isPlaying)
+                {
+                    // 파티클 실행 시간을 설정 후 플레이
+                    ParticleSystem.MainModule main = trailParticle.main;
+                    main.startLifetime = _particalLifeTime;
+                    trailParticle.Play();
+                }
+                else
+                {
+                    // 파티클이 이미 플레이 되있다면 실행 시간을 새로 설정
+                    ParticleSystem.MainModule main = trailParticle.main;
+                    main.startLifetime = _particalLifeTime;
+                }
             }
         }
+        _monsterCurrentState = MonsterStatus.Rush;
     }
 
     // 몬스터 애니메이션 상태로 움직일 수 있는지 확인
@@ -211,19 +153,15 @@ public class Turtle : MeleeMonster
         return !(isInHit || isInDead);
     }
 
-    protected override void MonsterGetDamage(float damage)
+    public override void MonsterGetDamage(float damage)
     {
-        if (!_isNoDamage)
-        {
-            base.MonsterGetDamage(damage);
-            // 무적 상태 On
-            _isNoDamage = true;
-        }
+        _getDamaged = true;
+        base.MonsterGetDamage(damage);
 
-        // material이 빨간색이 아니면 true
-        if (!_isRedColor)
+        // 동시에 맞았을 경우 애니메이션이 넘어가지 않는걸 방지
+        if(_curHp <= 0)
         {
-            _getDamaged = true;
+            _monsterAnimator.SetBool("IsDead", true);
         }
     }
 }

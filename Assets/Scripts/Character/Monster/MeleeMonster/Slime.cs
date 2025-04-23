@@ -27,8 +27,6 @@ public class Slime : MeleeMonster
     {
         base.Update();
 
-        StopAttack();
-
         // 피격 시 0.1초 후 모델 색상 복구
         if (_getDamaged)
         {
@@ -60,7 +58,7 @@ public class Slime : MeleeMonster
         }
     }
 
-    protected override void MonsterGetDamage(float damage)
+    public override void MonsterGetDamage(float damage)
     {
         base.MonsterGetDamage(damage);
 

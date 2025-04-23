@@ -3,33 +3,17 @@ using UnityEngine;
 public class PlayerStatus : MonoBehaviour
 {
     private Status _playerStatus;
+    public Status Status 
+    { 
+        get { return _playerStatus; }
+    }
 
     private PlayerData _playerData;
 
     private float _maxExp;
     public float MaxExp
-    {
+    { 
         get { return _maxExp; }
-    }
-    private float _maxHp;
-    public float MaxHp
-    {
-        get { return _maxHp; }
-    }
-    private float _speed;
-    public float Speed
-    {
-        get { return _speed; }
-    }
-    private float _attackPowerRate;
-    public float AttackPowerRate
-    {
-        get { return _attackPowerRate; }
-    }
-    private float _attackSpeedRate;
-    public float AttackSpeedRate
-    {
-        get { return _attackSpeedRate; }
     }
 
     private int _hpGold;
@@ -43,6 +27,7 @@ public class PlayerStatus : MonoBehaviour
         get { return _expLevel; }
     }   
 
+    // 강화 레벨에 따라서 스텟이 정해짐 (enchantLevel)
     private int _hpLevel = 1;
     private int _attackPowerLevel = 1;
     private int _attackSpeedLevel = 1;
@@ -53,17 +38,11 @@ public class PlayerStatus : MonoBehaviour
         _playerData = PlayerDataManager.Instance.GetPlayerDataByStatLevel(_hpLevel, _expLevel, _attackPowerLevel, _attackSpeedLevel, _speedLevel);
         _playerStatus = new Status(_playerData);
         _maxExp = _playerStatus.Exp;
-        SetPlayerData();
+        //SetPlayerData();
     }
 
-    private void SetPlayerData()
+    private void SetPlayerGoldData()
     {
-        // 플레이어 스탯
-        _maxHp = _playerData.Hp;
-        _speed = _playerData.Speed;
-        _attackPowerRate = _playerData.AttackPowerRate;
-        _attackSpeedRate = _playerData.AttackSpeedRate;
-
         // 강화 할 때 필요한 골드
         _hpGold = _playerData.HpGold;
         _speedGold = _playerData.SpeedGold;

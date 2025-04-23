@@ -73,4 +73,4 @@ public class KunaiSkill : Skill
             WeaponManager.Instance.KunaiFire(transform.position, shotDir, _weaponData);
         }
     }
-}
+}   

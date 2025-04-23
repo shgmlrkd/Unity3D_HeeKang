@@ -18,6 +18,11 @@ public class Weapon : MonoBehaviour
 
     protected readonly Vector3 _spawnPosYOffset = new Vector3(0.0f, 0.5f, 0.0f);
 
+    protected void OnEnable()
+    {
+        _timer = 0.0f;
+    }
+
     protected void LifeTimer()
     {
         if (gameObject.activeSelf)

@@ -2,11 +2,6 @@ using UnityEngine;
 
 public class Bullet : ThrowWeapon
 {
-    private void OnEnable()
-    {
-        _timer = 0.0f;
-    }
-
     public void Fire(Vector3 pos, Vector3 dir, WeaponData data)
     {
         gameObject.SetActive(true);

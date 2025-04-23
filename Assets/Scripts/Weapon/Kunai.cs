@@ -6,7 +6,7 @@ public class Kunai : ThrowWeapon
 
     private void OnEnable()
     {
-        _timer = 0.0f;
+        base.OnEnable();
         _pierce = 0;
     }
 

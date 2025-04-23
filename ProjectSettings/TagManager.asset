@@ -8,6 +8,7 @@ TagManager:
   - Monster
   - Weapon
   - Item
+  - ParticleWeapon
   layers:
   - Default
   - TransparentFX

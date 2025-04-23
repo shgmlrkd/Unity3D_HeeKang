@@ -19,7 +19,7 @@ public class PlayerHpBar : MonoBehaviour
     private void Start()
     {
         _player = GetComponent<PlayerStatus>();
-        _curHp = _player.MaxHp;
+        _curHp = _player.Status.MaxHp;
         _playerHpBar = GameObject.Find("PlayerHpBar").GetComponentsInChildren<Transform>();
         _playerHpBarSlider = _playerHpBar[(int)HpBar.PlayerHpBar].GetComponent<Slider>();
         _playerHpBarText = _playerHpBar[(int)HpBar.PlayerHpBarText].GetComponent<TextMeshProUGUI>();
@@ -35,7 +35,7 @@ public class PlayerHpBar : MonoBehaviour
         // 체력바에 현재 남은 Hp 표시
         if (_playerHpBarSlider != null)
         {
-            _playerHpBarSlider.value = _curHp / _player.MaxHp;
+            _playerHpBarSlider.value = _curHp / _player.Status.MaxHp;
         }
         // 텍스트로 남은 체력 보여주기
         if (_playerHpBarText != null)
@@ -45,7 +45,7 @@ public class PlayerHpBar : MonoBehaviour
                 _curHp = 0;
             }
 
-            _playerHpBarText.text = $"{_curHp.ToString("F0") + " / " + _player.MaxHp.ToString()}";
+            _playerHpBarText.text = $"{_curHp.ToString("F0") + " / " + _player.Status.MaxHp.ToString()}";
         }
     }
 

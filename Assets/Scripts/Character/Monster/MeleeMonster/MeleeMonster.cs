@@ -16,16 +16,6 @@ public class MeleeMonster : Monster
         }
     }
 
-    public void OnHit()
-    {
-        _isHit = true;
-    }
-
-    public void OnAttackAble()
-    {
-        _isHit = false;
-    }
-    
     protected void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);

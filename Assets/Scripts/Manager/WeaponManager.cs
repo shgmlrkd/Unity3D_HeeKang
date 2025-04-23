@@ -19,4 +19,10 @@ public class WeaponManager : Singleton<WeaponManager>
         GameObject kunai = PoolingManager.Instance.Pop("Kunai");
         kunai.GetComponent<Kunai>().Fire(pos, dir, data);
     }
+
+    public void LaserFire(Vector3 pos, WeaponData data)
+    {
+        GameObject laser = PoolingManager.Instance.Pop("Laser");
+        laser.GetComponent<Laser>().Fire(pos, data);
+    }
 }

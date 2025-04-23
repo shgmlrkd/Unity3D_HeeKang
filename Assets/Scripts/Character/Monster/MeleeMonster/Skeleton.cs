@@ -25,26 +25,44 @@ public class Skeleton : MeleeMonster
     { 
         base.Update();
 
-        // 콜라이더가 꺼지면 공격 멈추기
-        StopAttack();
+        // 애니메이션에 Base Layer를 가져온거고 Base Layer는 인덱스가 0 이어서 매개변수가 0임
+        _monsterAnimStateInfo = _monsterAnimator.GetCurrentAnimatorStateInfo(0);
 
-        // 움직일 수 있는 상태에서만 동작
-        if (CanMove())
+        // 몬스터의 현재 상태에 따라 행동 처리
+        switch (_monsterCurrentState)
         {
-            Move();
-            Attack();
+            // 몬스터가 Run 상태면 이동과 공격
+            case MonsterStatus.Run:
+                if (CanMove())
+                {
+                    Move();
+                    Attack();
+                }
+                break;
+            // 몬스터가 Hit 상태면 애니메이션 체크해서 Run 상태로 돌림
+            case MonsterStatus.Hit:
+                if(IsHitAnimationFinished())
+                {
+                    _monsterCurrentState = MonsterStatus.Run;
+                }
+                break;
         }
     }
     
     // 몬스터 애니메이션 상태로 움직일 수 있는지 확인
     private bool CanMove()
     {
-        // 애니메이션에 Base Layer를 가져온거고 Base Layer는 인덱스가 0 이어서 매개변수가 0임
-        _monsterAnimStateInfo = _monsterAnimator.GetCurrentAnimatorStateInfo(0);
         bool isInHit = _monsterAnimStateInfo.IsName("Hit");
         bool isInDead = _monsterAnimStateInfo.IsName("Dead");
 
         // Hit이나 Dead 상태가 아니라면 true 반환
         return !(isInHit || isInDead);
+    }
+
+    private bool IsHitAnimationFinished()
+    {
+        bool isInHit = _monsterAnimStateInfo.IsName("Hit");
+
+        return !isInHit; // Hit 애니메이션 끝났으면 true 반환 
     }
 }

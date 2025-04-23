@@ -4,6 +4,11 @@ using UnityEngine.UI;
 
 public class Monster : MonoBehaviour
 {
+    protected enum MonsterStatus
+    {
+        Run, Hit, Rush, Dead
+    }
+
     protected Transform _player;
     protected GameObject _ground;
     protected GameObject _monsterHpBarpanel;
@@ -17,6 +22,8 @@ public class Monster : MonoBehaviour
     private Image[] _monsterHpBarImages;
 
     protected Status _monsterStatus;
+
+    protected MonsterStatus _monsterCurrentState = MonsterStatus.Run;
 
     protected Vector3 _moveOffset;
     protected AnimatorStateInfo _monsterAnimStateInfo;
@@ -102,6 +109,7 @@ public class Monster : MonoBehaviour
         // 초기화
         _curHp = _maxHp;
         _hpBarVisibleTimer = 0.0f;
+        _monsterCurrentState = MonsterStatus.Run;
 
         _isFadeOut = false;
         _isHpBarVisible = false;
@@ -122,6 +130,8 @@ public class Monster : MonoBehaviour
 
     protected void Update()
     {
+        // 콜라이더 꺼지면 초기화
+        StopAttackIfColliderOff();
         // 체력바 위치는 항상 갱신
         ShowHpBar();
         // 체력바 페이드 아웃 연출
@@ -149,7 +159,7 @@ public class Monster : MonoBehaviour
         }
     }
 
-    protected void Reposition()
+    private void Reposition()
     {
         Vector3 playerPos = _player.transform.position;
         Vector3 skeletonPos = transform.position;
@@ -168,7 +178,7 @@ public class Monster : MonoBehaviour
     }
     
     // 콜라이더가 꺼지면 공격 불가능
-    protected void StopAttack()
+    private void StopAttackIfColliderOff()
     {
         if (!_monsterCollider.enabled)
         {
@@ -178,7 +188,7 @@ public class Monster : MonoBehaviour
     }
 
     // 체력 상태 갱신해서 보여주기
-    protected void ShowHpBar()
+    private void ShowHpBar()
     {
         Vector3 worldPos = transform.position + _monsterHpBarOffset;
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
@@ -190,8 +200,23 @@ public class Monster : MonoBehaviour
         }
     }
 
+    private void InitHpBarEffect()
+    {
+        // 체력바 타이머 초기화 및 표시 설정
+        _isFadeOut = false;
+        _isHpBarVisible = true;
+        _hpBarVisibleTimer = 0.0f;
+        _hpBarAlphaValue = _one;
+
+        // 몬스터 체력바 알파값 1로 하고
+        SetMonsterHpBarAlpha(_one);
+        // 몬스터 체력바 보여주기
+        _monsterHpBarSlider.gameObject.SetActive(true);
+    }
+
     protected void Move()
     {
+        _monsterCurrentState = MonsterStatus.Run;
         // 플레이어 방향으로 이동, 회전
         Vector3 direction = (_player.position - transform.position).normalized;
         direction.y = 0;
@@ -215,7 +240,7 @@ public class Monster : MonoBehaviour
         return false;
     }
 
-    protected virtual void MonsterGetDamage(float damage)
+    public virtual void MonsterGetDamage(float damage)
     {
         // 피격
         _curHp -= damage;
@@ -227,7 +252,8 @@ public class Monster : MonoBehaviour
             _monsterCollider.enabled = false;
             GameObject exp = PoolingManager.Instance.Pop("Exp");
             exp.GetComponent<Exp>().SetExp(_monsterStatus.Exp, transform.position);
-            _monsterAnimator.SetTrigger("Dead");
+            _monsterAnimator.SetTrigger("Dead"); 
+            _monsterCurrentState = MonsterStatus.Dead;
         }
         else
         {
@@ -235,7 +261,8 @@ public class Monster : MonoBehaviour
             if (HasAnimParameter(_monsterAnimator, "Hit"))
             {
                 // 맞는 애니메이션
-                _monsterAnimator.SetTrigger("Hit");
+                _monsterAnimator.SetTrigger("Hit"); 
+                _monsterCurrentState = MonsterStatus.Hit;
             }
         }
     }
@@ -293,19 +320,18 @@ public class Monster : MonoBehaviour
     {
         if(other.CompareTag("Weapon"))
         {
-            // 체력바 타이머 초기화 및 표시 설정
-            _isFadeOut = false;
-            _isHpBarVisible = true;
-            _hpBarVisibleTimer = 0.0f;
-            _hpBarAlphaValue = _one;
+            // 체력바 연출 초기화
+            InitHpBarEffect();
 
-            // 몬스터 체력바 알파값 1로 하고
-            SetMonsterHpBarAlpha(_one);
-            // 몬스터 체력바 보여주기
-            _monsterHpBarSlider.gameObject.SetActive(true);
             // 무기 공격력 만큼 데미지주기
             float damage = other.GetComponent<Weapon>().WeaponAttackPower;
             MonsterGetDamage(damage);
+        }
+
+        if(other.CompareTag("ParticleWeapon"))
+        {
+            // 체력바 연출 초기화
+            InitHpBarEffect();
         }
     }
 }

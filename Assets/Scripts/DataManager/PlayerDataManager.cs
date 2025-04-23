@@ -5,7 +5,7 @@ public struct PlayerData
 {
     public int Key;
     public string Name;
-    public int Level;
+    public int EnchantLevel;
     public float Exp;
     public float Hp;
     public int HpGold;
@@ -80,7 +80,7 @@ public class PlayerDataManager : Singleton<PlayerDataManager>
 
             data.Key = int.Parse(colData[0]);
             data.Name = colData[1];
-            data.Level = int.Parse(colData[2]);
+            data.EnchantLevel = int.Parse(colData[2]);
             data.Exp = float.Parse(colData[3]);
             data.Hp = float.Parse(colData[4]);
             data.HpGold = int.Parse(colData[5]);
