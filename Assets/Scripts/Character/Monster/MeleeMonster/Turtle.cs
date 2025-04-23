@@ -32,6 +32,8 @@ public class Turtle : MeleeMonster
 
     private void OnEnable()
     {
+        SetMonsterKey(_turtleKey);
+
         base.OnEnable();
 
         _colorLerpTimer = 0.0f;
@@ -63,17 +65,11 @@ public class Turtle : MeleeMonster
         _turleMaterial = GetComponentsInChildren<Renderer>();
 
         _shieldParticles = GetComponentsInChildren<ParticleSystem>();
-
-        // 키값에 따른 몬스터 데이터 세팅
-        SetMonsterData(MonsterDataManager.Instance.GetMonsterData(_turtleKey));
     }
 
     private void Update()
     {
         base.Update();
-
-        // 다시 모델의 원래색으로 바꿈
-        ResetOriginalColor();
 
         if (_curHp <= 0) return;
 
@@ -83,6 +79,8 @@ public class Turtle : MeleeMonster
         DamageColorEffect();
         // 무적일 때는 이 함수로 움직임
         ImmortalMove();
+        // 다시 모델의 원래색으로 바꿈
+        ResetOriginalColor();
 
         Attack();
 
@@ -98,7 +96,7 @@ public class Turtle : MeleeMonster
         // 도달하지 못했을 경우 이 방향으로 빠르게 움직임
         if (_isRedColor && !_isReached)
         {
-            transform.Translate(_directionToPlayer * _speed * _rageSpeedRate * Time.deltaTime, Space.World);
+            transform.Translate(_directionToPlayer * _monsterStatus.Speed * _rageSpeedRate * Time.deltaTime, Space.World);
 
             // 일정 거리 되면 무적 해제, 분노 해제
             if (Vector3.Distance(transform.position, _dashTargetPos) <= _rageEndDistance)
@@ -107,7 +105,6 @@ public class Turtle : MeleeMonster
                 _isRedColor = false;
                 _isRagePrepared = false;
                 _isReached = true;
-                print("무적 끝, 도착");
             }
         }
     }
@@ -136,7 +133,6 @@ public class Turtle : MeleeMonster
                 _isRedColor = false;
                 _isReached = false;
                 _colorLerpTimer = 0.0f;
-                print("isreached 해제, 원래 색상으로 돌아옴");
             }
         }
     }
@@ -187,7 +183,7 @@ public class Turtle : MeleeMonster
         // 플레이어가 있었던 위치 기준 거리 계산
         _targetDistance = Vector3.Distance(transform.position, _player.position);
         // 파티클 라이프 타임 구함 (_colorLerpTime 동안 그 자리에 가만히 있기 때문에 이 시간도 더함)
-        _particalLifeTime = _targetDistance / (_speed * _rageSpeedRate) + _colorLerpTime;
+        _particalLifeTime = _targetDistance / (_monsterStatus.Speed * _rageSpeedRate) + _colorLerpTime;
 
         // 체력이 남아 있다면
         if (_curHp > 0)

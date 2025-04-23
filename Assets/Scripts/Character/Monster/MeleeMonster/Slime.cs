@@ -10,15 +10,20 @@ public class Slime : MeleeMonster
 
     private int _slimeKey = 101;
 
-    void Start()
+    private void OnEnable()
+    {
+       SetMonsterKey(_slimeKey);
+
+        base.OnEnable();
+    }
+
+    private void Start()
     {
         base.Start();
         _slimeMaterial = GetComponentsInChildren<Renderer>();
-        // 키값에 따른 몬스터 데이터 세팅
-        SetMonsterData(MonsterDataManager.Instance.GetMonsterData(_slimeKey));
     }
 
-    void Update()
+    private void Update()
     {
         base.Update();
 

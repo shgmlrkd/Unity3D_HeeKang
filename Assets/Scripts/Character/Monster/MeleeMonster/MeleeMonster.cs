@@ -8,9 +8,9 @@ public class MeleeMonster : Monster
         if (_isAttackAble)
         {
             _attackTimer += Time.deltaTime;
-            if (_attackTimer >= _attackInterval)
+            if (_attackTimer >= _monsterStatus.AttackInterval)
             {
-                _attackTimer -= _attackInterval;
+                _attackTimer -= _monsterStatus.AttackInterval;
                 _player.gameObject.GetComponent<PlayerGetDamage>().GetDamage(_attackPower);
             }
         }

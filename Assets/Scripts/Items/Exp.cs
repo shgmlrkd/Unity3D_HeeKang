@@ -15,7 +15,7 @@ public class Exp : MonoBehaviour
     private float _pickUpDistance = 0.5f; // 경험치가 플레이어 방향으로 돌아와서 경험치 비활성화 시키는 거리
     private float _timePassed = 0.0f; // 이동 시간이 경과한 시간
 
-    private int _exp;
+    private float _exp;
 
     private bool _isCollision = false;
     private bool _isReachedTargetPos = false;
@@ -88,7 +88,7 @@ public class Exp : MonoBehaviour
         }
     }
 
-    public void SetExp(int value, Vector3 pos)
+    public void SetExp(float value, Vector3 pos)
     {
         _exp = value;
         transform.position = pos;

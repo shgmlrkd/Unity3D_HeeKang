@@ -6,9 +6,11 @@ public class Skeleton : MeleeMonster
 {
     private int _skeletonKey = 102;
 
-    private void Awake()
+    private void OnEnable()
     {
-        base.Awake();
+        SetMonsterKey(_skeletonKey);
+
+        base.OnEnable();
     }
 
     private void Start()

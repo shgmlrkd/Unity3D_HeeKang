@@ -33,17 +33,20 @@ public class PlayerDataManager : Singleton<PlayerDataManager>
         return totalExp.Exp;
     }
 
-    public PlayerData GetPlayerDataByStatLevel(int hpLevel, int attackLevel, int attackSpeedLevel, int speedLevel)
+    public PlayerData GetPlayerDataByStatLevel(int hpLevel, int expLevel, int attackLevel, int attackSpeedLevel, int speedLevel)
     {
         PlayerData result = new PlayerData();
 
         PlayerData hpData = _playerDatas[hpLevel];
+        PlayerData expData = _playerDatas[expLevel];
         PlayerData attackData = _playerDatas[attackLevel];
         PlayerData attackSpeedData = _playerDatas[attackSpeedLevel];
         PlayerData speedData = _playerDatas[speedLevel];
 
         result.Hp = hpData.Hp;
         result.HpGold = hpData.HpGold;
+
+        result.Exp = expData.Exp;
 
         result.AttackPowerRate = attackData.AttackPowerRate;
         result.AttackPowerGold = attackData.AttackPowerGold;

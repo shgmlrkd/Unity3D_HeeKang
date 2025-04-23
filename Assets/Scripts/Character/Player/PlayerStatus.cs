@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
+    private Status _playerStatus;
+
     private PlayerData _playerData;
 
     private float _maxExp;
@@ -35,11 +37,11 @@ public class PlayerStatus : MonoBehaviour
     private int _attackPowerGold;
     private int _attackSpeedGold;
 
-    private int _expLevel = 1; 
+    private int _expLevel = 1;
     public int ExpLevel
     {
         get { return _expLevel; }
-    }
+    }   
 
     private int _hpLevel = 1;
     private int _attackPowerLevel = 1;
@@ -48,8 +50,9 @@ public class PlayerStatus : MonoBehaviour
 
     private void Start()
     {
-        _playerData = PlayerDataManager.Instance.GetPlayerDataByStatLevel(_hpLevel, _attackPowerLevel, _attackSpeedLevel, _speedLevel);
-        _maxExp = PlayerDataManager.Instance.GetPlayerTotalExpToLevel(_expLevel);
+        _playerData = PlayerDataManager.Instance.GetPlayerDataByStatLevel(_hpLevel, _expLevel, _attackPowerLevel, _attackSpeedLevel, _speedLevel);
+        _playerStatus = new Status(_playerData);
+        _maxExp = _playerStatus.Exp;
         SetPlayerData();
     }
 
