@@ -100,12 +100,14 @@ public class Turtle : MeleeMonster
         {
             transform.Translate(_directionToPlayer * _speed * _rageSpeedRate * Time.deltaTime, Space.World);
 
-            // 일정 거리 되면 무적 해제
+            // 일정 거리 되면 무적 해제, 분노 해제
             if (Vector3.Distance(transform.position, _dashTargetPos) <= _rageEndDistance)
             {
                 _isNoDamage = false;
                 _isRedColor = false;
+                _isRagePrepared = false;
                 _isReached = true;
+                print("무적 끝, 도착");
             }
         }
     }
@@ -134,6 +136,7 @@ public class Turtle : MeleeMonster
                 _isRedColor = false;
                 _isReached = false;
                 _colorLerpTimer = 0.0f;
+                print("isreached 해제, 원래 색상으로 돌아옴");
             }
         }
     }
@@ -168,7 +171,6 @@ public class Turtle : MeleeMonster
             {
                 _isRedColor = true;
                 _getDamaged = false;
-                _isRagePrepared = false;
                 _colorLerpTimer = 0.0f;
             }
         }
@@ -220,7 +222,6 @@ public class Turtle : MeleeMonster
             base.MonsterGetDamage(damage);
             // 무적 상태 On
             _isNoDamage = true;
-            print("맞음");
         }
 
         // material이 빨간색이 아니면 true
