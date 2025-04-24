@@ -200,7 +200,7 @@ public class Monster : MonoBehaviour
         }
     }
 
-    private void InitHpBarEffect()
+    public void InitHpBarEffect()
     {
         // 체력바 타이머 초기화 및 표시 설정
         _isFadeOut = false;
@@ -328,10 +328,10 @@ public class Monster : MonoBehaviour
             MonsterGetDamage(damage);
         }
 
-        if(other.CompareTag("ParticleWeapon"))
+        /*if(other.CompareTag("ParticleWeapon"))
         {
             // 체력바 연출 초기화
             InitHpBarEffect();
-        }
+        }*/
     }
 }
