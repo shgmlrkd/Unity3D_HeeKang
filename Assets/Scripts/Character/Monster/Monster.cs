@@ -138,7 +138,19 @@ public class Monster : MonoBehaviour
         FadeOutMonsterHpBar();
         // 플레이어와 거리가 너무 멀면 반대편으로 보내기
         Reposition();
+
+        Action();
     }
+
+    private void Action()
+    {
+        // 스위치 문 넣기
+    }
+
+    /*protected virtual bool CanMove()
+    {
+        // 이런식으로 override해서 다르게 만들기
+    }*/
 
     // 몬스터 데이터 세팅
     protected void SetMonsterData(MonsterData monsterData)
@@ -321,18 +333,9 @@ public class Monster : MonoBehaviour
     {
         if(other.CompareTag("Weapon"))
         {
-           /* // 체력바 연출 초기화
-            InitHpBarEffect();
-*/
             // 무기 공격력 만큼 데미지주기
             float damage = other.GetComponent<Weapon>().WeaponAttackPower;
             MonsterGetDamage(damage);
         }
-
-        /*if(other.CompareTag("ParticleWeapon"))
-        {
-            // 체력바 연출 초기화
-            InitHpBarEffect();
-        }*/
     }
 }
