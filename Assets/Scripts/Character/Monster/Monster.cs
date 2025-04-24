@@ -200,20 +200,6 @@ public class Monster : MonoBehaviour
         }
     }
 
-    public void InitHpBarEffect()
-    {
-        // 체력바 타이머 초기화 및 표시 설정
-        _isFadeOut = false;
-        _isHpBarVisible = true;
-        _hpBarVisibleTimer = 0.0f;
-        _hpBarAlphaValue = _one;
-
-        // 몬스터 체력바 알파값 1로 하고
-        SetMonsterHpBarAlpha(_one);
-        // 몬스터 체력바 보여주기
-        _monsterHpBarSlider.gameObject.SetActive(true);
-    }
-
     protected void Move()
     {
         _monsterCurrentState = MonsterStatus.Run;
@@ -240,8 +226,23 @@ public class Monster : MonoBehaviour
         return false;
     }
 
+    private void InitHpBarEffect()
+    {
+        // 체력바 타이머 초기화 및 표시 설정
+        _isFadeOut = false;
+        _isHpBarVisible = true;
+        _hpBarVisibleTimer = 0.0f;
+        _hpBarAlphaValue = _one;
+
+        // 몬스터 체력바 알파값 1로 하고
+        SetMonsterHpBarAlpha(_one);
+        // 몬스터 체력바 보여주기
+        _monsterHpBarSlider.gameObject.SetActive(true);
+    }
+
     public virtual void MonsterGetDamage(float damage)
     {
+        InitHpBarEffect();
         // 피격
         _curHp -= damage;
 
@@ -320,9 +321,9 @@ public class Monster : MonoBehaviour
     {
         if(other.CompareTag("Weapon"))
         {
-            // 체력바 연출 초기화
+           /* // 체력바 연출 초기화
             InitHpBarEffect();
-
+*/
             // 무기 공격력 만큼 데미지주기
             float damage = other.GetComponent<Weapon>().WeaponAttackPower;
             MonsterGetDamage(damage);
