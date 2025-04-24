@@ -73,7 +73,6 @@ public class LaserSkill : Skill
             Collider target = targetColliders[index];
             WeaponManager.Instance.LaserFire(target.transform.position, _weaponData);
             target.gameObject.GetComponent<Monster>().MonsterGetDamage(_weaponData.AttackPower);
-           // target.gameObject.GetComponent<Monster>().InitHpBarEffect();
         }
     }
 }
