@@ -21,7 +21,7 @@ public class PlayerExpBar : MonoBehaviour
     private void Start()
     {
        _player = GetComponent<PlayerStatus>();
-       _playerExpBar = GameObject.Find("PlayerExpBar").GetComponentsInChildren<Transform>();
+       _playerExpBar = InGameUIManager.Instance.GetPlayerExpBarUI();
        _playerExpBarSlider = _playerExpBar[(int)ExpBar.PlayerExpBar].GetComponent<Slider>();
        _playerExpBarText = _playerExpBar[(int)ExpBar.PlayerExpBarText].GetComponent<TextMeshProUGUI>();
        _playerLevelText = _playerExpBar[(int)ExpBar.PlayerLevelText].GetComponent<TextMeshProUGUI>();

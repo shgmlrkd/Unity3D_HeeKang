@@ -41,6 +41,16 @@ public class PlayerStatus : MonoBehaviour
         //SetPlayerData();
     }
 
+    private void Update()
+    {
+        // 스킬 패널 닫기 (임시 아무것도 아님)
+        if (Input.GetMouseButtonDown(0))
+        {
+            InGameUIManager.Instance.SkillPanelOff();
+            Time.timeScale = 1;
+        }
+    }
+
     private void SetPlayerGoldData()
     {
         // 강화 할 때 필요한 골드
@@ -54,6 +64,13 @@ public class PlayerStatus : MonoBehaviour
     {
         _expLevel++;
         _maxExp = PlayerDataManager.Instance.GetPlayerTotalExpToLevel(_expLevel);
+
         // 레벨업 했으니 스킬 3개 중 1개 선택하는거 구현 해야함
+
+
+        // 스킬 패널 열기
+        InGameUIManager.Instance.SkillPanelOn();
+        // 시간 멈춤
+        Time.timeScale = 0;
     }
 }

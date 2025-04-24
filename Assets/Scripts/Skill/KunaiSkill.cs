@@ -53,22 +53,24 @@ public class KunaiSkill : Skill
         int count = _weaponData.ProjectileCount;
 
         // 화살 간의 각도
-        float spreadDegree = 10f;
+        float spreadDegree = 10.0f;
         int mid = count / 2;
 
         for (int i = 0; i < count; i++)
         {
-            int offset = i - mid;
+            float offset = i - mid;
 
             // 짝수일 경우 중심이 없으니 조정
-            if (count % 2 == 0 && i >= mid)
+            if (count % 2 == 0)
             {
-                offset += 1;
+                offset += 0.5f;
             }
 
             // 각도 회전: Y축 기준으로 회전 (수평 방향으로 퍼짐)
             Quaternion rot = Quaternion.AngleAxis(offset * spreadDegree, Vector3.up);
             Vector3 shotDir = rot * dir;
+
+            print(offset * spreadDegree);
 
             WeaponManager.Instance.KunaiFire(transform.position, shotDir, _weaponData);
         }

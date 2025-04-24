@@ -20,7 +20,7 @@ public class PlayerHpBar : MonoBehaviour
     {
         _player = GetComponent<PlayerStatus>();
         _curHp = _player.Status.MaxHp;
-        _playerHpBar = GameObject.Find("PlayerHpBar").GetComponentsInChildren<Transform>();
+        _playerHpBar = InGameUIManager.Instance.GetPlayerHpBarUI();
         _playerHpBarSlider = _playerHpBar[(int)HpBar.PlayerHpBar].GetComponent<Slider>();
         _playerHpBarText = _playerHpBar[(int)HpBar.PlayerHpBarText].GetComponent<TextMeshProUGUI>();
     }

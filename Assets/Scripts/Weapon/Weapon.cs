@@ -9,12 +9,13 @@ public class Weapon : MonoBehaviour
     {
         get { return _weaponAttackPower; }
     }
-    protected float _weaponSpeed = 0.0f;
-    protected float _weaponLifeTimer = 0.0f;
     protected float _timer = 0.0f;
+    protected float _weaponSpeed = 0.0f;
+    protected float _weaponRange = 0.0f;
     protected float _weaponPierce = 0.0f;
+    protected float _weaponLifeTimer = 0.0f;
+    protected float _weaponKnockBack = 0.0f;
     protected float _weaponProjectileCount = 0.0f;
-    protected float _weaponColliderRadius;
 
     protected readonly Vector3 _spawnPosYOffset = new Vector3(0.0f, 0.5f, 0.0f);
 
@@ -23,7 +24,7 @@ public class Weapon : MonoBehaviour
         _timer = 0.0f;
     }
 
-    protected void LifeTimer()
+    protected virtual void LifeTimer()
     {
         if (gameObject.activeSelf)
         {

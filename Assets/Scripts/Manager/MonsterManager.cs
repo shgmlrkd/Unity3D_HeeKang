@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class MonsterManager : Singleton<MonsterManager>
 {
-    private GameObject _inGameTimer;
     private List<GameObject> _monsterPool;
     private Dictionary<string, MonsterSpawnerData> _monsterSpawnDataDict;
 
@@ -25,16 +24,10 @@ public class MonsterManager : Singleton<MonsterManager>
         _groundLayer = LayerMask.GetMask("Ground");
     }
 
-    private void Start()
-    {
-        // 인게임 시간을 가져오기 위해 InGamePlayTimer 오브젝트를 찾음
-        _inGameTimer = GameObject.Find("InGamePlayTimer");
-    }
-
     private void Update()
     {
         // 인게임 시간 받아오기
-        _inGameTime = _inGameTimer.GetComponent<InGameTime>().InGameTimer;
+        _inGameTime = InGameUIManager.Instance.GetInGameTimer();
     }
 
     public void CreateMonsters(int poolSize, string monsterName)
@@ -150,62 +143,5 @@ public class MonsterManager : Singleton<MonsterManager>
         }
 
         return closest;
-
-        /*// 카메라에서 pos까지의 거리 계산 (z 값으로 사용됨)
-        float distanceFromCamera = Vector3.Distance(Camera.main.transform.position, pos);
-
-        // 뷰포트 좌표 (0, 0.5): 왼쪽 중앙 / (1, 0.5): 오른쪽 중앙 + 오프셋 범위
-        // 해당 z 거리 위치에서 화면 좌우 끝이 월드에서 어디인지 계산
-        Vector3 worldLeft = Camera.main.ViewportToWorldPoint(new Vector3(-_offset, 0.5f, distanceFromCamera));
-        Vector3 worldRight = Camera.main.ViewportToWorldPoint(new Vector3(1 + _offset, 0.5f, distanceFromCamera));
-
-        // 위에서 구한 좌우 월드 좌표의 거리 = 해당 거리에서 카메라가 보여주는 가로 너비
-        float screenWidthInWorld = Vector3.Distance(worldLeft, worldRight);
-
-        // 카메라가 현재 비추는 화면의 가로 길이를 기준으로 반지름을 설정
-        float halfScreenWidth = screenWidthInWorld * 0.5f;
-
-        // 화면 안쪽의 몬스터만 찾기
-        Collider[] monsters = Physics.OverlapSphere(pos, halfScreenWidth, LayerMask.GetMask("Monster"));
-
-        GameObject closest = null;
-        float minDistance = float.MaxValue;
-
-        foreach (Collider monster in monsters)
-        {
-            // 플레이어와 몬스터의 거리 구하기
-            float dist = Vector3.Distance(pos, monster.transform.position);
-
-            // 더 작으면 갱신
-            if (dist < minDistance)
-            {
-                minDistance = dist;
-                closest = monster.gameObject;
-            }
-        }
-
-        return closest;*/
-
-        /* 그냥 범위 고정으로 상수 변수 줘서 하는 방법
-            Collider[] monsters = Physics.OverlapSphere(pos, 상수 변수, LayerMask.GetMask("Monster"));
-
-            GameObject closest = null;
-            float minDistance = float.MaxValue;
-
-            foreach (Collider monster in monsters)
-            {
-                // 플레이어와 몬스터의 거리 구하기
-                float dist = Vector3.Distance(pos, monster.transform.position);
-
-                // 더 작으면 갱신
-                if (dist < minDistance)
-                {
-                    minDistance = dist;
-                    closest = monster.gameObject;
-                }
-            }
-
-            return closest;
-        */
     }
 }

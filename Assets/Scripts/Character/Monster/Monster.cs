@@ -17,7 +17,6 @@ public class Monster : MonoBehaviour
     protected Animator _monsterAnimator;
     protected Collider _monsterCollider;
 
-    private GameObject _inGameTimer;
     private Transform _groundParent;
     private Image[] _monsterHpBarImages;
 
@@ -50,9 +49,6 @@ public class Monster : MonoBehaviour
 
     private readonly int _one = 1;
 
-    protected bool _isHit = false;
-    protected bool _isAttackAble = false;
-
     private bool _isSetting = false;
     private bool _isFadeOut = false;
     private bool _isHpBarVisible = false;
@@ -60,10 +56,8 @@ public class Monster : MonoBehaviour
 
     protected void Awake()
     {
-        _monsterHpBarPrefab = Resources.Load<GameObject>("Prefabs/MonsterUI/MonsterHpBar");
+        _monsterHpBarPrefab = Resources.Load<GameObject>("Prefabs/UI/MonsterHpBar");
         _monsterHpBarOffset = new Vector3(0.0f, 1.5f, 0.0f);
-        // 인게임 시간을 가져오기 위해 InGamePlayTimer 오브젝트를 찾음
-        _inGameTimer = GameObject.Find("InGamePlayTimer");
     }
 
     protected void Start()
@@ -74,7 +68,7 @@ public class Monster : MonoBehaviour
         _monsterAnimator = GetComponent<Animator>();
 
         // 체력바 생성
-        GameObject _monsterHpBarPanel = GameObject.Find("HpBarPanel");
+        GameObject _monsterHpBarPanel = GameObject.Find("InGameCanvas/MonsterHpBarPanel");
         GameObject _monsterHpBar = Instantiate(_monsterHpBarPrefab, _monsterHpBarPanel.transform);
         _monsterHpBarSlider = _monsterHpBar.GetComponent<Slider>();
         _monsterHpBarSlider.gameObject.SetActive(false);
@@ -98,12 +92,13 @@ public class Monster : MonoBehaviour
         if (_isStatSettingEnd)
         {
             // 인게임 시간 받아오기
-            _inGameTime = _inGameTimer.GetComponent<InGameTime>().InGameTimer;
+            _inGameTime = InGameUIManager.Instance.GetInGameTimer();
             // HP = 처음 HP × (1 + (게임 경과 시간 / 스케일 배율))
             // ATKPW = 처음 ATKPW × (1 + (게임 경과 시간 / 스케일 배율))
             _maxHp = _baseHp * (_one + (_inGameTime / _monsterStatus.StateScaleFactor));
             _curHp = _maxHp;
             _attackPower = _baseAtk * (_one + (_inGameTime / _monsterStatus.StateScaleFactor));
+            print("HP : " + _maxHp + " ATK : " + _attackPower);
         }
 
         // 초기화
@@ -138,19 +133,52 @@ public class Monster : MonoBehaviour
         FadeOutMonsterHpBar();
         // 플레이어와 거리가 너무 멀면 반대편으로 보내기
         Reposition();
-
+        // 몬스터 액션 FSM
         Action();
     }
 
     private void Action()
     {
-        // 스위치 문 넣기
+        // 몬스터의 현재 상태에 따라 행동 처리
+        switch (_monsterCurrentState)
+        {
+            // 몬스터가 Run 상태면 Move() 실행
+            case MonsterStatus.Run:
+                if (CanMove())
+                { 
+                    Move();
+                }
+                break;
+            // 몬스터가 Hit 상태면 HandleHitState() 실행
+            case MonsterStatus.Hit:
+                HandleHitState();
+                break;
+            // 몬스터가 Rush 상태면 HandleRushState() 실행
+            case MonsterStatus.Rush:
+                HandleRushState();
+                break;
+        }
     }
 
-    /*protected virtual bool CanMove()
+    protected virtual bool CanMove()
     {
-        // 이런식으로 override해서 다르게 만들기
-    }*/
+        _monsterAnimStateInfo = _monsterAnimator.GetCurrentAnimatorStateInfo(0);
+
+        bool isInDead = _monsterAnimStateInfo.IsName("Dead");
+
+        return !isInDead;
+    }
+
+    // 기본적으로 Run 상태로 돌아감
+    protected virtual void HandleHitState()
+    {
+        _monsterCurrentState = MonsterStatus.Run;
+    }
+
+    protected virtual void HandleRushState()
+    {
+        // 기본은 아무것도 안함 (Rush 없는 몬스터는 이거 그대로 씀)
+    }
 
     // 몬스터 데이터 세팅
     protected void SetMonsterData(MonsterData monsterData)
@@ -194,7 +222,6 @@ public class Monster : MonoBehaviour
     {
         if (!_monsterCollider.enabled)
         {
-            _isAttackAble = false;
             _attackTimer = 0.0f;
         }
     }
@@ -265,7 +292,7 @@ public class Monster : MonoBehaviour
             _monsterCollider.enabled = false;
             GameObject exp = PoolingManager.Instance.Pop("Exp");
             exp.GetComponent<Exp>().SetExp(_monsterStatus.Exp, transform.position);
-            _monsterAnimator.SetTrigger("Dead"); 
+            _monsterAnimator.SetTrigger("Dead");
             _monsterCurrentState = MonsterStatus.Dead;
         }
         else
@@ -274,7 +301,7 @@ public class Monster : MonoBehaviour
             if (HasAnimParameter(_monsterAnimator, "Hit"))
             {
                 // 맞는 애니메이션
-                _monsterAnimator.SetTrigger("Hit"); 
+                _monsterAnimator.SetTrigger("Hit");
                 _monsterCurrentState = MonsterStatus.Hit;
             }
         }

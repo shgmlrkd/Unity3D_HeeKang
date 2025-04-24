@@ -25,4 +25,10 @@ public class WeaponManager : Singleton<WeaponManager>
         GameObject laser = PoolingManager.Instance.Pop("Laser");
         laser.GetComponent<Laser>().Fire(pos, data);
     }
+
+    public void ShootFireBall(Vector3 pos, Vector3 dir, WeaponData data)
+    {
+        GameObject fireBall = PoolingManager.Instance.Pop("FireBall");
+        fireBall.GetComponent<FireBall>().Fire(pos, dir, data);
+    }
 }

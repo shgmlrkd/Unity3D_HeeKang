@@ -38,12 +38,6 @@ public class Slime : MeleeMonster
                 ResetOriginalColor();
             }
         }
-
-        if (CanMove())
-        {
-            Move();
-            Attack();
-        }
     }
 
     private void ResetOriginalColor()
@@ -73,17 +67,5 @@ public class Slime : MeleeMonster
             block.SetColor("_EmissionColor", Color.white);
             slimeMaterial.SetPropertyBlock(block);
         }
-    }
-
-    // 몬스터 애니메이션 상태로 움직일 수 있는지 확인
-    private bool CanMove()
-    { 
-        // 애니메이션에 Base Layer를 가져온거고 Base Layer는 인덱스가 0 이어서 매개변수가 0임
-        _monsterAnimStateInfo = _monsterAnimator.GetCurrentAnimatorStateInfo(0);
-
-        bool isInDead = _monsterAnimStateInfo.IsName("Dead");
-        
-        // Dead 상태가 아니라면 true 반환
-        return !isInDead;
     }
 }

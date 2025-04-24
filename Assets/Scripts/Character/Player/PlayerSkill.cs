@@ -9,6 +9,7 @@ public class PlayerSkill : MonoBehaviour
     {
         //_skills.Add(gameObject.AddComponent<BulletSkill>());
         //_skills.Add(gameObject.AddComponent<KunaiSkill>());
-        _skills.Add(gameObject.AddComponent<LaserSkill>());
+        //_skills.Add(gameObject.AddComponent<LaserSkill>());
+        _skills.Add(gameObject.AddComponent<FireBallSkill>());
     }
 }
