@@ -103,7 +103,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 3496190844714030095}
   - component: {fileID: 6214277109307881984}
   - component: {fileID: 2524433753443498013}
+  - component: {fileID: -8045406319575213539}
   m_Layer: 5
   m_Name: SkillUIButton
   m_TagString: Untagged
@@ -336,3 +337,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-8045406319575213539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6047231436193487059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1e9471b7ceeb6646840ef4eb560d31d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
