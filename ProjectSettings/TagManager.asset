@@ -8,7 +8,7 @@ TagManager:
   - Monster
   - Weapon
   - Item
-  - FxTemporaire
+  - AoEWeapon
   layers:
   - Default
   - TransparentFX

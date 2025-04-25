@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BulletSkill : Skill
 {
-    private int _bulletIndexKey = 301;
+    private int _bulletIndexKey = 300;
 
     private void Awake()
     {
@@ -16,15 +16,7 @@ public class BulletSkill : Skill
         StartCoroutine(FireLoop());
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            BulletLevelUp();
-        }
-    }
-
-    private void BulletLevelUp()
+    public void BulletLevelUp()
     {
         LevelUp();
         _weaponData = WeaponDataManager.Instance.GetWeaponData(_bulletIndexKey + _level);

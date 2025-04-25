@@ -1,31 +1,31 @@
 Key,Name,Level,Path,Description,AttackPower,AttackInterval,AttackRange,AttackSpeed,Knockback,Pierce,ProjectileCount,LifeTime
-301,Bullet,1,UI/Bullet,빠르고 강력한 총알을 발사하여 적에게 3의 데미지를 입힙니다.,3,1,0,12,0,0,0,4
-302,Bullet,2,UI/Bullet,빠르고 강력한 총알을 발사하여 적에게 5의 데미지를 입힙니다.,5,0.88,0,13,0,0,0,4
-303,Bullet,3,UI/Bullet,빠르고 강력한 총알을 발사하여 적에게 7의 데미지를 입힙니다.,7,0.76,0,14,0,0,0,4
-304,Bullet,4,UI/Bullet,빠르고 강력한 총알을 발사하여 적에게 9의 데미지를 입힙니다.,9,0.64,0,15,0,0,0,4
-305,Bullet,5,UI/Bullet,빠르고 강력한 총알을 발사하여 적에게 11의 데미지를 입힙니다.,11,0.52,0,16,0,0,0,4
-306,Kunai,1,UI/Kunai,가장 가까운 몬스터를 향해 쿠나이 1개를 발사하며 몬스터 1마리에게 4의 데미지를 입힙니다.,4,2.9,0,9,0,0,1,4
-307,Kunai,2,UI/Kunai,가장 가까운 몬스터를 향해 쿠나이 2개를 발사하며 각 쿠나이는 1마리의 몬스터를 관통하고 적에게 4의 데미지를 입힙니다.,4,2.6,0,10,0,1,2,4
-308,Kunai,3,UI/Kunai,가장 가까운 몬스터를 향해 쿠나이 3개를 발사하며 각 쿠나이는 2마리의 몬스터를 관통하고 적에게 5의 데미지를 입힙니다.,5,2.3,0,11,0,2,3,4
-309,Kunai,4,UI/Kunai,가장 가까운 몬스터를 향해 쿠나이 4개를 발사하며 각 쿠나이는 3마리의 몬스터를 관통하고 적에게 6의 데미지를 입힙니다.,6,2,0,12,0,3,4,4
-310,Kunai,5,UI/Kunai,가장 가까운 몬스터를 향해 쿠나이 5개를 발사하며 각 쿠나이는 4마리의 몬스터를 관통하고 적에게 8의 데미지를 입힙니다.,8,1.7,0,13,0,4,5,4
-311,Sword,1,UI/Sword,ATK : 3 Cloest Monster Tracking Spin Blade,3,3,0,3,0,0,0,4
-312,Sword,2,UI/Sword,ATK : 4 Cloest Monster Tracking Spin Blade,4,2.5,0,4,0,0,0,4
-313,Sword,3,UI/Sword,ATK : 5 Cloest Monster Tracking Spin Blade,5,2,0,5,0,0,0,4
-314,Sword,4,UI/Sword,ATK : 6 Cloest Monster Tracking Spin Blade,6,1.5,0,6,0,0,0,4
-315,Sword,5,UI/Sword,ATK : 7 Cloest Monster Tracking Spin Blade,7,1,0,7,0,0,0,4
-316,Axe,1,UI/Axe,ATK : 5 Spinning Twin Axe,5,0,2,3,2,0,0,0
-317,Axe,2,UI/Axe,ATK : 6 Spinning Twin Axe,6,0,4,4,3,0,0,0
-318,Axe,3,UI/Axe,ATK : 7 Spinning Twin Axe,7,0,6,5,4,0,0,0
-319,Axe,4,UI/Axe,ATK : 8 Spinning Twin Axe,8,0,8,6,5,0,0,0
-320,Axe,5,UI/Axe,ATK : 9 Spinning Twin Axe,9,0,10,7,6,0,0,0
-321,FireBall,1,UI/FireBall,ATK : 4 FireBall is Boom,4,3,2,7.5,2,0,0,4
-322,FireBall,2,UI/FireBall,ATK : 6 FireBall is Boom,6,2.5,2.5,8.5,3,0,0,4
-323,FireBall,3,UI/FireBall,ATK : 8 FireBall is Boom,8,2,3,9.5,4,0,0,4
-324,FireBall,4,UI/FireBall,ATK : 10 FireBall is Boom,10,1.5,3.5,10.5,5,0,0,4
-325,FireBall,5,UI/FireBall,ATK : 12 FireBall is Boom,12,1,4,11.5,6,0,0,4
-326,Laser,1,UI/Laser,하늘에서 레이저를 발사해 플레이어 주변 무작위 몬스터 1마리에게 5데미지를 입힙니다.,5,2,5,0,0,0,1,0.5
-327,Laser,2,UI/Laser,하늘에서 레이저를 발사해 플레이어 주변 무작위 몬스터 2마리에게 6데미지를 입힙니다.,6,1.8,5.8,0,0,0,2,0.5
-328,Laser,3,UI/Laser,하늘에서 레이저를 발사해 플레이어 주변 무작위 몬스터 3마리에게 7데미지를 입힙니다.,7,1.6,6.6,0,0,0,3,0.5
-329,Laser,4,UI/Laser,하늘에서 레이저를 발사해 플레이어 주변 무작위 몬스터 4마리에게 8데미지를 입힙니다.,8,1.4,7.4,0,0,0,4,0.5
-330,Laser,5,UI/Laser,하늘에서 레이저를 발사해 플레이어 주변 무작위 몬스터 5마리에게 9데미지를 입힙니다.,9,1.2,8.2,0,0,0,5,0.5
+300,Bullet,1,UI/Bullet,빠르�?강력??총알??발사?�여 ?�에�?3???��?지�??�힙?�다.,3,1,0,12,0,0,0,4
+301,Bullet,2,UI/Bullet,빠르�?강력??총알??발사?�여 ?�에�?5???��?지�??�힙?�다.,5,0.88,0,13,0,0,0,4
+302,Bullet,3,UI/Bullet,빠르�?강력??총알??발사?�여 ?�에�?7???��?지�??�힙?�다.,7,0.76,0,14,0,0,0,4
+303,Bullet,4,UI/Bullet,빠르�?강력??총알??발사?�여 ?�에�?9???��?지�??�힙?�다.,9,0.64,0,15,0,0,0,4
+304,Bullet,5,UI/Bullet,빠르�?강력??총알??발사?�여 ?�에�?11???��?지�??�힙?�다.,11,0.52,0,16,0,0,0,4
+305,Kunai,1,UI/Kunai,가??가까운 몬스?��? ?�해 쿠나??1개�? 발사?�며 몬스??1마리?�게 4???��?지�??�힙?�다.,4,2.9,0,9,0,0,1,4
+306,Kunai,2,UI/Kunai,가??가까운 몬스?��? ?�해 쿠나??2개�? 발사?�며 �?쿠나?�는 1마리??몬스?��? 관?�하�??�에�?4???��?지�??�힙?�다.,4,2.6,0,10,0,1,2,4
+307,Kunai,3,UI/Kunai,가??가까운 몬스?��? ?�해 쿠나??3개�? 발사?�며 �?쿠나?�는 2마리??몬스?��? 관?�하�??�에�?5???��?지�??�힙?�다.,5,2.3,0,11,0,2,3,4
+308,Kunai,4,UI/Kunai,가??가까운 몬스?��? ?�해 쿠나??4개�? 발사?�며 �?쿠나?�는 3마리??몬스?��? 관?�하�??�에�?6???��?지�??�힙?�다.,6,2,0,12,0,3,4,4
+309,Kunai,5,UI/Kunai,가??가까운 몬스?��? ?�해 쿠나??5개�? 발사?�며 �?쿠나?�는 4마리??몬스?��? 관?�하�??�에�?8???��?지�??�힙?�다.,8,1.7,0,13,0,4,5,4
+310,Sword,1,UI/Sword,ATK : 3 Cloest Monster Tracking Spin Blade,3,3,0,3,0,0,0,4
+311,Sword,2,UI/Sword,ATK : 4 Cloest Monster Tracking Spin Blade,4,2.5,0,4,0,0,0,4
+312,Sword,3,UI/Sword,ATK : 5 Cloest Monster Tracking Spin Blade,5,2,0,5,0,0,0,4
+313,Sword,4,UI/Sword,ATK : 6 Cloest Monster Tracking Spin Blade,6,1.5,0,6,0,0,0,4
+314,Sword,5,UI/Sword,ATK : 7 Cloest Monster Tracking Spin Blade,7,1,0,7,0,0,0,4
+315,Axe,1,UI/Axe,ATK : 5 Spinning Twin Axe,5,0,4,3,0,0,0,0
+316,Axe,2,UI/Axe,ATK : 6 Spinning Twin Axe,6,0,5,4,0,0,0,0
+317,Axe,3,UI/Axe,ATK : 7 Spinning Twin Axe,7,0,6,5,3,0,0,0
+318,Axe,4,UI/Axe,ATK : 8 Spinning Twin Axe,8,0,7,6,3.5,0,0,0
+319,Axe,5,UI/Axe,ATK : 9 Spinning Twin Axe,9,0,8,7,4,0,0,0
+320,FireBall,1,UI/FireBall,ATK : 4 FireBall is Boom,4,3,2,7.5,2,0,0,4
+321,FireBall,2,UI/FireBall,ATK : 6 FireBall is Boom,6,2.5,2.5,8.5,3,0,0,4
+322,FireBall,3,UI/FireBall,ATK : 8 FireBall is Boom,8,2,3,9.5,4,0,0,4
+323,FireBall,4,UI/FireBall,ATK : 10 FireBall is Boom,10,1.5,3.5,10.5,5,0,0,4
+324,FireBall,5,UI/FireBall,ATK : 12 FireBall is Boom,12,1,4,11.5,6,0,0,4
+325,Laser,1,UI/Laser,?�늘?�서 ?�이?��?발사???�레?�어 주�? 무작??몬스??1마리?�게 5?��?지�??�힙?�다.,5,2,5,0,0,0,1,0.5
+326,Laser,2,UI/Laser,?�늘?�서 ?�이?��?발사???�레?�어 주�? 무작??몬스??2마리?�게 6?��?지�??�힙?�다.,6,1.8,5.8,0,0,0,2,0.5
+327,Laser,3,UI/Laser,?�늘?�서 ?�이?��?발사???�레?�어 주�? 무작??몬스??3마리?�게 7?��?지�??�힙?�다.,7,1.6,6.6,0,0,0,3,0.5
+328,Laser,4,UI/Laser,?�늘?�서 ?�이?��?발사???�레?�어 주�? 무작??몬스??4마리?�게 8?��?지�??�힙?�다.,8,1.4,7.4,0,0,0,4,0.5
+329,Laser,5,UI/Laser,?�늘?�서 ?�이?��?발사???�레?�어 주�? 무작??몬스??5마리?�게 9?��?지�??�힙?�다.,9,1.2,8.2,0,0,0,5,0.5

@@ -156,45 +156,9 @@ public class Monster : MonoBehaviour
             case MonsterStatus.Rush:
                 HandleRushState();
                 break;
-        }
-    }
-
-    protected virtual bool CanMove()
-    {
-        _monsterAnimStateInfo = _monsterAnimator.GetCurrentAnimatorStateInfo(0);
-
-        bool isInDead = _monsterAnimStateInfo.IsName("Dead");
-
-        return !isInDead;
-    }
-
-    // 기본적으로 Run 상태로 돌아감
-    protected virtual void HandleHitState()
-    {
-        _monsterCurrentState = MonsterStatus.Run;
-    }
-
-    protected virtual void HandleRushState()
-    {
-        // 기본은 아무것도 안함 (Rush 없는 몬스터는 이거 그대로 씀)
-    }
-
-    // 몬스터 데이터 세팅
-    protected void SetMonsterData(MonsterData monsterData)
-    {
-        _monsterStatus = new Status(monsterData);
-        _baseHp = _monsterStatus.MaxHp;
-        _baseAtk = _monsterStatus.AttackPower;
-        _isStatSettingEnd = true;
-    }
-
-    protected void SetMonsterKey(int key)
-    {
-        if (!_isSetting)
-        {
-            _isSetting = true;
-            // 키값에 따른 데이터 세팅
-            SetMonsterData(MonsterDataManager.Instance.GetMonsterData(key)); 
+            case MonsterStatus.Dead:
+                HandleDeadState();
+                break;
         }
     }
 
@@ -238,21 +202,6 @@ public class Monster : MonoBehaviour
         }
     }
 
-    protected void Move()
-    {
-        _monsterCurrentState = MonsterStatus.Run;
-        // 플레이어 방향으로 이동, 회전
-        Vector3 direction = (_player.position - transform.position).normalized;
-        direction.y = 0;
-
-        if (direction.sqrMagnitude > 0)
-        {
-            transform.Translate(direction * _monsterStatus.Speed * Time.deltaTime, Space.World);
-
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * _monsterStatus.RotSpeed);
-        }
-    }
-
     private bool HasAnimParameter(Animator animator, string paramName)
     {
         // 파라미터에 매개변수로 들어온 paramName이 있는지 확인
@@ -276,34 +225,6 @@ public class Monster : MonoBehaviour
         SetMonsterHpBarAlpha(_one);
         // 몬스터 체력바 보여주기
         _monsterHpBarSlider.gameObject.SetActive(true);
-    }
-
-    public virtual void MonsterGetDamage(float damage)
-    {
-        InitHpBarEffect();
-        // 피격
-        _curHp -= damage;
-
-        // 죽으면 죽는 애니메이션, 충돌체 끄고 체력바 끄기
-        if (_curHp <= 0)
-        {
-            _curHp = 0;
-            _monsterCollider.enabled = false;
-            GameObject exp = PoolingManager.Instance.Pop("Exp");
-            exp.GetComponent<Exp>().SetExp(_monsterStatus.Exp, transform.position);
-            _monsterAnimator.SetTrigger("Dead");
-            _monsterCurrentState = MonsterStatus.Dead;
-        }
-        else
-        {
-            // Hit이라는 파라미터가 애니메이션에 있는지 체크
-            if (HasAnimParameter(_monsterAnimator, "Hit"))
-            {
-                // 맞는 애니메이션
-                _monsterAnimator.SetTrigger("Hit");
-                _monsterCurrentState = MonsterStatus.Hit;
-            }
-        }
     }
 
     // 체력바 알파값 조절
@@ -341,6 +262,116 @@ public class Monster : MonoBehaviour
                 _isHpBarVisible = false;
             }
         }
+    }
+
+    protected void Move()
+    {
+        _monsterCurrentState = MonsterStatus.Run;
+        // 플레이어 방향으로 이동, 회전
+        Vector3 direction = (_player.position - transform.position).normalized;
+        direction.y = 0;
+
+        if (direction.sqrMagnitude > 0)
+        {
+            transform.Translate(direction * _monsterStatus.Speed * Time.deltaTime, Space.World);
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * _monsterStatus.RotSpeed);
+        }
+    }
+
+    protected virtual bool CanMove()
+    {
+        _monsterAnimStateInfo = _monsterAnimator.GetCurrentAnimatorStateInfo(0);
+
+        bool isInDead = _monsterAnimStateInfo.IsName("Dead");
+
+        return !isInDead;
+    }
+
+    // 기본적으로 Run 상태로 돌아감
+    protected virtual void HandleHitState()
+    {
+        _monsterCurrentState = MonsterStatus.Run;
+    }
+
+    protected virtual void HandleDeadState()
+    {
+        // 기본은 아무것도 안함
+    }
+
+    protected virtual void HandleRushState()
+    {
+        // 기본은 아무것도 안함 (Rush 없는 몬스터는 이거 그대로 씀)
+    }
+
+    // 몬스터 데이터 세팅
+    protected void SetMonsterData(MonsterData monsterData)
+    {
+        _monsterStatus = new Status(monsterData);
+        _baseHp = _monsterStatus.MaxHp;
+        _baseAtk = _monsterStatus.AttackPower;
+        _isStatSettingEnd = true;
+    }
+
+    protected void SetMonsterKey(int key)
+    {
+        if (!_isSetting)
+        {
+            _isSetting = true;
+            // 키값에 따른 데이터 세팅
+            SetMonsterData(MonsterDataManager.Instance.GetMonsterData(key));
+        }
+    }
+
+    public virtual void MonsterGetDamage(float damage)
+    {
+        InitHpBarEffect();
+        // 피격
+        _curHp -= damage;
+
+        // 죽으면 죽는 애니메이션, 충돌체 끄고 체력바 끄기
+        if (_curHp <= 0)
+        {
+            _curHp = 0;
+            _monsterCollider.enabled = false;
+            GameObject exp = PoolingManager.Instance.Pop("Exp");
+            exp.GetComponent<Exp>().SetExp(_monsterStatus.Exp, transform.position);
+            _monsterAnimator.SetTrigger("Dead");
+            _monsterCurrentState = MonsterStatus.Dead;
+        }
+        else
+        {
+            // Hit이라는 파라미터가 애니메이션에 있는지 체크
+            if (HasAnimParameter(_monsterAnimator, "Hit"))
+            {
+                // 맞는 애니메이션
+                _monsterAnimator.SetTrigger("Hit");
+                _monsterCurrentState = MonsterStatus.Hit;
+            }
+        }
+    }
+
+    public void MonsterKnockBack(Vector3 dir, float knockBackDistance, float duration)
+    {
+        // KnockBack 시작
+        StartCoroutine(KnockBackRoutine(dir, knockBackDistance, duration));
+    }
+
+    private IEnumerator KnockBackRoutine(Vector3 dir, float knockBackDistance, float duration)
+    {
+        Vector3 start = transform.position; // 시작 위치
+        Vector3 end = start + dir * knockBackDistance; // 도착 위치
+        float elapsed = 0f;
+
+        // 보간을 이용해서 부드럽게 KnockBack
+        while (elapsed < duration)
+        {
+            transform.position = Vector3.Lerp(start, end, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = end;
     }
 
     // 몬스터 체력바 끄기 (애니메이션 키)

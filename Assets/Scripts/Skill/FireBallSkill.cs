@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FireBallSkill : Skill
 {
-    private int _kunaiIndexKey = 321;
+    private int _kunaiIndexKey = 320;
 
     private void Awake()
     {

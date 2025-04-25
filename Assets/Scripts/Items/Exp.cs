@@ -38,7 +38,10 @@ public class Exp : MonoBehaviour
     }
 
     private void Update()
-    { 
+    {
+        // 스킬 선택 창 나오면 멈춤
+        if (Time.timeScale == 0) return;
+
         if (!_isCollision) // 충돌 안했을 때는
         {
             // 제자리에서 Y축 회전

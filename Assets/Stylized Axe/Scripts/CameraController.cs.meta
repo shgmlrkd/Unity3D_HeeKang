@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 102522b3fbbd11240bddffc1673d4d9a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 265545
+  packageName: 'Stylized Axe 3D : Weapons'
+  packageVersion: 1.0.0
+  assetPath: Assets/Stylized Axe/Scripts/CameraController.cs
+  uploadId: 624834

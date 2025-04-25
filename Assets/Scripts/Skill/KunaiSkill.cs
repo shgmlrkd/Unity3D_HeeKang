@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class KunaiSkill : Skill
 {
-    private int _kunaiIndexKey = 306;
+    private int _kunaiIndexKey = 305;
 
     private void Awake()
     {

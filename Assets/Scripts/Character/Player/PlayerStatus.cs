@@ -55,9 +55,6 @@ public class PlayerStatus : MonoBehaviour
         _expLevel++;
         _maxExp = PlayerDataManager.Instance.GetPlayerTotalExpToLevel(_expLevel);
 
-        // 레벨업 했으니 스킬 3개 중 1개 선택하는거 구현 해야함
-
-
         // 스킬 패널 열기
         InGameUIManager.Instance.SkillPanelOn();
         // 시간 멈춤

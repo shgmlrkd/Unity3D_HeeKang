@@ -850,7 +850,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchorMin.x
@@ -858,7 +858,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_SizeDelta.x
@@ -898,11 +898,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 266.66666
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -375
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -919,6 +919,22 @@ PrefabInstance:
     - target: {fileID: 6047231436193487059, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_Name
       value: SkillUIButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214277109307881984, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214277109307881984, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214277109307881984, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214277109307881984, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1526,7 +1542,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1534,7 +1550,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1574,11 +1590,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 800
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -375
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2117,9 +2133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29913e2aa634b944180a4f7be756a509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonPoolSize: 50
-  _slimePoolSize: 50
-  _turtlePoolSize: 50
+  _skeletonPoolSize: 0
+  _slimePoolSize: 0
+  _turtlePoolSize: 10
   _expPoolSize: 200
   _bulletPoolSize: 50
   _kunaiPoolSize: 50
@@ -2297,7 +2313,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchorMin.x
@@ -2305,7 +2321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2345,11 +2361,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 1333.3333
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -375
       objectReference: {fileID: 0}
     - target: {fileID: 1900330633330958364, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2525,7 +2541,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2123596946
 RectTransform:
   m_ObjectHideFlags: 0

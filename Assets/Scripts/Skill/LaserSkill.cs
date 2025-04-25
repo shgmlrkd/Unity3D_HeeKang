@@ -7,7 +7,7 @@ public class LaserSkill : Skill
     // HashSet은 이 배열에 이미 존재하는 인수는 자동으로 걸러짐 (중복 제거)
     private HashSet<int> _selectedIndexes;
 
-    private int _laserIndexKey = 326;
+    private int _laserIndexKey = 325;
 
     private void Awake()
     {

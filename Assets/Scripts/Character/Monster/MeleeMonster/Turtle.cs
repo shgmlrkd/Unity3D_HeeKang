@@ -7,18 +7,24 @@ public class Turtle : MeleeMonster
 
     private Vector3 _playerPosAtHit; // 맞았을 떄 플레이어 위치 변수
     private Vector3 _directionToPlayer; // 플레이어로 향하는 방향벡터 변수
-    private Vector3 _rushTargetPos; // 돌진 목표 위치
 
-    private readonly float _rushEndDistance = 1.0f;
-    private readonly float _rushSpeedRate = 5.0f;
+    private readonly float _rushDuration = 1.5f;
+    private readonly float _rushSpeedRate = 4.0f;
 
+    private float _rushTimer = 0.0f;
     private float _particalLifeTime;
-    private float _distanceOffset = 4.0f;
 
     private bool _isReached = false; // 플레이어가 있었던 위치까지 도달했는지 체크하는 변수
     private bool _getDamaged = false; // 데미지 입었는지 체크하는 변수
    
     private int _turtleKey = 103;
+
+    private void Awake()
+    {
+        base.Awake();
+        // 파티클 라이프 타임 = 돌진 시간
+        _particalLifeTime = _rushDuration;
+    }
 
     private void OnEnable()
     {
@@ -26,7 +32,8 @@ public class Turtle : MeleeMonster
 
         base.OnEnable();
 
-        // bool 변수 초기화
+        _rushTimer = 0.0f;
+
         _isReached = false;
         _getDamaged = false;
     }
@@ -43,12 +50,15 @@ public class Turtle : MeleeMonster
         // 도착 할 때까지 돌진
         if (!_isReached)
         {
-            transform.Translate(_directionToPlayer * _monsterStatus.Speed * _rushSpeedRate * Time.deltaTime, Space.World);
+            _rushTimer += Time.deltaTime;
 
-            // 일정 거리 되면 다시 Run 상태
-            if (Vector3.Distance(transform.position, _rushTargetPos) <= _rushEndDistance)
+            transform.Translate(_directionToPlayer * _monsterStatus.Speed * _rushSpeedRate * Time.deltaTime, Space.World);
+            
+            // 일정 시간 동안 돌진
+            if (_rushTimer >= _rushDuration)
             {
                 _isReached = true;
+                _rushTimer -= _rushDuration;
                 _monsterCurrentState = MonsterStatus.Run;
                 _monsterAnimator.SetBool("IsReached", _isReached);
             }
@@ -58,13 +68,18 @@ public class Turtle : MeleeMonster
     protected override void HandleHitState()
     {
         // 데미지를 입었으면
-        if (_getDamaged)
+        //if (_getDamaged)
         {
             // 돌진 상태 준비 (위치 잡기)
             _isReached = false;
             SetRushState();
-            _getDamaged = false;
+            //_getDamaged = false;
         }
+    }
+
+    protected override void HandleDeadState()
+    {
+        StopParticle();
     }
 
     private void SetRushState()
@@ -81,19 +96,13 @@ public class Turtle : MeleeMonster
             transform.forward = _directionToPlayer;
         }
 
-        // 돌진 할 목표 위치 설정
-        _rushTargetPos = _playerPosAtHit + _directionToPlayer * _distanceOffset;
-        // 플레이어가 있었던 위치 기준 거리 계산
-        float targetDistance = Vector3.Distance(transform.position, _player.position);
-        // 파티클 라이프 타임 구함
-        _particalLifeTime = targetDistance / (_monsterStatus.Speed * _rushSpeedRate);
-
         // 체력이 남아 있다면
         if (_curHp > 0)
         {
             // 돌진 파티클 플레이
             PlayParticle();
         }
+
         _monsterCurrentState = MonsterStatus.Rush;
     }
 
@@ -115,6 +124,15 @@ public class Turtle : MeleeMonster
                 ParticleSystem.MainModule main = trailParticle.main;
                 main.startLifetime = _particalLifeTime;
             }
+        }
+    }
+
+    private void StopParticle()
+    {
+        // 파티클 멈춤
+        foreach (ParticleSystem trailParticle in _trailParticles)
+        {
+            trailParticle.Stop();
         }
     }
 

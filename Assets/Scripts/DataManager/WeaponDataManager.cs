@@ -22,9 +22,22 @@ public class WeaponDataManager : Singleton<WeaponDataManager>
 {
     private Dictionary<int, WeaponData> _weaponDatas = new Dictionary<int, WeaponData>();
 
+    private readonly int _weaponMaxLevel = 5;
+    public int WeaponMaxLevel
+    {
+        get { return _weaponMaxLevel; }
+    }
+    private int _weaponCount;
+    public int WeaponCount
+    {
+        get { return _weaponCount; }
+    }
+
     private void Awake()
     {
         LoadWeaponData();
+
+        _weaponCount = _weaponDatas.Count / _weaponMaxLevel;
     }
 
     public WeaponData GetWeaponData(int key)

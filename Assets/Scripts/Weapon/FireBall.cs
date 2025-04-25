@@ -75,8 +75,17 @@ public class FireBall : ThrowWeapon
             if (_timer >= _weaponLifeTimer)
             {
                 _timer -= _weaponLifeTimer;
-                _fireBallParticles[(int)FireBallParticle.Flight].gameObject.SetActive(false);
+                gameObject.SetActive(false);
             }
+        }
+    }
+
+    protected override void Move()
+    {
+        // 날아가는 중에만 Move
+        if (!_isExplosionParticlePlay)
+        { 
+            transform.Translate(Vector3.forward * _weaponSpeed * Time.deltaTime);
         }
     }
 
@@ -125,13 +134,20 @@ public class FireBall : ThrowWeapon
             // 모든 몬스터들 데미지 주기
             foreach(Collider targetCollider in targetColliders)
             {
-                targetCollider.gameObject.GetComponent<Monster>().MonsterGetDamage(_weaponAttackPower);
-            }
+                // 맞은 몬스터
+                Monster target = targetCollider.gameObject.GetComponent<Monster>();
+                // 밀려나갈 방향
+                Vector3 knockBackDir = (target.transform.position - transform.position).normalized;
+                knockBackDir.y = 0.0f;
 
-            // 파이어 볼은 넉백도 있어서 해줘야함
+                // 데미지 주고 넉백 시키기
+                target.MonsterGetDamage(_weaponAttackPower);
+                target.MonsterKnockBack(knockBackDir, _weaponKnockBack, 0.25f);
+            }
         }
     }
 
+    // 광역 데미지 주는 범위 출력
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
