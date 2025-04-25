@@ -41,16 +41,6 @@ public class PlayerStatus : MonoBehaviour
         //SetPlayerData();
     }
 
-    private void Update()
-    {
-        // 스킬 패널 닫기 (임시 아무것도 아님)
-        if (Input.GetMouseButtonDown(0))
-        {
-            InGameUIManager.Instance.SkillPanelOff();
-            Time.timeScale = 1;
-        }
-    }
-
     private void SetPlayerGoldData()
     {
         // 강화 할 때 필요한 골드

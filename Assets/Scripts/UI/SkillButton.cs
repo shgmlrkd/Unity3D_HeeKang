@@ -30,6 +30,8 @@ public class SkillButton : MonoBehaviour
     {
         _weaponKey++;
         WeaponData data = WeaponDataManager.Instance.GetWeaponData(_weaponKey);
+        _skillIcon.sprite = Resources.Load<Sprite>(data.UIPath);
+        _skillText.text = data.Description;
     }
 
     // 키 값에 따른 스킬 UI 세팅

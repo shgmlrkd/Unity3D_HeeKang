@@ -98,7 +98,6 @@ public class Monster : MonoBehaviour
             _maxHp = _baseHp * (_one + (_inGameTime / _monsterStatus.StateScaleFactor));
             _curHp = _maxHp;
             _attackPower = _baseAtk * (_one + (_inGameTime / _monsterStatus.StateScaleFactor));
-            print("HP : " + _maxHp + " ATK : " + _attackPower);
         }
 
         // √ ±‚»≠
