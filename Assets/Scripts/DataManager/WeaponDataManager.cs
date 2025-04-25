@@ -16,6 +16,7 @@ public struct WeaponData
     public int Pierce;
     public int ProjectileCount;
     public float LifeTime;
+    public float RotSpeed;
 }
 
 public class WeaponDataManager : Singleton<WeaponDataManager>
@@ -73,6 +74,7 @@ public class WeaponDataManager : Singleton<WeaponDataManager>
             data.Pierce = int.Parse(colData[10]);
             data.ProjectileCount = int.Parse(colData[11]);
             data.LifeTime = float.Parse(colData[12]);
+            data.RotSpeed = float.Parse(colData[13]);
 
             _weaponDatas.Add(data.Key, data);
         }

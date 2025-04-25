@@ -2141,6 +2141,7 @@ MonoBehaviour:
   _kunaiPoolSize: 50
   _laserPoolSize: 10
   _fireBallPoolSize: 50
+  _axePoolSize: 5
 --- !u!4 &1573080577
 Transform:
   m_ObjectHideFlags: 0

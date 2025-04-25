@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponManager : Singleton<WeaponManager>
@@ -30,5 +31,16 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         GameObject fireBall = PoolingManager.Instance.Pop("FireBall");
         fireBall.GetComponent<FireBall>().Fire(pos, dir, data);
+    }
+
+    public void StartAxeSpin(Transform playerTransform, Vector3 pos, WeaponData data)
+    {
+        GameObject axe = PoolingManager.Instance.Pop("Axe");
+        axe.GetComponent<Axe>().SpinAround(playerTransform, pos, data);
+    }
+
+    public List<GameObject> GetObjects(string key)
+    {
+        return PoolingManager.Instance.GetObjects(key);
     }
 }

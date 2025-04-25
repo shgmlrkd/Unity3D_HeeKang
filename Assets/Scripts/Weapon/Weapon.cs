@@ -13,6 +13,7 @@ public class Weapon : MonoBehaviour
     protected float _weaponSpeed = 0.0f;
     protected float _weaponRange = 0.0f;
     protected float _weaponPierce = 0.0f;
+    protected float _weaponRotSpeed = 0.0f;
     protected float _weaponLifeTimer = 0.0f;
     protected float _weaponKnockBack = 0.0f;
     protected float _weaponProjectileCount = 0.0f;
