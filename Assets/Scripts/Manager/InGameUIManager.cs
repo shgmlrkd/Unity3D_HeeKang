@@ -87,7 +87,7 @@ public class InGameUIManager : Singleton<InGameUIManager>
         // 스킬 버튼 3개 추가
         for(int i = 0; i < _cardButtonCount; i++)
         {
-            GameObject skillBtn = Instantiate(skillBtnPrefab, _skillUIs[0]);
+            GameObject skillBtn = Instantiate(skillBtnPrefab, _skillUIs[(int)SkillPanel.SkillPanel]);
         }
         // 스킬 패널 처음에 비활성화
         _inGamePanels[(int)InGamePanel.SkillPanel].gameObject.SetActive(false);
