@@ -21,11 +21,11 @@ public class PlayerSkill : MonoBehaviour
 
     private void Start()
     {
-        //_skills.Add(gameObject.AddComponent<BulletSkill>());
-        //_skills.Add(gameObject.AddComponent<KunaiSkill>());
-        //_skills.Add(gameObject.AddComponent<LaserSkill>());
-        //_skills.Add(gameObject.AddComponent<FireBallSkill>());
-        //_skills.Add(gameObject.AddComponent<AxeSkill>());
+        _skills.Add(gameObject.AddComponent<BulletSkill>());
+        _skills.Add(gameObject.AddComponent<KunaiSkill>());
+        _skills.Add(gameObject.AddComponent<LaserSkill>());
+        _skills.Add(gameObject.AddComponent<FireBallSkill>());
+        _skills.Add(gameObject.AddComponent<AxeSkill>());
         _skills.Add(gameObject.AddComponent<SwordSkill>());
     }
 

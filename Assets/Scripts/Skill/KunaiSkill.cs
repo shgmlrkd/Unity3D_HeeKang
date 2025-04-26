@@ -70,8 +70,6 @@ public class KunaiSkill : Skill
             Quaternion rot = Quaternion.AngleAxis(offset * spreadDegree, Vector3.up);
             Vector3 shotDir = rot * dir;
 
-            print(offset * spreadDegree);
-
             WeaponManager.Instance.KunaiFire(transform.position, shotDir, _weaponData);
         }
     }
