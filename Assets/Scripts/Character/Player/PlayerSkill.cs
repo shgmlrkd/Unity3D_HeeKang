@@ -25,7 +25,8 @@ public class PlayerSkill : MonoBehaviour
         //_skills.Add(gameObject.AddComponent<KunaiSkill>());
         //_skills.Add(gameObject.AddComponent<LaserSkill>());
         //_skills.Add(gameObject.AddComponent<FireBallSkill>());
-        _skills.Add(gameObject.AddComponent<AxeSkill>());
+        //_skills.Add(gameObject.AddComponent<AxeSkill>());
+        _skills.Add(gameObject.AddComponent<SwordSkill>());
     }
 
     public void PlayerSkillUnlockOrLevelUp(int key)

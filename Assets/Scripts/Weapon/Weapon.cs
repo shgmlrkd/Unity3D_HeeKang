@@ -6,6 +6,10 @@ public class Weapon : MonoBehaviour
 
     protected Vector3 _direction;
 
+    protected readonly float _maxAlphaValue = 1.0f;
+    protected readonly float _minAlphaValue = 0.0f;
+
+    protected float _fadeLerpTime;
     protected float _weaponAttackPower = 0.0f;
     public float WeaponAttackPower
     {

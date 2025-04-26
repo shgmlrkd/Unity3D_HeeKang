@@ -31,6 +31,10 @@ public class Monster : MonoBehaviour
 
     protected float _maxHp;
     protected float _curHp;
+    public float MonsterCurHp
+    {
+        get { return _curHp; }
+    }
     protected float _attackPower;
 
     protected float _attackTimer = 0.0f;

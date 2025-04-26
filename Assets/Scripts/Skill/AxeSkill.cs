@@ -71,11 +71,11 @@ public class AxeSkill : Skill
         }
 
         // 실행 중인 코루틴 저장 및 코루틴 시작
-        Coroutine coroutine = StartCoroutine(HandleAxesLifeCycle(_activateAxes, _weaponData.LifeTime));
+        Coroutine coroutine = StartCoroutine(AxesLifeCycle(_activateAxes, _weaponData.LifeTime));
         _runningCoroutines.Add(coroutine);
     }
 
-    private IEnumerator HandleAxesLifeCycle(List<GameObject> axes, float lifeTime)
+    private IEnumerator AxesLifeCycle(List<GameObject> axes, float lifeTime)
     {
         while (true)
         {
