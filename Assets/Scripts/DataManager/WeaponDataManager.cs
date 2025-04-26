@@ -12,11 +12,12 @@ public struct WeaponData
     public float AttackInterval;
     public float AttackRange;
     public float AttackSpeed;   
-    public float Knockback;
+    public float KnockBack;
+    public float KnockBackLerpTime;
+    public float RotSpeed;  
     public int Pierce;
     public int ProjectileCount;
     public float LifeTime;
-    public float RotSpeed;
 }
 
 public class WeaponDataManager : Singleton<WeaponDataManager>
@@ -70,11 +71,12 @@ public class WeaponDataManager : Singleton<WeaponDataManager>
             data.AttackInterval = float.Parse(colData[6]);
             data.AttackRange = float.Parse(colData[7]);
             data.AttackSpeed = float.Parse(colData[8]);
-            data.Knockback = float.Parse(colData[9]);
-            data.Pierce = int.Parse(colData[10]);
-            data.ProjectileCount = int.Parse(colData[11]);
-            data.LifeTime = float.Parse(colData[12]);
-            data.RotSpeed = float.Parse(colData[13]);
+            data.KnockBack = float.Parse(colData[9]);
+            data.KnockBackLerpTime = float.Parse(colData[10]);
+            data.RotSpeed = float.Parse(colData[11]);
+            data.Pierce = int.Parse(colData[12]);
+            data.ProjectileCount = int.Parse(colData[13]);
+            data.LifeTime = float.Parse(colData[14]);
 
             _weaponDatas.Add(data.Key, data);
         }

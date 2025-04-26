@@ -9,6 +9,11 @@ public class WeaponManager : Singleton<WeaponManager>
         PoolingManager.Instance.Add(key, poolSize, weaponPrefab, transform);
     }
 
+    public List<GameObject> GetObjects(string key)
+    {
+        return PoolingManager.Instance.GetObjects(key);
+    }
+
     public void BulletFire(Vector3 pos, Vector3 dir, WeaponData data)
     {
         GameObject bullet = PoolingManager.Instance.Pop("Bullet");
@@ -39,8 +44,9 @@ public class WeaponManager : Singleton<WeaponManager>
         axe.GetComponent<Axe>().SpinAround(playerTransform, pos, data);
     }
 
-    public List<GameObject> GetObjects(string key)
+    public void ThrowSpinningSword(Vector3 pos, Vector3 dir, WeaponData data)
     {
-        return PoolingManager.Instance.GetObjects(key);
+        GameObject sword = PoolingManager.Instance.Pop("Sword");
+        sword.GetComponent<Sword>().Fire(pos, dir, data);
     }
 }

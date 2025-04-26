@@ -88,16 +88,21 @@ public class Monster : MonoBehaviour
 
     protected void OnEnable()
     {
-        // 몬스터의 세팅이 완료되었을 경우, HP와 ATK 갱신
+        // 몬스터의 세팅이 완료되었을 경우 
         if (_isStatSettingEnd)
         {
-            // 인게임 시간 받아오기
+            // 인게임 시간 받아오고
             _inGameTime = InGameUIManager.Instance.GetInGameTimer();
-            // HP = 처음 HP × (1 + (게임 경과 시간 / 스케일 배율))
-            // ATKPW = 처음 ATKPW × (1 + (게임 경과 시간 / 스케일 배율))
-            _maxHp = _baseHp * (_one + (_inGameTime / _monsterStatus.StateScaleFactor));
-            _curHp = _maxHp;
-            _attackPower = _baseAtk * (_one + (_inGameTime / _monsterStatus.StateScaleFactor));
+
+            // 일정 시간이 지났을 경우 HP와 ATK 갱신
+            if ((int)(_inGameTime % _monsterStatus.StatUpdateInterval) == 0)
+            {
+                // HP = 처음 HP × (1 + (게임 경과 시간 / 스케일 배율))
+                // ATK = 처음 ATK × (1 + (게임 경과 시간 / 스케일 배율))
+                _maxHp = _baseHp * (_one + (_inGameTime / _monsterStatus.StateScaleFactor));
+                _curHp = _maxHp;
+                _attackPower = _baseAtk * (_one + (_inGameTime / _monsterStatus.StateScaleFactor));
+            }
         }
 
         // 초기화
@@ -296,12 +301,12 @@ public class Monster : MonoBehaviour
 
     protected virtual void HandleDeadState()
     {
-        // 기본은 아무것도 안함
+        // 기본은 아무것도 없음
     }
 
     protected virtual void HandleRushState()
     {
-        // 기본은 아무것도 안함 (Rush 없는 몬스터는 이거 그대로 씀)
+        // 기본은 아무것도 없음
     }
 
     // 몬스터 데이터 세팅
@@ -357,16 +362,16 @@ public class Monster : MonoBehaviour
         StartCoroutine(KnockBackRoutine(dir, knockBackDistance, duration));
     }
 
-    private IEnumerator KnockBackRoutine(Vector3 dir, float knockBackDistance, float duration)
+    private IEnumerator KnockBackRoutine(Vector3 dir, float knockBackDistance, float lerpTime)
     {
         Vector3 start = transform.position; // 시작 위치
         Vector3 end = start + dir * knockBackDistance; // 도착 위치
         float elapsed = 0f;
 
         // 보간을 이용해서 부드럽게 KnockBack
-        while (elapsed < duration)
+        while (elapsed < lerpTime)
         {
-            transform.position = Vector3.Lerp(start, end, elapsed / duration);
+            transform.position = Vector3.Lerp(start, end, elapsed / lerpTime);
             elapsed += Time.deltaTime;
             yield return null;
         }

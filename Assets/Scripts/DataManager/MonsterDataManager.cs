@@ -15,6 +15,7 @@ public struct MonsterData
     public float AttackDistance;
     public float LifeTime;
     public float StatScaleFactor;
+    public float StatUpdateInterval;
 }
 
 public struct MonsterSpawnData
@@ -74,13 +75,14 @@ public class MonsterDataManager : Singleton<MonsterDataManager>
             monsterData.AttackDistance = float.Parse(colData[9]);
             monsterData.LifeTime = float.Parse(colData[10]);
             monsterData.StatScaleFactor = float.Parse(colData[11]);
+            monsterData.StatUpdateInterval = float.Parse(colData[12]);
 
             // 몬스터 스폰 관련 데이터
             MonsterSpawnData monsterSpawnData;
 
-            monsterSpawnData.SpawnInterval = float.Parse(colData[12]);
-            monsterSpawnData.SpawnStartTime = float.Parse(colData[13]);
-            monsterSpawnData.SpawnEndTime = float.Parse(colData[14]);
+            monsterSpawnData.SpawnInterval = float.Parse(colData[13]);
+            monsterSpawnData.SpawnStartTime = float.Parse(colData[14]);
+            monsterSpawnData.SpawnEndTime = float.Parse(colData[15]);
 
             _monsterDatas.Add(monsterData.Key, monsterData);
             _monsterSpawnIntervalDatas.Add(monsterData.Name, monsterSpawnData);

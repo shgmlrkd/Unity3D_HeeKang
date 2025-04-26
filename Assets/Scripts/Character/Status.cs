@@ -75,6 +75,13 @@ public class Status
         get { return _stateScaleFactor; }
         set { _stateScaleFactor = value; }
     }
+    // 몬스터 시간 지날 때 이거 기준으로 갱신 가능
+    private float _statUpdateInterval;
+    public float StatUpdateInterval
+    {
+        get { return _statUpdateInterval; }
+        set { _statUpdateInterval = value; }
+    }
     // 타입 (근거리, 원거리)
     private int _type;
     public int Type
@@ -104,6 +111,7 @@ public class Status
         _attackDistance = data.AttackDistance;
         _lifeTime = data.LifeTime;
         _stateScaleFactor = data.StatScaleFactor;
+        _statUpdateInterval = data.StatUpdateInterval;
         _exp = data.Exp;
         _type = data.Type;
     }

@@ -14,7 +14,7 @@ public class PoolingManager : Singleton<PoolingManager>
 
         if (parent == null)
         {
-            GameObject parentObject = new GameObject(key);
+             GameObject parentObject = new GameObject(key);
             parent = parentObject.transform;
         }
 

@@ -9,7 +9,7 @@ public class Turtle : MeleeMonster
     private Vector3 _directionToPlayer; // 플레이어로 향하는 방향벡터 변수
 
     private readonly float _rushDuration = 1.5f;
-    private readonly float _rushSpeedRate = 4.0f;
+    private readonly float _rushSpeedRate = 3.0f;
 
     private float _rushTimer = 0.0f;
     private float _particalLifeTime;

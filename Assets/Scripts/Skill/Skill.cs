@@ -2,10 +2,16 @@ using UnityEngine;
 
 public class Skill : MonoBehaviour
 {
+    protected WaitForSeconds _fireInterval;
+
     protected WeaponData _weaponData;
 
+    protected readonly float _maxAlphaValue = 1.0f;
+    protected readonly float _minAlphaValue = 0.0f;
+
+    protected float _fadeLerpTime;
+
     protected int _level = 0;
-    protected WaitForSeconds _fireInterval;
 
     public void InitInterval(WeaponData weaponData)
     {

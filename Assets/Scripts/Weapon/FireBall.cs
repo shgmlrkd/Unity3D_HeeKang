@@ -104,9 +104,10 @@ public class FireBall : ThrowWeapon
         _direction = dir.normalized;
         _weaponRange = data.AttackRange;
         _weaponSpeed = data.AttackSpeed;
-        _weaponKnockBack = data.Knockback;
-        _weaponAttackPower = data.AttackPower;
         _weaponLifeTimer = data.LifeTime;
+        _weaponKnockBack = data.KnockBack;
+        _weaponAttackPower = data.AttackPower;
+        _weaponKnockBackLerpTime = data.KnockBackLerpTime;
         _isExplosionParticleTimer = _weaponLifeTimer * 0.1f; // 라이프 타임의 1 / 10
         _direction.y = 0.0f;
 
@@ -142,13 +143,13 @@ public class FireBall : ThrowWeapon
 
                 // 데미지 주고 넉백 시키기
                 target.MonsterGetDamage(_weaponAttackPower);
-                target.MonsterKnockBack(knockBackDir, _weaponKnockBack, 0.25f);
+                target.MonsterKnockBack(knockBackDir, _weaponKnockBack, _weaponKnockBackLerpTime);
             }
         }
     }
 
     // 광역 데미지 주는 범위 출력
-    private void OnDrawGizmos()
+    protected override void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _weaponRange);

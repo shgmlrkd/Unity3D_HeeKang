@@ -1,5 +1,12 @@
 using UnityEngine;
 
+[System.Serializable]
+public struct PoolData
+{
+    public string name;
+    public int size;
+}
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
@@ -12,24 +19,12 @@ public class GameManager : MonoBehaviour
     public GameObject Player
     { get { return _player; } }
 
-    [SerializeField]
-    private int _skeletonPoolSize; 
-    [SerializeField]
-    private int _slimePoolSize;
-    [SerializeField]
-    private int _turtlePoolSize;
-    [SerializeField]
-    private int _expPoolSize;
-    [SerializeField]
-    private int _bulletPoolSize;
-    [SerializeField]
-    private int _kunaiPoolSize;
-    [SerializeField]
-    private int _laserPoolSize; 
-    [SerializeField]
-    private int _fireBallPoolSize;
-    [SerializeField]
-    private int _axePoolSize;
+    [SerializeField] 
+    private PoolData[] weaponPools;
+    [SerializeField] 
+    private PoolData[] monsterPools;
+    [SerializeField] 
+    private PoolData[] itemPools;
 
     void Awake()
     {
@@ -39,17 +34,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        WeaponManager.Instance.CreateWeapons(_bulletPoolSize, "Bullet");
-        WeaponManager.Instance.CreateWeapons(_kunaiPoolSize, "Kunai");
-        WeaponManager.Instance.CreateWeapons(_laserPoolSize, "Laser");
-        WeaponManager.Instance.CreateWeapons(_fireBallPoolSize, "FireBall");
-        WeaponManager.Instance.CreateWeapons(_axePoolSize, "Axe");
+        // 무기(스킬)들
+        foreach (PoolData  pool in weaponPools)
+            WeaponManager.Instance.CreateWeapons(pool.size, pool.name);
 
-        MonsterManager.Instance.CreateMonsters(_skeletonPoolSize, "Skeleton");
-        MonsterManager.Instance.CreateMonsters(_slimePoolSize, "Slime");
-        MonsterManager.Instance.CreateMonsters(_turtlePoolSize, "TurtleShell");
+        // 몬스터들
+        foreach (PoolData pool in monsterPools)
+            MonsterManager.Instance.CreateMonsters(pool.size, pool.name);
 
-        ItemManager.Instance.CreateItems(_expPoolSize, "Exp");
+        // 아이템들
+        foreach (PoolData pool in itemPools)
+            ItemManager.Instance.CreateItems(pool.size, pool.name);
     }
 
     private void SpawnPlayer()

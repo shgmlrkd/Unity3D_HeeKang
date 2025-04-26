@@ -4,14 +4,14 @@ public class Axe : Weapon
 {
     private Transform _playerTransform; // 플레이어 위치
 
-    private readonly float _speedRate = 2.0f;
-    private float _angle = 0f;
+    private float _angle = 0.0f;
 
     private void Update()
     {
         // 이 angle은 이동속도를 말함 (공전 속도)
-        _angle += (_speedRate * Time.deltaTime); // 각도 증가
+        _angle += (_weaponSpeed * Time.deltaTime); // 각도 증가
 
+        // 플레이어 기준으로 돌아야하므로 중점을 계속 갱신
         Vector3 center = _playerTransform.position + _spawnPosYOffset;
 
         // 원형 경로의 x, z 좌표 계산
@@ -30,24 +30,34 @@ public class Axe : Weapon
         gameObject.SetActive(true);
 
         _playerTransform = playerTransform;
+        transform.position = pos;
         _weaponRange = data.AttackRange;
         _weaponSpeed = data.AttackSpeed;
         _weaponRotSpeed = data.RotSpeed;
-        _weaponKnockBack = data.Knockback; 
+        _weaponKnockBack = data.KnockBack;
         _weaponAttackPower = data.AttackPower;
+        _weaponKnockBackLerpTime = data.KnockBackLerpTime;
 
         // 기준 점이 될 벡터
         Vector3 center = playerTransform.position + _spawnPosYOffset;
 
-        // 시작 위치에서 플레이어 중심까지의 방향 벡터
+        // 플레이어 중심에서 시작 위치까지의 방향 벡터
         Vector3 dir = pos - center;
+        // 처음 시작 각도 구하기
         _angle = Mathf.Atan2(dir.z, dir.x);
+    }
 
-        // 각도에 따른 원형 경로의 x, z 좌표 계산
-        float x = Mathf.Cos(_angle) * _weaponRange;
-        float z = Mathf.Sin(_angle) * _weaponRange;
+    private void OnTriggerEnter(Collider other)
+    {
+        // 몬스터와 충돌하고 넉백 수치가 있을 때
+        if (other.CompareTag("Monster") && _weaponKnockBack > 0)
+        {
+            Monster target = other.gameObject.GetComponent<Monster>();
 
-        // 계산된 x, z 좌표와 플레이어의 중심 위치를 더해 시작 위치로 설정
-        transform.position = new Vector3(x, 0, z) + center;
+            Vector3 knockBackDir = (target.transform.position - transform.position).normalized;
+            knockBackDir.y = 0.0f;
+
+            target.MonsterKnockBack(knockBackDir, _weaponKnockBack, _weaponKnockBackLerpTime);
+        }
     }
 }
