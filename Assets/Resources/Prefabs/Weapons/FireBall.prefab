@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7864968356131822559}
-  - component: {fileID: -408613722303681020}
   - component: {fileID: 6464692150396730090}
   - component: {fileID: 659962879574275421}
+  - component: {fileID: -408613722303681020}
   m_Layer: 0
   m_Name: FireBall
   m_TagString: AoEWeapon
@@ -36,18 +36,6 @@ Transform:
   - {fileID: 2053817553123410545}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-408613722303681020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8085432970417896268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f75b82e202d35cc4daddec49f5b6b05c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &6464692150396730090
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -96,6 +84,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-408613722303681020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8085432970417896268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f75b82e202d35cc4daddec49f5b6b05c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &833216395646642186
 PrefabInstance:
   m_ObjectHideFlags: 0

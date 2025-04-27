@@ -2114,6 +2114,7 @@ GameObject:
   - component: {fileID: 1573080580}
   - component: {fileID: 1573080579}
   - component: {fileID: 1573080583}
+  - component: {fileID: 1573080584}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2133,29 +2134,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29913e2aa634b944180a4f7be756a509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponPools:
+  _weaponPools:
   - name: Bullet
     size: 50
   - name: Kunai
     size: 100
-  - name: Laser
-    size: 5
-  - name: FireBall
-    size: 20
+  - name: Sword
+    size: 30
   - name: Axe
     size: 5
-  - name: Sword
-    size: 50
-  monsterPools:
-  - name: Skeleton
-    size: 100
+  - name: FireBall
+    size: 30
+  - name: Laser
+    size: 30
+  - name: LichFireBall
+    size: 30
+  _monsterPools:
   - name: Slime
-    size: 100
+    size: 0
+  - name: Skeleton
+    size: 0
   - name: TurtleShell
-    size: 100
-  itemPools:
+    size: 0
+  - name: ChestMonster
+    size: 0
+  - name: Lich
+    size: 10
+  _itemPools:
   - name: Exp
-    size: 250
+    size: 500
 --- !u!4 &1573080577
 Transform:
   m_ObjectHideFlags: 0
@@ -2229,6 +2236,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f51d4826f246c6b4584b729a69d37705, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1573080584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573080575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95ffa128d77e5c94c9dc49cd2a1b64b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1698319912

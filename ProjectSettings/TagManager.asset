@@ -9,6 +9,7 @@ TagManager:
   - Weapon
   - Item
   - AoEWeapon
+  - MonsterWeapon
   layers:
   - Default
   - TransparentFX

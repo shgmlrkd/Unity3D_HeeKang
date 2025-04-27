@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1730301283947585421}
   - component: {fileID: 8721772565242531375}
   - component: {fileID: 2997388672012999380}
+  - component: {fileID: 351701994991696667}
   m_Layer: 0
   m_Name: Lich
   m_TagString: Monster
@@ -46,7 +47,7 @@ Animator:
   m_GameObject: {fileID: 378771130812722481}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 3dc717adf98c7b043a3e77ed0130d470, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0a15c11dbbde189499421a0ca9e248fa, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8c34bcd2b52de4e4f934f342908f3fa0, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -106,6 +107,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &351701994991696667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378771130812722481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 229fa281a736e664a92e61349f924654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1088376768557062654
 GameObject:
   m_ObjectHideFlags: 0

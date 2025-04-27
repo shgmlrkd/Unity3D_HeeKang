@@ -78,9 +78,10 @@ GameObject:
   - component: {fileID: 8460827212096981622}
   - component: {fileID: 7538242137987243030}
   - component: {fileID: 2556029655971271950}
+  - component: {fileID: -8961639645779730467}
   m_Layer: 0
   m_Name: ChestMonster
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,7 +113,7 @@ Animator:
   m_GameObject: {fileID: 1052805012354210733}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 379af92262f34e06ab580c86e8d7c6a6, type: 3}
-  m_Controller: {fileID: 9100000, guid: 03730bceb22a49ef8f018a0019003810, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0a66b3154dce58e40806259172d6a9af, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -172,6 +173,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-8961639645779730467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052805012354210733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31f4d2f96943be045840d3b7cfc9219c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1423609434683090692
 GameObject:
   m_ObjectHideFlags: 0

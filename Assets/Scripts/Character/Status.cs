@@ -113,6 +113,5 @@ public class Status
         _stateScaleFactor = data.StatScaleFactor;
         _statUpdateInterval = data.StatUpdateInterval;
         _exp = data.Exp;
-        _type = data.Type;
     }
 }

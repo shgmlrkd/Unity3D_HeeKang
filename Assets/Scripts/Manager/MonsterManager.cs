@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class MonsterManager : Singleton<MonsterManager>
 {
+    private Transform _player;
     private List<GameObject> _monsterPool;
     private Dictionary<string, MonsterSpawnerData> _monsterSpawnDataDict;
 
@@ -17,6 +19,11 @@ public class MonsterManager : Singleton<MonsterManager>
         Left, Right, Up, Down
     }
 
+    private enum SpawnType
+    {
+        Normal, Circle
+    }
+
     private void Awake()
     {
         _monsterPool = new List<GameObject>();
@@ -24,10 +31,19 @@ public class MonsterManager : Singleton<MonsterManager>
         _groundLayer = LayerMask.GetMask("Ground");
     }
 
-    private void Update()
+    private void OnEnable()
+    {
+        _player = GameManager.Instance.Player.transform;
+    }
+
+    private void Start()
     {
         // 인게임 시간 받아오기
         _inGameTime = InGameUIManager.Instance.GetInGameTimer();
+    }
+
+    private void Update()
+    {
     }
 
     public void CreateMonsters(int poolSize, string monsterName)
@@ -42,8 +58,17 @@ public class MonsterManager : Singleton<MonsterManager>
         MonsterSpawnerData data = new MonsterSpawnerData(monsterName, pool, spawnData);
         // 딕셔너리에 추가
         _monsterSpawnDataDict.Add(monsterName, data);
-        // MonsterSpawnData에 입력된 스폰 간격에 맞춰 몬스터를 주기적으로 스폰
-        StartCoroutine(SpawnRoutine(data));
+
+        switch((SpawnType)spawnData.Type)
+        {
+            case SpawnType.Normal:
+                // MonsterSpawnData에 입력된 스폰 간격에 맞춰 몬스터를 주기적으로 스폰
+                StartCoroutine(SpawnRoutine(data));
+                break;
+            case SpawnType.Circle:
+                StartCoroutine(SpawnCircleRoutine(data));
+                break;
+        }
     }
 
     private IEnumerator SpawnRoutine(MonsterSpawnerData data)
@@ -77,6 +102,55 @@ public class MonsterManager : Singleton<MonsterManager>
                 _monsterPool[i].transform.position = spawnPos;
                 _monsterPool[i].SetActive(true);
                 return;
+            }
+        }
+    }
+
+    private IEnumerator SpawnCircleRoutine(MonsterSpawnerData data)
+    {
+        while (_inGameTime < data.SpawnData.SpawnStartTime)
+        {
+            _inGameTime = InGameUIManager.Instance.GetInGameTimer();  // 시간 갱신
+            yield return null;
+        }
+
+        // 일정 시간마다 몬스터를 원형으로 배치하는 반복 코루틴
+        while (_inGameTime < data.SpawnData.SpawnEndTime)
+        {
+            // 원형 배치 실행
+            SpawnCircleMonster(data);
+
+            // 스폰 간격만큼 대기
+            yield return new WaitForSeconds(data.SpawnData.SpawnInterval);
+
+            // 매번 시간을 업데이트하고 다시 확인
+            _inGameTime = InGameUIManager.Instance.GetInGameTimer();  // 시간 갱신
+        }
+    }
+
+    // 몬스터 풀 개수만큼 한번에 원형으로 플레이어를 가둠
+    private void SpawnCircleMonster(MonsterSpawnerData data)
+    {
+        int monsterPoolCount = data.Pool.Count;
+        _monsterPool = data.Pool;
+
+        // 원에서 각 몬스터 간 각도 계산 (라디안)
+        float angleStep = Mathf.PI * 2 / monsterPoolCount;
+
+        for(int i = 0; i < monsterPoolCount; i++)
+        {
+            // 라디안 anlge
+            float angle = angleStep * i;
+
+            float x = Mathf.Cos(angle) * data.SpawnData.SpawnRange;
+            float z = Mathf.Sin(angle) * data.SpawnData.SpawnRange;
+
+            Vector3 newPos = new Vector3(x, 0.0f, z) + _player.position;
+
+            if (!_monsterPool[i].activeSelf)
+            {
+                _monsterPool[i].transform.position = newPos;
+                _monsterPool[i].SetActive(true);
             }
         }
     }

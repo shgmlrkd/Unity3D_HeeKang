@@ -20,11 +20,11 @@ public class GameManager : MonoBehaviour
     { get { return _player; } }
 
     [SerializeField] 
-    private PoolData[] weaponPools;
+    private PoolData[] _weaponPools;
     [SerializeField] 
-    private PoolData[] monsterPools;
+    private PoolData[] _monsterPools;
     [SerializeField] 
-    private PoolData[] itemPools;
+    private PoolData[] _itemPools;
 
     void Awake()
     {
@@ -35,15 +35,15 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // 무기(스킬)들
-        foreach (PoolData  pool in weaponPools)
+        foreach (PoolData  pool in _weaponPools)
             WeaponManager.Instance.CreateWeapons(pool.size, pool.name);
 
         // 몬스터들
-        foreach (PoolData pool in monsterPools)
+        foreach (PoolData pool in _monsterPools)
             MonsterManager.Instance.CreateMonsters(pool.size, pool.name);
 
         // 아이템들
-        foreach (PoolData pool in itemPools)
+        foreach (PoolData pool in _itemPools)
             ItemManager.Instance.CreateItems(pool.size, pool.name);
     }
 

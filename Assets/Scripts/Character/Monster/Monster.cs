@@ -6,7 +6,7 @@ public class Monster : MonoBehaviour
 {
     protected enum MonsterStatus
     {
-        Run, Hit, Rush, Dead
+        Run, Hit, Rush, Attack, Dead
     }
 
     protected Transform _player;
@@ -39,6 +39,7 @@ public class Monster : MonoBehaviour
 
     protected float _attackTimer = 0.0f;
     protected float _distanceThreshold;
+    protected float _attackInterval = 0.0f;
 
     private readonly float _halfRatio = 0.5f;
     private readonly float _fadeSpeed = 3.0f;
@@ -103,9 +104,9 @@ public class Monster : MonoBehaviour
             {
                 // HP = 처음 HP × (1 + (게임 경과 시간 / 스케일 배율))
                 // ATK = 처음 ATK × (1 + (게임 경과 시간 / 스케일 배율))
-                _maxHp = _baseHp * (_one + (_inGameTime / _monsterStatus.StateScaleFactor));
+                _maxHp = _baseHp * (_one + (int)(_inGameTime / _monsterStatus.StateScaleFactor));
                 _curHp = _maxHp;
-                _attackPower = _baseAtk * (_one + (_inGameTime / _monsterStatus.StateScaleFactor));
+                _attackPower = _baseAtk * (_one + (int)(_inGameTime / _monsterStatus.StateScaleFactor));
             }
         }
 
@@ -150,7 +151,7 @@ public class Monster : MonoBehaviour
         // 몬스터의 현재 상태에 따라 행동 처리
         switch (_monsterCurrentState)
         {
-            // 몬스터가 Run 상태면 Move() 실행
+            // 몬스터가 Run 상태면 조건 확인 후 Move() 실행
             case MonsterStatus.Run:
                 if (CanMove())
                 { 
@@ -164,6 +165,9 @@ public class Monster : MonoBehaviour
             // 몬스터가 Rush 상태면 HandleRushState() 실행
             case MonsterStatus.Rush:
                 HandleRushState();
+                break;
+            case MonsterStatus.Attack:
+                HandleAttackState();
                 break;
             case MonsterStatus.Dead:
                 HandleDeadState();
@@ -237,7 +241,7 @@ public class Monster : MonoBehaviour
     }
 
     // 체력바 알파값 조절
-    private void SetMonsterHpBarAlpha(float alphaValue)
+    protected void SetMonsterHpBarAlpha(float alphaValue)
     {
         foreach (Image monsterHpBarImage in _monsterHpBarImages)
         {
@@ -273,7 +277,7 @@ public class Monster : MonoBehaviour
         }
     }
 
-    protected void Move()
+    protected virtual void Move()
     {
         _monsterCurrentState = MonsterStatus.Run;
         // 플레이어 방향으로 이동, 회전
@@ -302,13 +306,17 @@ public class Monster : MonoBehaviour
     {
         _monsterCurrentState = MonsterStatus.Run;
     }
-
-    protected virtual void HandleDeadState()
+    protected virtual void HandleRushState()
     {
         // 기본은 아무것도 없음
     }
 
-    protected virtual void HandleRushState()
+    protected virtual void HandleAttackState()
+    {
+        _monsterCurrentState = MonsterStatus.Run;
+    }
+
+    protected virtual void HandleDeadState()
     {
         // 기본은 아무것도 없음
     }
@@ -402,6 +410,34 @@ public class Monster : MonoBehaviour
             // 무기 공격력 만큼 데미지주기
             float damage = other.GetComponent<Weapon>().WeaponAttackPower;
             MonsterGetDamage(damage);
+        }
+
+        // 플레이어랑 트리거 체크되면 플레이어 데미지 주기
+        if (other.CompareTag("Player"))
+        {
+            _player.gameObject.GetComponent<PlayerGetDamage>().GetDamage(_attackPower);
+        }
+    }
+
+    protected void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            _attackTimer += Time.deltaTime;
+            if (_attackTimer >= _monsterStatus.AttackInterval)
+            {
+                _attackTimer -= _monsterStatus.AttackInterval;
+                _player.gameObject.GetComponent<PlayerGetDamage>().GetDamage(_attackPower);
+            }
+        }
+    }
+
+    protected void OnTriggerExit(Collider other)
+    {
+        // 플레이어와 충돌이 멈췄다면 초기화
+        if (other.CompareTag("Player"))
+        {
+            _attackTimer = 0.0f;
         }
     }
 }

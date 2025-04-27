@@ -1,30 +1,29 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class FireBall : ThrowWeapon
 {
-    private enum FireBallParticle
+    protected enum FireBallParticle
     {
         Flight, Explosion
     }
 
-    private List<ParticleSystem> psList;
-    private ParticleSystem[] _fireBallParticles;
-    private ParticleSystem[] _flightParticles;
-    private ParticleSystem[] _explosionParticles;
+    protected List<ParticleSystem> psList;
+    protected ParticleSystem[] _fireBallParticles;
+    protected ParticleSystem[] _flightParticles;
+    protected ParticleSystem[] _explosionParticles;
 
-    private float _isExplosionParticleTimer;
+    protected float _isExplosionParticleTimer;
 
-    private bool _isExplosionParticlePlay = false;
+    protected bool _isExplosionParticlePlay = false;
     private bool _isParticleSystemListAdded = false;
 
-    private void Awake()
+    protected void Awake()
     {
         psList = new List<ParticleSystem>();
     }
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         base.OnEnable();
 
@@ -49,7 +48,7 @@ public class FireBall : ThrowWeapon
         _isExplosionParticlePlay = false;
     }
 
-    private void Update()
+    protected void Update()
     {
         base.Update();
 
@@ -114,21 +113,27 @@ public class FireBall : ThrowWeapon
         transform.rotation = Quaternion.LookRotation(_direction);
     }
 
+    protected void ExplosionParticleStart()
+    {
+        _timer = 0.0f;
+        _isExplosionParticlePlay = true;
+        // 날아가는 파이어볼 파티클 비활성화
+        _fireBallParticles[(int)FireBallParticle.Flight].gameObject.SetActive(false);
+        // 터지는 파티클 활성화
+        _fireBallParticles[(int)FireBallParticle.Explosion].gameObject.SetActive(true);
+        // 터지는 파티클 플레이
+        foreach (ParticleSystem exposionParticle in _explosionParticles)
+        {
+            exposionParticle.Play();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Monster") && !_isExplosionParticlePlay)
         {
-            _timer = 0.0f;
-            _isExplosionParticlePlay = true;
-            // 날아가는 파이어볼 파티클 비활성화
-            _fireBallParticles[(int)FireBallParticle.Flight].gameObject.SetActive(false);
-            // 터지는 파티클 활성화
-            _fireBallParticles[(int)FireBallParticle.Explosion].gameObject.SetActive(true);
-            // 터지는 파티클 플레이
-            foreach (ParticleSystem exposionParticle in _explosionParticles)
-            {
-                exposionParticle.Play();
-            }
+            // 폭발 파티클 실행
+            ExplosionParticleStart();
 
             // 플레이어 기준 범위 내의 몬스터들 Collider 찾기
             Collider[] targetColliders = Physics.OverlapSphere(transform.position, _weaponRange, LayerMask.GetMask("Monster"));

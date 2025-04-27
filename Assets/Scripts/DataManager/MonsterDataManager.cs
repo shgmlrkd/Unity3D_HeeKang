@@ -5,7 +5,6 @@ public struct MonsterData
 {
     public int Key;
     public string Name;
-    public int Type;
     public float Hp;
     public int Exp;
     public float MoveSpeed;
@@ -20,9 +19,11 @@ public struct MonsterData
 
 public struct MonsterSpawnData
 {
+    public int Type;
     public float SpawnInterval;
     public float SpawnStartTime;
     public float SpawnEndTime;
+    public float SpawnRange;
 }
 
 public class MonsterDataManager : Singleton<MonsterDataManager>
@@ -65,24 +66,25 @@ public class MonsterDataManager : Singleton<MonsterDataManager>
 
             monsterData.Key = int.Parse(colData[0]);
             monsterData.Name = colData[1];
-            monsterData.Type = int.Parse(colData[2]);
-            monsterData.Hp = float.Parse(colData[3]);
-            monsterData.Exp = int.Parse(colData[4]);
-            monsterData.MoveSpeed = float.Parse(colData[5]);
-            monsterData.RotateSpeed = float.Parse(colData[6]);
-            monsterData.AttackPower = float.Parse(colData[7]);
-            monsterData.AttackInterval = float.Parse(colData[8]);
-            monsterData.AttackDistance = float.Parse(colData[9]);
-            monsterData.LifeTime = float.Parse(colData[10]);
-            monsterData.StatScaleFactor = float.Parse(colData[11]);
-            monsterData.StatUpdateInterval = float.Parse(colData[12]);
+            monsterData.Hp = float.Parse(colData[2]);
+            monsterData.Exp = int.Parse(colData[3]);
+            monsterData.MoveSpeed = float.Parse(colData[4]);
+            monsterData.RotateSpeed = float.Parse(colData[5]);
+            monsterData.AttackPower = float.Parse(colData[6]);
+            monsterData.AttackInterval = float.Parse(colData[7]);
+            monsterData.AttackDistance = float.Parse(colData[8]);
+            monsterData.LifeTime = float.Parse(colData[9]);
+            monsterData.StatScaleFactor = float.Parse(colData[10]);
+            monsterData.StatUpdateInterval = float.Parse(colData[11]);
 
             // 몬스터 스폰 관련 데이터
             MonsterSpawnData monsterSpawnData;
 
+            monsterSpawnData.Type = int.Parse(colData[12]);
             monsterSpawnData.SpawnInterval = float.Parse(colData[13]);
             monsterSpawnData.SpawnStartTime = float.Parse(colData[14]);
             monsterSpawnData.SpawnEndTime = float.Parse(colData[15]);
+            monsterSpawnData.SpawnRange = float.Parse(colData[16]);
 
             _monsterDatas.Add(monsterData.Key, monsterData);
             _monsterSpawnIntervalDatas.Add(monsterData.Name, monsterSpawnData);

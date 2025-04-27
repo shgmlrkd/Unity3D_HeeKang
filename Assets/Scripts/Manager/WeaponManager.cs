@@ -14,6 +14,7 @@ public class WeaponManager : Singleton<WeaponManager>
         return PoolingManager.Instance.GetObjects(key);
     }
 
+    // 플레이어 무기
     public void BulletFire(Vector3 pos, Vector3 dir, WeaponData data)
     {
         GameObject bullet = PoolingManager.Instance.Pop("Bullet");
@@ -48,5 +49,12 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         GameObject sword = PoolingManager.Instance.Pop("Sword");
         sword.GetComponent<Sword>().Fire(pos, dir, data);
+    }
+
+    // 몬스터 무기
+    public void ShootLichFireBall(Vector3 pos, Vector3 dir, MonsterWeaponData data)
+    {
+        GameObject lichFireBall = PoolingManager.Instance.Pop("LichFireBall");
+        lichFireBall.GetComponent<LichFireBall>().Fire(pos, dir, data);
     }
 }

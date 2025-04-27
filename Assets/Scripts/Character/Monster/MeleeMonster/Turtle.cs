@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class Turtle : MeleeMonster
+public class Turtle : Monster
 {
     private ParticleSystem[] _trailParticles;
 
@@ -67,14 +67,9 @@ public class Turtle : MeleeMonster
 
     protected override void HandleHitState()
     {
-        // 데미지를 입었으면
-        //if (_getDamaged)
-        {
-            // 돌진 상태 준비 (위치 잡기)
-            _isReached = false;
-            SetRushState();
-            //_getDamaged = false;
-        }
+        // 데미지를 입었으면 돌진 상태 준비 (위치 잡기)
+        _isReached = false;
+        SetRushState();
     }
 
     protected override void HandleDeadState()

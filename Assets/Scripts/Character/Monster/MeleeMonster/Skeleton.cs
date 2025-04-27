@@ -2,7 +2,7 @@ using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Skeleton : MeleeMonster
+public class Skeleton : Monster
 {
     private int _skeletonKey = 102;
 
@@ -11,14 +11,6 @@ public class Skeleton : MeleeMonster
         SetMonsterKey(_skeletonKey);
 
         base.OnEnable();
-    }
-
-    private void Start()
-    {
-        base.Start();
-
-        // 키값에 따른 몬스터 데이터 세팅
-        SetMonsterData(MonsterDataManager.Instance.GetMonsterData(_skeletonKey));
     }
 
     protected override bool CanMove()
