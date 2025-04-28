@@ -2159,7 +2159,7 @@ MonoBehaviour:
   - name: ChestMonster
     size: 0
   - name: Lich
-    size: 10
+    size: 1
   _itemPools:
   - name: Exp
     size: 500

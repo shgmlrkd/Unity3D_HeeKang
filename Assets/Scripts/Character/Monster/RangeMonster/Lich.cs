@@ -103,18 +103,35 @@ public class Lich : FlashDamagedMonster
 
         if (_canFireNow)
         {
-            _monsterAnimator.SetTrigger("Fire");
             StartCoroutine(FireRoutine(direction));
         }
     }
 
     private IEnumerator FireRoutine(Vector3 dir)
     {
+        _monsterAnimator.SetTrigger("Fire");
         _canFireNow = false; // 발사했으니까 잠깐 막음
 
         _lichFireBallSkill.Fire(dir); // 발사
-        yield return _lichFireBallSkill.FireInterval; // 기다림
 
-        _canFireNow = true; // 다시 발사 가능
+        float fireAnimLength = _monsterAnimator.GetCurrentAnimatorStateInfo(0).length;
+
+        // FireInterval과 Fire 애니메이션 길이 비교
+        float remainingTime = Mathf.Max(0, _lichFireBallSkill.AttackInterval - fireAnimLength);
+
+        // Fire 애니메이션이 끝날 때까지 기다림
+        yield return new WaitForSeconds(fireAnimLength);
+
+        // 대기하다가 이미 Hp가 없다면 종료
+        if (_curHp <= 0)
+            yield break;
+
+        // Fire 애니메이션이 끝난 후 바로 Idle 상태로 전환
+        _monsterAnimator.SetTrigger("Idle");
+
+        // 남은 FireInterval 시간만큼 기다림
+        yield return new WaitForSeconds(remainingTime);
+
+        _canFireNow = true;
     }
 }

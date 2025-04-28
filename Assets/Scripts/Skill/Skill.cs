@@ -15,6 +15,11 @@ public class Skill : MonoBehaviour
     protected readonly float _minAlphaValue = 0.0f;
 
     protected float _fadeLerpTime;
+    protected float _attackInterval;
+    public float AttackInterval
+    {
+        get { return _attackInterval; }
+    }
 
     protected int _level = 0;
 

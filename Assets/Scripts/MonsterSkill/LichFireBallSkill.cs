@@ -8,6 +8,7 @@ public class LichFireBallSkill : Skill
     {
         _monsterWeaponData = MonsterWeaponDataManager.Instance.GetMonsterWeaponData(_lichFireBallIndexKey);
         InitInterval(_monsterWeaponData);
+        _attackInterval = _monsterWeaponData.AttackInterval;
     }
 
     public void Fire(Vector3 dir)
