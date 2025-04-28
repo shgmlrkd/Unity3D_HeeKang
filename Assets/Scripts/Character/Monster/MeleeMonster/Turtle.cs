@@ -15,7 +15,6 @@ public class Turtle : Monster
     private float _particalLifeTime;
 
     private bool _isReached = false; // 플레이어가 있었던 위치까지 도달했는지 체크하는 변수
-    private bool _getDamaged = false; // 데미지 입었는지 체크하는 변수
    
     private int _turtleKey = 103;
 
@@ -35,7 +34,6 @@ public class Turtle : Monster
         _rushTimer = 0.0f;
 
         _isReached = false;
-        _getDamaged = false;
     }
 
     private void Start()
@@ -133,7 +131,6 @@ public class Turtle : Monster
 
     public override void MonsterGetDamage(float damage)
     {
-        _getDamaged = true;
         base.MonsterGetDamage(damage);
 
         // 동시에 맞았을 경우 애니메이션이 넘어가지 않는걸 방지

@@ -12,6 +12,7 @@ public class PlayerExpBar : MonoBehaviour
 
     private float _toPercent = 100.0f;
     private float _curExp = 0.0f;
+    private int _pendingLevelUp = 0;
 
     private enum ExpBar
     {
@@ -51,13 +52,16 @@ public class PlayerExpBar : MonoBehaviour
         }
     }
 
+    // 경험치를 개당 20으로 했을 경우 1렙때
+    // 레벨업이 2번 되는데 스킬 선택 버튼은 1번 실행되는 버그 있음
     public void SetPlayerCurExp(float exp)
     {
         _curExp += exp;
 
-        if(_curExp >= _player.MaxExp)
+        // 레벨업이 여러 번 일어날 수 있으므로 반복문으로 처리
+        while (_curExp >= _player.MaxExp)
         {
-            _curExp %= _player.MaxExp;
+            _curExp -= _player.MaxExp;
             _player.LevelUp();
         }
     }

@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 8721772565242531375}
   - component: {fileID: 2997388672012999380}
   - component: {fileID: 351701994991696667}
-  m_Layer: 0
+  - component: {fileID: -6511110382095240087}
+  m_Layer: 6
   m_Name: Lich
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -119,6 +120,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 229fa281a736e664a92e61349f924654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6511110382095240087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378771130812722481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda09890f1034ef4b852d846a5bf290c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _monsterFireBallIndexKey: 401
 --- !u!1 &1088376768557062654
 GameObject:
   m_ObjectHideFlags: 0

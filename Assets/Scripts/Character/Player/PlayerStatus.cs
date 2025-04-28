@@ -38,7 +38,6 @@ public class PlayerStatus : MonoBehaviour
         _playerData = PlayerDataManager.Instance.GetPlayerDataByStatLevel(_hpLevel, _expLevel, _attackPowerLevel, _attackSpeedLevel, _speedLevel);
         _playerStatus = new Status(_playerData);
         _maxExp = _playerStatus.Exp;
-        //SetPlayerData();
     }
 
     private void SetPlayerGoldData()

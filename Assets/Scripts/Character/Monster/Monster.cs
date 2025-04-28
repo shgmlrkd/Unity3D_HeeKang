@@ -350,6 +350,7 @@ public class Monster : MonoBehaviour
         if (_curHp <= 0)
         {
             _curHp = 0;
+            InGameUIManager.Instance.SetKillCountText();
             _monsterCollider.enabled = false;
             GameObject exp = PoolingManager.Instance.Pop("Exp");
             exp.GetComponent<Exp>().SetExp(_monsterStatus.Exp, transform.position);

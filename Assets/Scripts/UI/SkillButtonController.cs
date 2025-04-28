@@ -88,11 +88,29 @@ public class SkillButtonController : MonoBehaviour
             int randIndex = Random.Range(0, availableSkillKeys.Count);
             // 스킬 키값
             int key = availableSkillKeys[randIndex];
+
+            if (IsSkillMaxLevel(key))
+            {
+                continue; // 만렙인 스킬은 패스
+            }
+
             if (selectedKeys.Add(key))
             {
                 _skillKeysCopy.Add(key);
             }
         }
+    }
+
+    private bool IsSkillMaxLevel(int key)
+    {
+        int curLevel = _skillLevelDict[key];
+
+        // 이 스킬이 속한 그룹의 최대 키 계산
+        int skillIndex = (curLevel - _skillStartKey) / _skillMaxLevel;
+        int skillMaxKey = _skillStartKey + (key + 1) * _skillMaxLevel - 1;
+
+        // 만렙 여부 판단
+        return curLevel > skillMaxKey;
     }
 
     private void SetSkillUI()

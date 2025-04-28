@@ -1,2 +1,3 @@
 Key,Name,AttackPower,AttackInterval,AttackSpeed,LifeTime
 401,LichFireBall,1.5,2,3.5,4
+402,BeholderFireball,2,1.7,2.4,4

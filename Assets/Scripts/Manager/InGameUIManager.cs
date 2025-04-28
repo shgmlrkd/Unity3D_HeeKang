@@ -1,10 +1,11 @@
+using TMPro;
 using UnityEngine;
 
 public class InGameUIManager : Singleton<InGameUIManager>
 {
     private enum InGamePanel
     {
-        PlayerPanel = 1, SkillPanel
+        PlayerPanel = 1, SkillPanel, KillCntPanel
     }
 
     private enum PlayerPanel
@@ -12,12 +13,21 @@ public class InGameUIManager : Singleton<InGameUIManager>
         HpBar, ExpBar, InGameTimer
     }
 
+    private enum KillCountPanel
+    {
+        KillCount = 1
+    }
+
     private Transform[] _inGamePanels;
     private Transform[] _playerUIs;
+    private Transform[] _killCountUIs;
     private Transform _inGameCanvas;
 
     private int _panelChildrenCount;
     private int _playerPanelChildrenCount;
+    private int _killCountPanelChildrenCount;
+
+    private int _killCount = 0;
 
     private bool _isStart = false;
 
@@ -32,7 +42,10 @@ public class InGameUIManager : Singleton<InGameUIManager>
             SetInGamePanel();
             // 플레이어 UI 패널 세팅
             SetPlayerPanel();
-
+            // 몬스터 킬 수 패널 세팅
+            SetKillCountPanel();
+            // 몬스터 킬 수 초기화
+            SetKillCountText();
             _inGamePanels[(int)InGamePanel.SkillPanel].gameObject.SetActive(false);
         }
     }
@@ -65,6 +78,16 @@ public class InGameUIManager : Singleton<InGameUIManager>
         }
     }
 
+    private void SetKillCountPanel()
+    {
+        _killCountPanelChildrenCount = _inGamePanels[(int)InGamePanel.KillCntPanel].childCount;
+        _killCountUIs = new Transform[_killCountPanelChildrenCount];
+        for (int i = 0; i < _killCountPanelChildrenCount; i++)
+        {
+            _killCountUIs[i] = _inGamePanels[(int)InGamePanel.KillCntPanel].GetChild(i);
+        }
+    }
+
     // 플레이어 체력바에 관련된 모든 UI 요소
     public Transform[] GetPlayerHpBarUI()
     {
@@ -93,5 +116,10 @@ public class InGameUIManager : Singleton<InGameUIManager>
     public void SkillPanelOff()
     {
         _inGamePanels[(int)InGamePanel.SkillPanel].gameObject.SetActive(false);
+    }
+
+    public void SetKillCountText()
+    {
+        _killCountUIs[(int)KillCountPanel.KillCount].GetComponent<TextMeshProUGUI>().text = "X " + _killCount++.ToString();
     }
 }

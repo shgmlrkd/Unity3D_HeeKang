@@ -16,9 +16,10 @@ public class BulletSkill : Skill
         StartCoroutine(FireLoop());
     }
 
-    public void BulletLevelUp()
+    public override void LevelUp()
     {
-        LevelUp();
+        base.LevelUp();
+
         _weaponData = WeaponDataManager.Instance.GetWeaponData(_bulletIndexKey + _level);
         InitInterval(_weaponData);
     }

@@ -1,16 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
-public class Beholder : MonoBehaviour
+public class Beholder : FlashDamagedMonster
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    private MonsterFireBallSkill _monsterFireBallSkill;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private int _beholderKey = 106;
+
+
 }

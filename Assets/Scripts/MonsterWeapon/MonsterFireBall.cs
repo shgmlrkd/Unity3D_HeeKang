@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LichFireBall : FireBall
+public class MonsterFireBall : FireBall
 {
     public void Fire(Vector3 pos, Vector3 dir, MonsterWeaponData data)
     {

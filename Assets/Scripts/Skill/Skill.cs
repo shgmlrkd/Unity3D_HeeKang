@@ -22,6 +22,8 @@ public class Skill : MonoBehaviour
     }
 
     protected int _level = 0;
+    public int Level
+    { get { return _level; } }
 
     protected void InitInterval(WeaponData weaponData)
     {
@@ -32,7 +34,7 @@ public class Skill : MonoBehaviour
         _fireInterval = new WaitForSeconds(weaponData.AttackInterval);
     }
 
-    public void LevelUp()
+    public virtual void LevelUp()
     {
         _level++;
 

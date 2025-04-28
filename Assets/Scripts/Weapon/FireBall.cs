@@ -137,6 +137,9 @@ public class FireBall : ThrowWeapon
 
             // 플레이어 기준 범위 내의 몬스터들 Collider 찾기
             Collider[] targetColliders = Physics.OverlapSphere(transform.position, _weaponRange, LayerMask.GetMask("Monster"));
+
+            print(targetColliders.Length);  
+
             // 모든 몬스터들 데미지 주기
             foreach(Collider targetCollider in targetColliders)
             {

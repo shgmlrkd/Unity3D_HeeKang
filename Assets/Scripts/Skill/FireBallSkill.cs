@@ -16,17 +16,9 @@ public class FireBallSkill : Skill
         StartCoroutine(FireLoop());
     }
 
-    private void Update()
+    public override void LevelUp()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            FireBallLevelUp();
-        }
-    }
-
-    private void FireBallLevelUp()
-    {
-        LevelUp();
+        base.LevelUp();
         _weaponData = WeaponDataManager.Instance.GetWeaponData(_kunaiIndexKey + _level);
         InitInterval(_weaponData);
     }

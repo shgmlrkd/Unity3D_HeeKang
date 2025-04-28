@@ -16,17 +16,9 @@ public class KunaiSkill : Skill
         StartCoroutine(FireLoop());
     }
 
-    private void Update()
+    public override void LevelUp()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            KunaiLevelUp();
-        }
-    }
-
-    private void KunaiLevelUp()
-    {
-        LevelUp();
+        base.LevelUp();
         _weaponData = WeaponDataManager.Instance.GetWeaponData(_kunaiIndexKey + _level);
         InitInterval(_weaponData);
     }

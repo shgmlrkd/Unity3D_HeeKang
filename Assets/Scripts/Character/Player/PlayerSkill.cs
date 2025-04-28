@@ -4,72 +4,49 @@ using System.Linq;
 
 public class PlayerSkill : MonoBehaviour
 {
-    private enum AddSkill
+    private List<Skill> _skills;
+    public List<Skill> Skills
     {
-        Bullet = 300, Kunai = 305, Sword = 310, Axe = 315, FireBall = 320, Laser = 325
+        get { return _skills; }
     }
 
-    private List<Skill> _skills;
+    private readonly int _weaponStartKey = 300;
 
-    private int _skillStartIndex;
-        
     private void Awake()
     {
         _skills = new List<Skill>();
-        _skillStartIndex = (int)AddSkill.Bullet;
     }
 
     private void Start()
     {
         _skills.Add(gameObject.AddComponent<BulletSkill>());
-        /*_skills.Add(gameObject.AddComponent<KunaiSkill>());
-        _skills.Add(gameObject.AddComponent<LaserSkill>());
-        _skills.Add(gameObject.AddComponent<FireBallSkill>());
+        _skills.Add(gameObject.AddComponent<KunaiSkill>());
+        _skills.Add(gameObject.AddComponent<SwordSkill>());
         _skills.Add(gameObject.AddComponent<AxeSkill>());
-        _skills.Add(gameObject.AddComponent<SwordSkill>());*/
+        _skills.Add(gameObject.AddComponent<FireBallSkill>());
+        _skills.Add(gameObject.AddComponent<LaserSkill>());
+
+        foreach(Skill skill in _skills)
+        {
+            skill.enabled = false;
+        }
+
+        _skills[0].enabled = true;
     }
 
     public void PlayerSkillUnlockOrLevelUp(int key)
     {
-        /*switch((AddSkill)key)
+        // _skills 리스트의 인덱스 번호
+        int index = (key - _weaponStartKey) / WeaponDataManager.Instance.WeaponMaxLevel;
+        
+        // 안켜져 있으면 키고
+        if (!_skills[index].enabled)
         {
-            case AddSkill.Bullet:
-                // _skills 리스트에 BulletSkill이 하나라도 있는지 체크
-                if (!_skills.Any(skill => skill is BulletSkill))
-                    _skills.Add(gameObject.AddComponent<BulletSkill>());
-                else
-                {
-                    Skill bulletSkill = _skills.FirstOrDefault(skill => skill is BulletSkill);
-                    bulletSkill.GetComponent<BulletSkill>().LevelUp
-                }
-                break;
-            case AddSkill.Kunai:
-                // _skills 리스트에 KunaiSkill이 하나라도 있는지 체크
-                if (!_skills.Any(skill => skill is KunaiSkill))
-                    _skills.Add(gameObject.AddComponent<KunaiSkill>());
-                else
-                {
-
-                }
-                break;
-            case AddSkill.FireBall:
-                // _skills 리스트에 FireBallSkill이 하나라도 있는지 체크
-                if (!_skills.Any(skill => skill is FireBallSkill))
-                    _skills.Add(gameObject.AddComponent<FireBallSkill>());
-                else
-                {
-
-                }
-                break;
-            case AddSkill.Laser:
-                // _skills 리스트에 LaserSkill이 하나라도 있는지 체크
-                if (!_skills.Any(skill => skill is LaserSkill))
-                    _skills.Add(gameObject.AddComponent<LaserSkill>());
-                else
-                {
-
-                }
-                break;
-        }*/
+            _skills[index].enabled = true;
+        }
+        else // 켜져있으면 레벨업
+        {
+            _skills[index].LevelUp();
+        }
     }
 }

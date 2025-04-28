@@ -24,19 +24,11 @@ public class AxeSkill : Skill
         StartSpinAxe();
     }
 
-    private void Update()
+    public override void LevelUp()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AxeLevelUp();
-            StartSpinAxe();
-        }
-    }
-
-    private void AxeLevelUp()
-    {
-        LevelUp();
+        base.LevelUp();
         _weaponData = WeaponDataManager.Instance.GetWeaponData(_axeIndexKey + _level);
+        StartSpinAxe();
     }
 
     private void StartSpinAxe()

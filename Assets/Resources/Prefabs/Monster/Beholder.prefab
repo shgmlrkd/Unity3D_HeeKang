@@ -234,7 +234,9 @@ GameObject:
   - component: {fileID: 5548295746700600581}
   - component: {fileID: 1305198952932500602}
   - component: {fileID: 9116190673515359110}
-  m_Layer: 0
+  - component: {fileID: 371724360826053369}
+  - component: {fileID: 7688595365276905279}
+  m_Layer: 6
   m_Name: Beholder
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -328,6 +330,31 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!114 &371724360826053369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791087923883012693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2b3545df4a72d14686043fd09705d67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7688595365276905279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791087923883012693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda09890f1034ef4b852d846a5bf290c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _monsterFireBallIndexKey: 402
 --- !u!1 &852220902460361423
 GameObject:
   m_ObjectHideFlags: 0

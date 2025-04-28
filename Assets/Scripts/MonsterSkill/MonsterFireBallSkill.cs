@@ -1,12 +1,13 @@
 using UnityEngine;
 
-public class LichFireBallSkill : Skill
+public class MonsterFireBallSkill : Skill
 {
-    private int _lichFireBallIndexKey = 401;
+    [SerializeField]
+    private int _monsterFireBallIndexKey;
 
     private void Awake()
     {
-        _monsterWeaponData = MonsterWeaponDataManager.Instance.GetMonsterWeaponData(_lichFireBallIndexKey);
+        _monsterWeaponData = MonsterWeaponDataManager.Instance.GetMonsterWeaponData(_monsterFireBallIndexKey);
         InitInterval(_monsterWeaponData);
         _attackInterval = _monsterWeaponData.AttackInterval;
     }

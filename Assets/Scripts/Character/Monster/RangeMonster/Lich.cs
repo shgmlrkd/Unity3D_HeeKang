@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class Lich : FlashDamagedMonster
 {
-    private LichFireBallSkill _lichFireBallSkill;
+    private MonsterFireBallSkill _monsterFireBallSkill;
 
     private float _distance;
-
     private int _lichKey = 105;
 
     private bool _canFireNow = true;
@@ -23,8 +22,7 @@ public class Lich : FlashDamagedMonster
     private void Start()
     {
         base.Start();
-        gameObject.AddComponent<LichFireBallSkill>();
-        _lichFireBallSkill = GetComponent<LichFireBallSkill>();
+        _monsterFireBallSkill = GetComponent<MonsterFireBallSkill>();
     }
 
     private void OnEnable()
@@ -74,7 +72,7 @@ public class Lich : FlashDamagedMonster
 
     protected override void HandleHitState()
     {
-        if(_distance <= _monsterStatus.AttackDistance)
+        if (_distance <= _monsterStatus.AttackDistance)
         {
             _monsterCurrentState = MonsterStatus.Attack;
         }
@@ -91,10 +89,10 @@ public class Lich : FlashDamagedMonster
 
         // 회전 방향 잡아주기
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * _monsterStatus.RotSpeed);
-       
+
         // 플레이어와의 거리 구하기
         _distance = Vector3.Distance(_player.position, transform.position);
-        
+
         // 멀어지면 Run 상태로 바꿈
         if (_distance > _monsterStatus.AttackDistance)
         {
@@ -112,12 +110,12 @@ public class Lich : FlashDamagedMonster
         _monsterAnimator.SetTrigger("Fire");
         _canFireNow = false; // 발사했으니까 잠깐 막음
 
-        _lichFireBallSkill.Fire(dir); // 발사
+        _monsterFireBallSkill.Fire(dir); // 발사
 
         float fireAnimLength = _monsterAnimator.GetCurrentAnimatorStateInfo(0).length;
 
         // FireInterval과 Fire 애니메이션 길이 비교
-        float remainingTime = Mathf.Max(0, _lichFireBallSkill.AttackInterval - fireAnimLength);
+        float remainingTime = Mathf.Max(0, _monsterFireBallSkill.AttackInterval - fireAnimLength);
 
         // Fire 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(fireAnimLength);

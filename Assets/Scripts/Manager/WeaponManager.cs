@@ -55,6 +55,6 @@ public class WeaponManager : Singleton<WeaponManager>
     public void ShootLichFireBall(Vector3 pos, Vector3 dir, MonsterWeaponData data)
     {
         GameObject lichFireBall = PoolingManager.Instance.Pop("LichFireBall");
-        lichFireBall.GetComponent<LichFireBall>().Fire(pos, dir, data);
+        lichFireBall.GetComponent<MonsterFireBall>().Fire(pos, dir, data);
     }
 }

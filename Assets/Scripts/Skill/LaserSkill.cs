@@ -21,17 +21,9 @@ public class LaserSkill : Skill
         StartCoroutine(FireLoop());
     }
 
-    void Update()
+    public override void LevelUp()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            LaserLevelUp();
-        }
-    }
-
-    private void LaserLevelUp()
-    {
-        LevelUp();
+        base.LevelUp();
         _weaponData = WeaponDataManager.Instance.GetWeaponData(_laserIndexKey + _level);
         InitInterval(_weaponData);
     }

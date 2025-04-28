@@ -16,17 +16,9 @@ public class SwordSkill : Skill
         StartCoroutine(FireLoop());
     }
 
-    private void Update()
+    public override void LevelUp()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SwordLevelUp();
-        }
-    }
-
-    private void SwordLevelUp()
-    {
-        LevelUp();
+        base.LevelUp();
         _weaponData = WeaponDataManager.Instance.GetWeaponData(_swordIndexKey + _level);
         InitInterval(_weaponData);
     }
