@@ -6,7 +6,7 @@ public class PlayerSkill : MonoBehaviour
 {
     private enum AddSkill
     {
-        Bullet = 300, Kunai = 305, FireBall = 320, Laser = 325
+        Bullet = 300, Kunai = 305, Sword = 310, Axe = 315, FireBall = 320, Laser = 325
     }
 
     private List<Skill> _skills;
