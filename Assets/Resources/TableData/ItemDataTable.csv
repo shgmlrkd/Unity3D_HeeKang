@@ -1,5 +1,5 @@
-Key,Name
-201,Gold
-202,GoldBox
-203,Medkit
-204,Magnet
+Key,Name,DropRate,MinValue,MaxValue
+201,Gold,10,1,1
+202,GoldBox,2,15,25
+203,Medkit,5,0.03,0.08
+204,Magnet,10,0,0
