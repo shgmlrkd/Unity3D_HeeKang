@@ -1,15 +1,11 @@
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI;
 
-public class Exp : MonoBehaviour
+public class Exp : Item
 {
     private Transform _player;
 
-    private Vector3 _rotationY;
     private Vector3 _directionToExp;
 
-    private float _rotationSpeed = 100.0f; // 경험치 나왔을 때 회전 속도
     private float _moveDistance = 0.4f; // 경험치 먹을 때 반대 방향으로 가는 거리 계수
     private float _timeToReach = 0.35f; // 경험치가 플레이어 반대 방향으로 가는 시간
     private float _pickUpDistance = 0.5f; // 경험치가 플레이어 방향으로 돌아와서 경험치 비활성화 시키는 거리
@@ -19,11 +15,6 @@ public class Exp : MonoBehaviour
 
     private bool _isCollision = false;
     private bool _isReachedTargetPos = false;
-
-    private void Awake()
-    {
-        _rotationY = Vector3.up;
-    }
 
     private void OnEnable()
     {
@@ -37,8 +28,8 @@ public class Exp : MonoBehaviour
         _player = GameManager.Instance.Player.transform;
     }
 
-    private void Update()
-    {
+    protected override void Update()
+    { 
         // 스킬 선택 창 나오면 멈춤
         if (Time.timeScale == 0) return;
 

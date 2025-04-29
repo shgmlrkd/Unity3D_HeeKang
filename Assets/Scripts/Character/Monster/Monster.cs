@@ -343,17 +343,23 @@ public class Monster : MonoBehaviour
     public virtual void MonsterGetDamage(float damage)
     {
         InitHpBarEffect();
+
         // 피격
         _curHp -= damage;
 
         // 죽으면 죽는 애니메이션, 충돌체 끄고 체력바 끄기
         if (_curHp <= 0)
         {
+            // 몬스터 죽은 회수, 몬스터 콜라이더 끄기
             _curHp = 0;
             InGameUIManager.Instance.SetKillCountText();
             _monsterCollider.enabled = false;
-            GameObject exp = PoolingManager.Instance.Pop("Exp");
-            exp.GetComponent<Exp>().SetExp(_monsterStatus.Exp, transform.position);
+
+            // 경험치와 랜덤 아이템 떨구기 (경험치 100%, 아이템 확률)
+            ItemManager.Instance.SpawnExp(_monsterStatus.Exp, transform.position);
+            ItemManager.Instance.SpawnRandomItem(transform.position);
+
+            // 죽는 애니메이션
             _monsterAnimator.SetTrigger("Dead");
             _monsterCurrentState = MonsterStatus.Dead;
         }

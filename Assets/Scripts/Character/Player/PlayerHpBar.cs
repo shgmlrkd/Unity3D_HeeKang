@@ -40,17 +40,27 @@ public class PlayerHpBar : MonoBehaviour
         // 텍스트로 남은 체력 보여주기
         if (_playerHpBarText != null)
         {
-            if(_curHp < 0)
-            {
-                _curHp = 0;
-            }
-
             _playerHpBarText.text = $"{_curHp.ToString("F0") + " / " + _player.Status.MaxHp.ToString()}";
         }
     }
 
-    public void SetPlayerCurHp(float damage)
+    public void PlayerGetDamage(float damage)
     {
         _curHp -= damage;
+
+        if (_curHp <= 0.0f)
+        {
+            _curHp = 0.0f;
+        }
+    }
+    
+    public void PlayerGetHeal(float  heal)
+    {
+        _curHp += heal;
+
+        if(_curHp >= _player.Status.MaxHp)
+        {
+            _curHp = _player.Status.MaxHp;
+        }
     }
 }

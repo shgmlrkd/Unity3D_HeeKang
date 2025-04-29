@@ -62,6 +62,6 @@ public class PlayerGetDamage : MonoBehaviour
         }
 
         // 플레이어 데미지 줌
-        _playerHpBar.SetPlayerCurHp(damage);
+        _playerHpBar.PlayerGetDamage(damage);
     }
 }
