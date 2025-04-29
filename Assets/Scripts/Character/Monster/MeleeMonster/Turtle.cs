@@ -103,19 +103,18 @@ public class Turtle : Monster
     {
         foreach (ParticleSystem trailParticle in _trailParticles)
         {
-            // 파티클이 안켜졌다면
+            if(trailParticle.isPlaying)
+            {
+                // 파티클을 먼저 정지하고 초기화
+                trailParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
+
             if (!trailParticle.isPlaying)
             {
                 // 파티클 실행 시간을 설정 후 플레이
                 ParticleSystem.MainModule main = trailParticle.main;
                 main.startLifetime = _particalLifeTime;
                 trailParticle.Play();
-            }
-            else
-            {
-                // 파티클이 이미 플레이 되있다면 실행 시간을 새로 설정
-                ParticleSystem.MainModule main = trailParticle.main;
-                main.startLifetime = _particalLifeTime;
             }
         }
     }
@@ -125,16 +124,16 @@ public class Turtle : Monster
         // 파티클 멈춤
         foreach (ParticleSystem trailParticle in _trailParticles)
         {
-            trailParticle.Stop();
+            trailParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
     }
-
+        
     public override void MonsterGetDamage(float damage)
     {
         base.MonsterGetDamage(damage);
 
         // 동시에 맞았을 경우 애니메이션이 넘어가지 않는걸 방지
-        if (_curHp <= 0)
+        if (_curHp <= 0)    
         {
             _monsterAnimator.SetBool("IsDead", true);
         }
