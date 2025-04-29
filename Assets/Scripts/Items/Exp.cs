@@ -40,8 +40,16 @@ public class Exp : Item
         }
         else // 충돌 시
         {
-            // 경험치 아이템 연출
-            MoveExpItem();
+            // 자석을 먹었다면 바로 먹음
+            if (ItemManager.Instance.IsMagnetOn)
+            {
+                MoveToPlayerAndPickup();
+            }
+            else
+            {
+                // 경험치 아이템 연출
+                MoveExpItem();
+            }
         }
     }
 
@@ -67,18 +75,24 @@ public class Exp : Item
         }
         else
         {
-            _timePassed += Time.deltaTime;
-            transform.position = Vector3.Lerp(transform.position, _player.position, _timePassed);
+            // 플레이어 방향으로 이동 후 Exp 먹음
+            MoveToPlayerAndPickup();
+        }
+    }
 
-            float distance = Vector3.Distance(transform.position, _player.position);
+    private void MoveToPlayerAndPickup()
+    {
+        _timePassed += Time.deltaTime;
+        transform.position = Vector3.Lerp(transform.position, _player.position, _timePassed);
 
-            // 다시 플레이어 위치로 돌아갔을 때 경험치를 추가
-            if (distance <= _pickUpDistance)
-            {
-                // 경험치++
-                _player.gameObject.GetComponent<PlayerExpBar>().SetPlayerCurExp(_exp);
-                gameObject.SetActive(false); // 아이템 비활성화
-            }
+        float distance = Vector3.Distance(transform.position, _player.position);
+
+        // 다시 플레이어 위치로 돌아갔을 때 경험치를 추가
+        if (distance <= _pickUpDistance)
+        {
+            // 경험치++
+            _player.gameObject.GetComponent<PlayerExpBar>().SetPlayerCurExp(_exp);
+            gameObject.SetActive(false); // 아이템 비활성화
         }
     }
 

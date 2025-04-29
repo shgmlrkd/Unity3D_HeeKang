@@ -1,11 +1,21 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemManager : Singleton<ItemManager>
 {
+    private readonly Vector3 _posOffsetY = new Vector3(0.0f, 0.5f, 0.0f);
+
     private readonly int _itemStartKey = 201;
     private readonly int _oneHundred = 100;
 
     private int _itemCount;
+
+    private bool _isMagnetOn = false;
+    public bool IsMagnetOn
+    {
+        get { return _isMagnetOn; }
+        set { _isMagnetOn = value; }
+    }
 
     private void Start()
     {
@@ -16,6 +26,30 @@ public class ItemManager : Singleton<ItemManager>
     {
         GameObject weaponPrefab = Resources.Load<GameObject>("Prefabs/Items/" + key);
         PoolingManager.Instance.Add(key, poolSize, weaponPrefab, transform);
+    }
+
+    // 활성화되어 있는 경험치의 위치만 반환
+    public List<Transform> GetEnabledExpList()
+    {
+        List<Transform> onEnableObjs = new List<Transform>();
+        List<GameObject> objs = PoolingManager.Instance.GetObjects("Exp");
+
+        foreach (GameObject obj in objs)
+        {
+            if(obj.activeSelf)
+                onEnableObjs.Add(obj.transform);
+        }
+
+        if(onEnableObjs.Count > 0)
+        {
+            _isMagnetOn = true;
+        }
+        else
+        {
+            _isMagnetOn = false;
+        }
+
+        return onEnableObjs;
     }
 
     public void SpawnExp(float expValue, Vector3 pos)
@@ -29,7 +63,7 @@ public class ItemManager : Singleton<ItemManager>
         // 아이템 개수 중 랜덤으로 뽑기
         int randomKey = _itemStartKey + Random.Range(0, _itemCount);
         // 랜덤으로 뽑은 키값으로 data 가져오기
-        ItemData data = ItemDataManager.Instance.GetItemData(203);
+        ItemData data = ItemDataManager.Instance.GetItemData(randomKey);
         // 그 data에 DropRate에 맞게 뽑기위한 랜덤값 (0 ~ 99)
         int randomRate = Random.Range(0, _oneHundred);
         // DropRate가 randomRate 이상이면 호출
@@ -38,7 +72,7 @@ public class ItemManager : Singleton<ItemManager>
             // 랜덤 값으로 아이템 값을 받음
             int randomValue = Random.Range(data.MinValue, data.MaxValue);
             GameObject obj = PoolingManager.Instance.Pop(data.Name);
-            obj.GetComponent<Item>().SetItemRandomValue(randomValue , pos);
+            obj.GetComponent<Item>().SetItemRandomValue(randomValue, pos + _posOffsetY);
         }
     }
 }

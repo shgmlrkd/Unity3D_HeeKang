@@ -5,7 +5,7 @@ public class InGameUIManager : Singleton<InGameUIManager>
 {
     private enum InGamePanel
     {
-        PlayerPanel = 1, SkillPanel, KillCntPanel
+        PlayerPanel = 1, SkillPanel, KillCntPanel, GoldCntPanel
     }
 
     private enum PlayerPanel
@@ -17,17 +17,24 @@ public class InGameUIManager : Singleton<InGameUIManager>
     {
         KillCount = 1
     }
+    private enum GoldCountPanel
+    {
+        GoldCount = 1
+    }
 
     private Transform[] _inGamePanels;
     private Transform[] _playerUIs;
     private Transform[] _killCountUIs;
+    private Transform[] _goldCountUIs;
     private Transform _inGameCanvas;
 
     private int _panelChildrenCount;
     private int _playerPanelChildrenCount;
     private int _killCountPanelChildrenCount;
+    private int _goldCountPanelChildrenCount;
 
     private int _killCount = 0;
+    private int _goldCount = 0;
 
     private bool _isStart = false;
 
@@ -46,6 +53,10 @@ public class InGameUIManager : Singleton<InGameUIManager>
             SetKillCountPanel();
             // 몬스터 킬 수 초기화
             SetKillCountText();
+            // 골드 개수 패널 세팅
+            SetGoldCountPanel();
+            // 골드 개수 초기화
+            SetGoldCountText();
             _inGamePanels[(int)InGamePanel.SkillPanel].gameObject.SetActive(false);
         }
     }
@@ -88,6 +99,16 @@ public class InGameUIManager : Singleton<InGameUIManager>
         }
     }
 
+    private void SetGoldCountPanel()
+    {
+        _goldCountPanelChildrenCount = _inGamePanels[(int)InGamePanel.GoldCntPanel].childCount;
+        _goldCountUIs = new Transform[_goldCountPanelChildrenCount];
+        for (int i = 0; i < _goldCountPanelChildrenCount; i++)
+        {
+            _goldCountUIs[i] = _inGamePanels[(int)InGamePanel.GoldCntPanel].GetChild(i);
+        }
+    }
+
     // 플레이어 체력바에 관련된 모든 UI 요소
     public Transform[] GetPlayerHpBarUI()
     {
@@ -121,5 +142,10 @@ public class InGameUIManager : Singleton<InGameUIManager>
     public void SetKillCountText()
     {
         _killCountUIs[(int)KillCountPanel.KillCount].GetComponent<TextMeshProUGUI>().text = "X " + _killCount++.ToString();
+    }
+
+    public void SetGoldCountText()
+    {
+        _goldCountUIs[(int)GoldCountPanel.GoldCount].GetComponent<TextMeshProUGUI>().text = "X " + _goldCount++.ToString();
     }
 }

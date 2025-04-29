@@ -8,6 +8,7 @@ public struct ItemData
     public float DropRate;
     public int MinValue;
     public int MaxValue;
+    public float LerpTime;
 }
 
 public class ItemDataManager : Singleton<ItemDataManager>
@@ -49,6 +50,7 @@ public class ItemDataManager : Singleton<ItemDataManager>
             data.DropRate = float.Parse(colData[2]);
             data.MinValue = int.Parse(colData[3]);
             data.MaxValue = int.Parse(colData[4]);
+            data.LerpTime = float.Parse(colData[5]);
 
             _itemDatas.Add(data.Key, data);
         }

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class PlayerHpBar : MonoBehaviour
 {
+    private ParticleSystem[] _healParticles;
     private PlayerStatus _player;
     private Slider _playerHpBarSlider;
     private Transform[] _playerHpBar;
@@ -18,6 +19,8 @@ public class PlayerHpBar : MonoBehaviour
 
     private void Start()
     {
+        _healParticles = GameObject.Find("Healing").GetComponentsInChildren<ParticleSystem>();
+
         _player = GetComponent<PlayerStatus>();
         _curHp = _player.Status.MaxHp;
         _playerHpBar = InGameUIManager.Instance.GetPlayerHpBarUI();
@@ -61,6 +64,20 @@ public class PlayerHpBar : MonoBehaviour
         if(_curHp >= _player.Status.MaxHp)
         {
             _curHp = _player.Status.MaxHp;
+        }
+
+        foreach(ParticleSystem healParticle in _healParticles)
+        {
+            if (healParticle.isPlaying)
+            {
+                // 파티클을 먼저 정지하고 초기화
+                healParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
+
+            if (!healParticle.isPlaying)
+            {
+                healParticle.Play();
+            }
         }
     }
 }

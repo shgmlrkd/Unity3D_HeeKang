@@ -1,5 +1,5 @@
-Key,Name,DropRate,MinValue,MaxValue
-201,Gold,10,1,1
-202,GoldBox,2,15,25
-203,Medkit,99,10,20
-204,Magnet,10,0,0
+Key,Name,DropRate,MinValue,MaxValue,LerpTime
+201,Gold,20,1,11,0
+202,SkillBox,5,0,1,0
+203,Medkit,25,10,21,0
+204,Magnet,15,0,1,5
