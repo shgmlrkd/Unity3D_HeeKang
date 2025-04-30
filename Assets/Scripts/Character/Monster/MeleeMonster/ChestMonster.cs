@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ChestMonster : FlashDamagedMonster
 {
-    private float _fadeLerpTimer = 10.0f;
+    private float _fadeLerpTimer = 15.0f;
     private float _activeTimer = 0.0f;
 
     private int _chestMonsterKey = 104;
