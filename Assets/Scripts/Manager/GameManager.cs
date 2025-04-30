@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     private void SpawnPlayer()
     {
-        GameObject prefab = Resources.Load<GameObject>("Prefabs/Player");
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/Player/UnityChan");
 
         _player = Instantiate(prefab);
     }
