@@ -126,7 +126,7 @@ public class SkillButtonController : MonoBehaviour
     private void SkillLevelUp(int key)
     {
         int skillKey = _skillLevelDict[key];
-        GameManager.Instance.Player.GetComponent<PlayerSkill>().PlayerSkillUnlockOrLevelUp(skillKey);
+        InGameManager.Instance.Player.GetComponent<PlayerSkill>().PlayerSkillUnlockOrLevelUp(skillKey);
         _skillLevelDict[key]++;
     }
 }

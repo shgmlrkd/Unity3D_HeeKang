@@ -12,7 +12,6 @@ public class PlayerExpBar : MonoBehaviour
 
     private float _toPercent = 100.0f;
     private float _curExp = 0.0f;
-    private int _pendingLevelUp = 0;
 
     private enum ExpBar
     {
@@ -61,6 +60,7 @@ public class PlayerExpBar : MonoBehaviour
         // 레벨업이 여러 번 일어날 수 있으므로 반복문으로 처리
         while (_curExp >= _player.MaxExp)
         {
+            print(_player.MaxExp);
             _curExp -= _player.MaxExp;
             _player.LevelUp();
         }

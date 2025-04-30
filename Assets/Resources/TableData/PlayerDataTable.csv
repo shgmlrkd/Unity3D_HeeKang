@@ -1,26 +1,76 @@
-Key,Name,EnchantLevel,TotalExp,Hp,HpGold,AttackPower,AttackGold,AttackSpeed,AttackSpeedGold,Speed,SpeedGold
-1,Girl,1,5,135,10,1,13,1,10,6,8
-2,Girl,2,6.75,146,20,1.02,25,1.05,20,6.22,12
-3,Girl,3,9.11,159,35,1.04,42,1.1,35,6.44,18
-4,Girl,4,12.3,174,50,1.06,59,1.15,50,6.66,26
-5,Girl,5,16.61,191,70,1.08,81,1.2,70,6.89,36
-6,Girl,6,22.42,210,95,1.1,108,1.25,95,7.11,50
-7,Girl,7,30.27,231,130,1.12,145,1.3,130,7.33,68
-8,Girl,8,40.86,254,160,1.14,184,1.35,160,7.55,90
-9,Girl,9,55.16,279,200,1.16,236,1.4,200,7.78,174
-10,Girl,10,74.47,306,0,1.18,0,1.5,0,8,0
-11,Girl,0,100.53,0,0,0,0,0,0,0,0
-12,Girl,0,135.72,0,0,0,0,0,0,0,0
-13,Girl,0,183.22,0,0,0,0,0,0,0,0
-14,Girl,0,247.35,0,0,0,0,0,0,0,0
-15,Girl,0,333.92,0,0,0,0,0,0,0,0
-16,Girl,0,450.79,0,0,0,0,0,0,0,0
-17,Girl,0,608.57,0,0,0,0,0,0,0,0
-18,Girl,0,821.57,0,0,0,0,0,0,0,0
-19,Girl,0,1109.12,0,0,0,0,0,0,0,0
-20,Girl,0,1497.31,0,0,0,0,0,0,0,0
-21,Girl,0,2021.37,0,0,0,0,0,0,0,0
-22,Girl,0,2728.85,0,0,0,0,0,0,0,0
-23,Girl,0,3683.94,0,0,0,0,0,0,0,0
-24,Girl,0,4973.32,0,0,0,0,0,0,0,0
-25,Girl,0,6714,0,0,0,0,0,0,0,0
+Key,Name,TotalExp,Hp,Speed
+1,Unity Chan,8,113,6
+2,Unity Chan,14,114,6.08
+3,Unity Chan,22,115,6.16
+4,Unity Chan,32,117,6.25
+5,Unity Chan,44,119,6.33
+6,Unity Chan,58,121,6.41
+7,Unity Chan,74,123,6.5
+8,Unity Chan,92,126,6.58
+9,Unity Chan,112,129,6.66
+10,Unity Chan,134,133,6.75
+11,Unity Chan,158,136,6.83
+12,Unity Chan,184,140,6.91
+13,Unity Chan,212,145,7
+14,Unity Chan,242,149,7.08
+15,Unity Chan,274,154,7.16
+16,Unity Chan,308,159,7.25
+17,Unity Chan,344,165,7.33
+18,Unity Chan,382,171,7.41
+19,Unity Chan,422,177,7.5
+20,Unity Chan,464,183,7.58
+21,Unity Chan,508,190,7.66
+22,Unity Chan,554,197,7.75
+23,Unity Chan,602,204,7.83
+24,Unity Chan,652,212,7.91
+25,Unity Chan,704,220,8
+26,Misaki Chan,1,1,1
+27,Misaki Chan,1,1,1
+28,Misaki Chan,1,1,1
+29,Misaki Chan,1,1,1
+30,Misaki Chan,1,1,1
+31,Misaki Chan,1,1,1
+32,Misaki Chan,1,1,1
+33,Misaki Chan,1,1,1
+34,Misaki Chan,1,1,1
+35,Misaki Chan,1,1,1
+36,Misaki Chan,1,1,1
+37,Misaki Chan,1,1,1
+38,Misaki Chan,1,1,1
+39,Misaki Chan,1,1,1
+40,Misaki Chan,1,1,1
+41,Misaki Chan,1,1,1
+42,Misaki Chan,1,1,1
+43,Misaki Chan,1,1,1
+44,Misaki Chan,1,1,1
+45,Misaki Chan,1,1,1
+46,Misaki Chan,1,1,1
+47,Misaki Chan,1,1,1
+48,Misaki Chan,1,1,1
+49,Misaki Chan,1,1,1
+50,Misaki Chan,1,1,1
+51,Yuko Chan,1,1,1
+52,Yuko Chan,1,1,1
+53,Yuko Chan,1,1,1
+54,Yuko Chan,1,1,1
+55,Yuko Chan,1,1,1
+56,Yuko Chan,1,1,1
+57,Yuko Chan,1,1,1
+58,Yuko Chan,1,1,1
+59,Yuko Chan,1,1,1
+60,Yuko Chan,1,1,1
+61,Yuko Chan,1,1,1
+62,Yuko Chan,1,1,1
+63,Yuko Chan,1,1,1
+64,Yuko Chan,1,1,1
+65,Yuko Chan,1,1,1
+66,Yuko Chan,1,1,1
+67,Yuko Chan,1,1,1
+68,Yuko Chan,1,1,1
+69,Yuko Chan,1,1,1
+70,Yuko Chan,1,1,1
+71,Yuko Chan,1,1,1
+72,Yuko Chan,1,1,1
+73,Yuko Chan,1,1,1
+74,Yuko Chan,1,1,1
+75,Yuko Chan,1,1,1

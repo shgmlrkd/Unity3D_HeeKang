@@ -7,11 +7,11 @@ public struct PoolData
     public int size;
 }
 
-public class GameManager : MonoBehaviour
+public class InGameManager : MonoBehaviour
 {
-    private static GameManager _instance;
-    public static GameManager Instance
-    {
+    private static InGameManager _instance;
+    public static InGameManager Instance
+    { 
         get { return _instance; }
     }
 
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     private void SpawnPlayer()
     {
-        GameObject prefab = Resources.Load<GameObject>("Prefabs/Player/UnityChan");
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/Player/" + GameManager.Instance.PlayerName);
 
         _player = Instantiate(prefab);
     }

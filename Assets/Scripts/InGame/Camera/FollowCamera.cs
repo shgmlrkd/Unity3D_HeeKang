@@ -16,7 +16,7 @@ public class FollowCamera : MonoBehaviour
 
     private void Start()
     {
-        _target = GameManager.Instance.Player.transform;
+        _target = InGameManager.Instance.Player.transform;
 
         _targetPos = _target.position;
         _destPos = _targetPos + Vector3.back * _distance + Vector3.up * _height;

@@ -17,20 +17,6 @@ public class Status
         get { return _speed; }
         set { _speed = value; }
     }
-    // 공격력
-    private float _attackPower;
-    public float AttackPower
-    {
-        get { return _attackPower; }
-        set { _attackPower = value; }
-    }
-    // 공격 속도
-    private float _attackSpeed;
-    public float AttackSpeed
-    {
-        get { return _attackSpeed; }
-        set { _attackSpeed = value; }
-    }
     // 경험치
     private float _exp;
     public float Exp
@@ -46,6 +32,13 @@ public class Status
     {
         get { return _rotSpeed; }
         set { _rotSpeed = value; }
+    }
+    // 공격력
+    private float _attackPower;
+    public float AttackPower
+    {
+        get { return _attackPower; }
+        set { _attackPower = value; }
     }
     // 공격 간격
     private float _attackInterval;
@@ -96,8 +89,6 @@ public class Status
         _maxHp = data.Hp;
         _exp = data.Exp;
         _speed = data.Speed;
-        _attackPower = data.AttackPowerRate;
-        _attackSpeed = data.AttackSpeedRate;
     }
 
     // 몬스터 Status 초기화

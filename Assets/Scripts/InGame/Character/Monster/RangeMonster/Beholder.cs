@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Beholder : FlashDamagedMonster
 {
-    private MonsterFireBallSkill _monsterFireBallSkill;
+    /*private MonsterFireBallSkill _monsterFireBallSkill;
 
-    private int _beholderKey = 106;
+    private int _beholderKey = 106;*/
 
 
 }

@@ -67,7 +67,7 @@ public class Monster : MonoBehaviour
 
     protected void Start()
     {
-        _player = GameManager.Instance.Player.transform;
+        _player = InGameManager.Instance.Player.transform;
 
         _monsterCollider = GetComponent<Collider>();
         _monsterAnimator = GetComponent<Animator>();

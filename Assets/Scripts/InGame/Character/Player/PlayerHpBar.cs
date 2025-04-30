@@ -19,7 +19,7 @@ public class PlayerHpBar : MonoBehaviour
 
     private void Start()
     {
-        _healParticles = GameObject.Find("Healing").GetComponentsInChildren<ParticleSystem>();
+        _healParticles = GameObject.Find("Healing").GetComponentsInChildren<ParticleSystem>();  
 
         _player = GetComponent<PlayerStatus>();
         _curHp = _player.Status.MaxHp;

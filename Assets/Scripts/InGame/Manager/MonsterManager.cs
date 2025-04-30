@@ -32,7 +32,7 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private void OnEnable()
     {
-        _player = GameManager.Instance.Player.transform;
+        _player = InGameManager.Instance.Player.transform;
     }
 
     private void Start()

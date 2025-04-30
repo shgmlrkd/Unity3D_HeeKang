@@ -2483,7 +2483,7 @@ GameObject:
   - component: {fileID: 1573080583}
   - component: {fileID: 1573080584}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: InGameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2515,7 +2515,7 @@ MonoBehaviour:
   - name: Laser
     size: 30
   - name: LichFireBall
-    size: 150
+    size: 500
   _monsterPools:
   - name: Slime
     size: 50
@@ -2536,6 +2536,8 @@ MonoBehaviour:
     size: 100
   - name: Magnet
     size: 100
+  - name: SkillBox
+    size: 50
 --- !u!4 &1573080577
 Transform:
   m_ObjectHideFlags: 0

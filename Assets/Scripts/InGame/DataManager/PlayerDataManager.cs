@@ -5,16 +5,9 @@ public struct PlayerData
 {
     public int Key;
     public string Name;
-    public int EnchantLevel;
     public float Exp;
     public float Hp;
-    public int HpGold;
-    public float AttackPowerRate;
-    public int AttackPowerGold;
-    public float AttackSpeedRate;
-    public int AttackSpeedGold;
     public float Speed;
-    public int SpeedGold;
 }
 
 public class PlayerDataManager : Singleton<PlayerDataManager>
@@ -26,14 +19,12 @@ public class PlayerDataManager : Singleton<PlayerDataManager>
         LoadPlayerData();
     }
 
-    public float GetPlayerTotalExpToLevel(int level)
+    public PlayerData GetPlayerData(int key)
     {
-        PlayerData totalExp = _playerDatas[level];
-
-        return totalExp.Exp;
+        return _playerDatas[key];
     }
 
-    public PlayerData GetPlayerDataByStatLevel(int hpLevel, int expLevel, int attackLevel, int attackSpeedLevel, int speedLevel)
+    /*public PlayerData GetPlayerDataByStatLevel(int hpLevel, int expLevel, int attackLevel, int attackSpeedLevel, int speedLevel)
     {
         PlayerData result = new PlayerData();
 
@@ -58,7 +49,7 @@ public class PlayerDataManager : Singleton<PlayerDataManager>
         result.SpeedGold = speedData.SpeedGold;
 
         return result;
-    }
+    }*/
 
     private void LoadPlayerData()
     {
@@ -80,16 +71,9 @@ public class PlayerDataManager : Singleton<PlayerDataManager>
 
             data.Key = int.Parse(colData[0]);
             data.Name = colData[1];
-            data.EnchantLevel = int.Parse(colData[2]);
-            data.Exp = float.Parse(colData[3]);
-            data.Hp = float.Parse(colData[4]);
-            data.HpGold = int.Parse(colData[5]);
-            data.AttackPowerRate = float.Parse(colData[6]);
-            data.AttackPowerGold = int.Parse(colData[7]); 
-            data.AttackSpeedRate = float.Parse(colData[8]);
-            data.AttackSpeedGold = int.Parse(colData[9]);
-            data.Speed = float.Parse(colData[10]);
-            data.SpeedGold = int.Parse(colData[11]);
+            data.Exp = float.Parse(colData[2]);
+            data.Hp = float.Parse(colData[3]);
+            data.Speed = float.Parse(colData[4]);
 
             _playerDatas.Add(data.Key, data);
         }

@@ -31,7 +31,7 @@ public class PlayerSkill : MonoBehaviour
             skill.enabled = false;
         }
 
-        _skills[0].enabled = true;
+        _skills[GameManager.Instance.SkillIndex].enabled = true;
     }
 
     public void PlayerSkillUnlockOrLevelUp(int key)

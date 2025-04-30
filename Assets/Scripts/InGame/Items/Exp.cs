@@ -25,7 +25,7 @@ public class Exp : Item
 
     private void Start()
     {
-        _player = GameManager.Instance.Player.transform;
+        _player = InGameManager.Instance.Player.transform;
     }
 
     protected override void Update()
