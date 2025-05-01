@@ -31,7 +31,7 @@ public class PlayerStatus : MonoBehaviour
     private int _attackPowerGold;
     private int _attackSpeedGold;*/
 
-    private int _expLevel = 1;
+    private int _expLevel = 0;
     public int ExpLevel
     {
         get { return _expLevel; }
@@ -63,13 +63,13 @@ public class PlayerStatus : MonoBehaviour
     public void LevelUp()
     {
         _expLevel++;
-        _playerData = PlayerDataManager.Instance.GetPlayerData(_expLevel);
+        _playerData = PlayerDataManager.Instance.GetPlayerData(GameManager.Instance.PlayerKey + _expLevel);
 
         _playerStatus.MaxHp = _playerData.Hp;
         _playerStatus.Exp = _playerData.Exp;
         _playerStatus.Speed = _playerData.Speed;
 
-        print(_playerStatus.MaxHp + " " +  _playerStatus.Exp + " " + _playerStatus.Speed);
+        print(GameManager.Instance.PlayerKey + " "+ _expLevel);
 
         // 스킬 패널 열기
         InGameUIManager.Instance.SkillPanelOn();

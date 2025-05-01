@@ -106,7 +106,6 @@ public class SkillButtonController : MonoBehaviour
         int curLevel = _skillLevelDict[key];
 
         // 이 스킬이 속한 그룹의 최대 키 계산
-        int skillIndex = (curLevel - _skillStartKey) / _skillMaxLevel;
         int skillMaxKey = _skillStartKey + (key + 1) * _skillMaxLevel - 1;
 
         // 만렙 여부 판단

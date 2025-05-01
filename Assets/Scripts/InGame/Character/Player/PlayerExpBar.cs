@@ -47,7 +47,7 @@ public class PlayerExpBar : MonoBehaviour
         // 텍스트로 인게임 레벨 보여주기
         if( _playerLevelText != null)
         {
-            _playerLevelText.text = $"{"Lv " + _player.ExpLevel}";
+            _playerLevelText.text = $"{"Lv " + (_player.ExpLevel + 1).ToString()}";
         }
     }
 
@@ -60,7 +60,6 @@ public class PlayerExpBar : MonoBehaviour
         // 레벨업이 여러 번 일어날 수 있으므로 반복문으로 처리
         while (_curExp >= _player.MaxExp)
         {
-            print(_player.MaxExp);
             _curExp -= _player.MaxExp;
             _player.LevelUp();
         }
