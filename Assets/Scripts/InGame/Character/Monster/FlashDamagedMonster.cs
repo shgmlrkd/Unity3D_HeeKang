@@ -4,12 +4,8 @@ using UnityEngine;
 public class FlashDamagedMonster : Monster
 {
     protected Renderer[] _monsterRenderers;
-    protected List<Material> _monsterMaterials;
 
     protected Color _flashColor;
-
-    protected readonly float _maxAlphaValue = 1.0f;
-    protected readonly float _minAlphaValue = 0.0f;
 
     private readonly float _colorFlashTime = 0.1f;
 
@@ -21,8 +17,7 @@ public class FlashDamagedMonster : Monster
         base.Start();
 
         _monsterRenderers = GetComponentsInChildren<Renderer>();
-        _monsterMaterials = new List<Material>();
-
+       
         foreach (Renderer monsterRenderer in _monsterRenderers)
         {
             _monsterMaterials.Add(monsterRenderer.material);

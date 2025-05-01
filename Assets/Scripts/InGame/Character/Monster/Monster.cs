@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,7 @@ public class Monster : MonoBehaviour
     protected Slider _monsterHpBarSlider;
     protected Animator _monsterAnimator;
     protected Collider _monsterCollider;
+    protected List<Material> _monsterMaterials;
 
     private Transform _groundParent;
     private Image[] _monsterHpBarImages;
@@ -36,14 +38,16 @@ public class Monster : MonoBehaviour
         get { return _curHp; }
     }
     protected float _attackPower;
-
     protected float _attackTimer = 0.0f;
     protected float _distanceThreshold;
     protected float _attackInterval = 0.0f;
+    protected float _fadeLerpTimer = 10.0f;
 
     private readonly float _halfRatio = 0.5f;
     private readonly float _fadeSpeed = 3.0f;
     private readonly float _hpBarVisibleDuration = 2.0f;
+
+    private readonly float _maxAlphaValue = 1.0f;
     private readonly float _minAlphaValue = 0.05f;
 
     private float _inGameTime;
@@ -54,6 +58,8 @@ public class Monster : MonoBehaviour
     private float _hpBarVisibleTimer = 0.0f;
 
     private readonly int _one = 1;
+
+    private int _prevUpgradeCount = 0;
 
     private bool _isSetting = false;
     private bool _isFadeOut = false;
@@ -69,6 +75,8 @@ public class Monster : MonoBehaviour
     protected void Start()
     {
         _player = InGameManager.Instance.Player.transform;
+
+        _monsterMaterials = new List<Material>();
 
         _monsterCollider = GetComponent<Collider>();
         _monsterAnimator = GetComponent<Animator>();
@@ -103,38 +111,24 @@ public class Monster : MonoBehaviour
         {
             // 인게임 시간 받아오고
             _inGameTime = InGameUIManager.Instance.GetInGameTimer();
-            
-            // 스폰 후 흐른 시간
-            float passedTime = _inGameTime - _spawnStartTime;
-            if (passedTime >= 0)
+            // 현재 강화 횟수 계산
+            int upgradeCount = MonsterUpgradeManager.GetUpgradeCount(_inGameTime, _monsterStatus.SpawnStartTime, _monsterStatus.StatUpdateInterval);
+            // 이전보다 강화 횟수가 증가했을 경우 능력치 갱신
+            if (upgradeCount > _prevUpgradeCount)
             {
-                // 몫이 0보다 클경우 업그레이드 가능
-                int update = (int)(passedTime / _monsterStatus.StatUpdateInterval);
-                if (update > 0)
-                {
-                    // 곱해 줄 계수
-                    float scale = 1 + (_inGameTime / _monsterStatus.StateScaleFactor);
-                    _maxHp = _baseHp * scale;
-                    _curHp = _maxHp;
-                    _attackPower = _baseAtk * scale;
-                    print(_inGameTime + " " + _spawnStartTime + " " + _monsterStatus.StatUpdateInterval);
-                }
-            }
-            // 일정 시간이 지났을 경우 HP와 ATK 갱신
-            /*if ((int)((_inGameTime - _spawnStartTime) % _monsterStatus.StatUpdateInterval) == 0)
-            {
-                // HP = 처음 HP × (1 + (게임 경과 시간 / 스케일 배율))
-                // ATK = 처음 ATK × (1 + (게임 경과 시간 / 스케일 배율))
-                _maxHp = _baseHp * (_one + (int)(_inGameTime / _monsterStatus.StateScaleFactor));
+                float scale = MonsterUpgradeManager.GetScaleFactor(upgradeCount, _monsterStatus.StatUpdateInterval, _monsterStatus.StateScaleFactor);
+                // HP 및 공격력 갱신
+                _maxHp = _baseHp * scale;
                 _curHp = _maxHp;
-                _attackPower = _baseAtk * (_one + (int)(_inGameTime / _monsterStatus.StateScaleFactor));
-
-                print(_inGameTime + " " + _spawnStartTime + " " + _monsterStatus.StatUpdateInterval);
-            }*/
+                _attackPower = _baseAtk * scale;
+                // 현재 강화 횟수 저장
+                _prevUpgradeCount = upgradeCount;
+            }
         }
 
         // 초기화
         _curHp = _maxHp;
+
         _hpBarVisibleTimer = 0.0f;
         _monsterCurrentState = MonsterStatus.Run;
 
@@ -152,6 +146,17 @@ public class Monster : MonoBehaviour
         {
             SetMonsterHpBarAlpha(_one);
             _monsterHpBarSlider.gameObject.SetActive(false);
+        }
+        // 알파값 되돌리기
+        if (_monsterMaterials != null)
+        {
+            // 알파값 1로 돌려놓기
+            foreach (Material monsterMaterial in _monsterMaterials)
+            {
+                Color finalColor = monsterMaterial.color;
+                finalColor.a = _maxAlphaValue;
+                monsterMaterial.color = finalColor;
+            }
         }
     }
 
@@ -264,7 +269,7 @@ public class Monster : MonoBehaviour
     }
 
     // 체력바 알파값 조절
-    protected void SetMonsterHpBarAlpha(float alphaValue)
+    public void SetMonsterHpBarAlpha(float alphaValue)
     {
         foreach (Image monsterHpBarImage in _monsterHpBarImages)
         {
@@ -385,8 +390,8 @@ public class Monster : MonoBehaviour
             ItemManager.Instance.SpawnExp(_monsterStatus.Exp, transform.position);
             ItemManager.Instance.SpawnRandomItem(transform.position);
 
-            // 죽는 애니메이션
-            _monsterAnimator.SetTrigger("Dead");
+            // 페이드 아웃하면서 죽는애니메이션
+            StartCoroutine(FadeOutOnDeath());
             _monsterCurrentState = MonsterStatus.Dead;
         }
         else
@@ -422,6 +427,44 @@ public class Monster : MonoBehaviour
         }
 
         transform.position = end;
+    }
+
+    // 페이드 아웃 후 죽음 처리
+    protected IEnumerator FadeOutOnDeath()
+    {
+        if (_monsterMaterials != null)
+        {
+            _monsterAnimator.SetTrigger("Dead");
+            // 페이드 아웃
+            float elapsed = 0.0f;
+            while (elapsed < _fadeLerpTimer)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / _fadeLerpTimer;
+
+                foreach (Material monsterMaterial in _monsterMaterials)
+                {
+                    // 알파 값 조절
+                    Color color = monsterMaterial.color;
+                    color.a = Mathf.Lerp(color.a, _minAlphaValue, t);
+                    SetMonsterHpBarAlpha(color.a);
+                    monsterMaterial.color = color;
+                }
+
+                yield return null;
+            }
+
+            foreach (Material monsterMaterial in _monsterMaterials)
+            {
+                // 최종 알파값 설정
+                Color finalColor = monsterMaterial.color;
+                finalColor.a = _minAlphaValue;
+                SetMonsterHpBarAlpha(finalColor.a);
+                monsterMaterial.color = finalColor;
+            }
+
+            gameObject.SetActive(false);
+        }
     }
 
     // 몬스터 체력바 끄기 (애니메이션 키)

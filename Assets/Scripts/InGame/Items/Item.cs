@@ -27,7 +27,7 @@ public class Item : MonoBehaviour
         transform.Rotate(_rotationY * _rotationSpeed * Time.deltaTime);
     }
 
-    public void SetItemRandomValue(int value, Vector3 pos)
+    public virtual void SetItemRandomValue(int value, Vector3 pos)
     {
         _itemValue = value;
         transform.position = pos;

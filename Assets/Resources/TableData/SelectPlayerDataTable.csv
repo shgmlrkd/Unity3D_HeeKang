@@ -1,4 +1,4 @@
 Key,PlayerKey,SkillIndex,Name,PlayerTexturePath,SkillTexturePath
 2001,1,0,Unity Chan,UI/UnityChan,UI/Bullet
-2002,26,1,Misaki Chan,UI/MisakiChan,UI/Kunai
-2003,51,4,Yuko Chan,UI/YukoChan,UI/FireBall
+2002,21,1,Misaki Chan,UI/MisakiChan,UI/Kunai
+2003,41,4,Yuko Chan,UI/YukoChan,UI/FireBall

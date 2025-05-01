@@ -55,6 +55,12 @@ public class PlayerExpBar : MonoBehaviour
     // 레벨업이 2번 되는데 스킬 선택 버튼은 1번 실행되는 버그 있음
     public void SetPlayerCurExp(float exp)
     {
+        if (_player.ExpLevel > 20)
+        {
+            _curExp = _player.MaxExp;
+            return;
+        }
+
         _curExp += exp;
 
         // 레벨업이 여러 번 일어날 수 있으므로 반복문으로 처리

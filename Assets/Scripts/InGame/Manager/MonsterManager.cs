@@ -7,11 +7,15 @@ public class MonsterManager : Singleton<MonsterManager>
     private Transform _player;
     private List<GameObject> _monsterPool;
     private Dictionary<string, MonsterSpawnerData> _monsterSpawnDataDict;
-
+    
     private LayerMask _groundLayer;
+
+    private readonly float _monstersInactiveTime = 300.0f;
 
     private float _inGameTime;
     private float _offset = 0.15f;
+
+    private bool _isDeadTime = false;
 
     private enum ScreenSide
     {
@@ -35,14 +39,16 @@ public class MonsterManager : Singleton<MonsterManager>
         _player = InGameManager.Instance.Player.transform;
     }
 
-    private void Start()
+    private void Update()
     {
         // 인게임 시간 받아오기
         _inGameTime = InGameUIManager.Instance.GetInGameTimer();
-    }
 
-    private void Update()
-    {
+        if(_inGameTime >= _monstersInactiveTime && !_isDeadTime)
+        {
+            _isDeadTime = true;
+            AllMonstersInactive();
+        }
     }
 
     public void CreateMonsters(int poolSize, string monsterName)
@@ -62,11 +68,11 @@ public class MonsterManager : Singleton<MonsterManager>
         {
             case SpawnType.Normal:
                 // MonsterSpawnData에 입력된 스폰 간격에 맞춰 몬스터를 주기적으로 스폰
-                StartCoroutine(SpawnRoutine(data));
+                data.SpawnCoroutine = StartCoroutine(SpawnRoutine(data));
                 break;
             case SpawnType.Circle:
                 // 원형으로 플레이어를 조여오는 패턴으로 스폰
-                StartCoroutine(SpawnCircleRoutine(data));
+                data.SpawnCoroutine = StartCoroutine(SpawnCircleRoutine(data));
                 break;
         }
     }
@@ -191,6 +197,62 @@ public class MonsterManager : Singleton<MonsterManager>
         return worldPos;
     }
     
+    private void AllMonstersInactive()
+    {
+        foreach (KeyValuePair<string, MonsterSpawnerData> pair in _monsterSpawnDataDict)
+        {
+            if (pair.Value.SpawnCoroutine != null)
+            {
+                StopCoroutine(pair.Value.SpawnCoroutine);
+            }
+
+            foreach (GameObject monster in pair.Value.Pool)
+            {
+                if (monster.activeSelf)
+                {
+                    Renderer renderer = monster.GetComponentInChildren<Renderer>();
+
+                    Animator anim = monster.GetComponent<Animator>();
+                    anim.SetTrigger("Dead");
+
+                    if (renderer != null)
+                    {
+                        Material mat = renderer.material;
+                        StartCoroutine(FadeOutAndDisable(monster, mat, 1.5f));
+                    }
+                    else
+                    {
+                        monster.SetActive(false);
+                    }
+                }
+            }
+        }
+    }
+
+    private IEnumerator FadeOutAndDisable(GameObject monster, Material monsterMaterial, float duration)
+    {
+        Color originalColor = monsterMaterial.color;
+        float time = 0.0f;
+
+        while (time < duration)
+        {
+            float t = time / duration;
+            Color newColor = originalColor;
+            newColor.a = Mathf.Lerp(1.0f, 0.0f, t);
+            monsterMaterial.color = newColor;
+            monster.GetComponent<Monster>().SetMonsterHpBarAlpha(newColor.a);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        Color finalColor = originalColor;
+        finalColor.a = 0.0f;
+        monster.GetComponent<Monster>().SetMonsterHpBarAlpha(finalColor.a);
+        monsterMaterial.color = finalColor;
+
+        monster.SetActive(false);
+    }
+
     public GameObject GetClosestMonster(Vector3 pos)
     {
         GameObject closest = null;

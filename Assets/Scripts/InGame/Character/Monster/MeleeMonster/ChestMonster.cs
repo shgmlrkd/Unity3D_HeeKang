@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class ChestMonster : FlashDamagedMonster
 {
-    private float _fadeLerpTimer = 15.0f;
     private float _activeTimer = 0.0f;
 
     private int _chestMonsterKey = 104;
@@ -12,7 +11,7 @@ public class ChestMonster : FlashDamagedMonster
     private void Awake()
     {
         base.Awake();
-
+        _fadeLerpTimer = 15.0f;
         _flashColor = Color.red;
     }
 
@@ -24,17 +23,6 @@ public class ChestMonster : FlashDamagedMonster
 
         _activeTimer = 0.0f; 
         _isInactive = false;
-
-        if (_monsterMaterials != null)
-        {    
-            // 알파값 1로 돌려놓기
-            foreach (Material monsterMaterial in _monsterMaterials)
-            {
-                Color finalColor = monsterMaterial.color;
-                finalColor.a = _maxAlphaValue;
-                monsterMaterial.color = finalColor;
-            }
-        }
     }
 
     private void Update()
@@ -42,50 +30,15 @@ public class ChestMonster : FlashDamagedMonster
         base.Update();
 
         _activeTimer += Time.deltaTime;
-        // 미믹은 원형으로 나와서 일정 시간 후 사라짐
-        if(_activeTimer >= _monsterStatus.LifeTime && !_isInactive)
+
+        // 미믹은 원형으로 나와서 일정 시간 후 또는 체력 0 이하일때 사라짐
+        if(!_isInactive && (_activeTimer >= _monsterStatus.LifeTime || _curHp <= 0))
         {
             _isInactive = true;
             _monsterCollider.enabled = false;
-            _monsterAnimator.SetTrigger("Dead");
-            _monsterCurrentState = MonsterStatus.Dead;
-            StartCoroutine(FadeChestMonster());
-        }
-    }
-
-    private IEnumerator FadeChestMonster()
-    {
-        if (_monsterMaterials != null)
-        {
-            // 페이드 아웃
-            float elapsed = 0.0f;
-            while (elapsed < _fadeLerpTimer)
-            {
-                elapsed += Time.deltaTime;
-                float t = elapsed / _fadeLerpTimer;
-
-                foreach(Material monsterMaterial in _monsterMaterials)
-                {
-                    // 알파 값 조절
-                    Color color = monsterMaterial.color;
-                    color.a = Mathf.Lerp(color.a, _minAlphaValue, t);
-                    SetMonsterHpBarAlpha(color.a);
-                    monsterMaterial.color = color;
-                }
-
-                yield return null;
-            }
-
-            foreach (Material monsterMaterial in _monsterMaterials)
-            {
-                // 최종 알파값 설정
-                Color finalColor = monsterMaterial.color;
-                finalColor.a = _minAlphaValue;
-                SetMonsterHpBarAlpha(finalColor.a);
-                monsterMaterial.color = finalColor;
-            }
-
-            gameObject.SetActive(false);
+            
+            _monsterCurrentState = MonsterStatus.Dead; 
+            StartCoroutine(FadeOutOnDeath());
         }
     }
 }

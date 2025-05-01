@@ -6,7 +6,7 @@ public struct MonsterData
     public int Key;
     public string Name;
     public float Hp;
-    public int Exp;
+    public float Exp;
     public float MoveSpeed;
     public float RotateSpeed;
     public float AttackPower;
@@ -67,7 +67,7 @@ public class MonsterDataManager : Singleton<MonsterDataManager>
             monsterData.Key = int.Parse(colData[0]);
             monsterData.Name = colData[1];
             monsterData.Hp = float.Parse(colData[2]);
-            monsterData.Exp = int.Parse(colData[3]);
+            monsterData.Exp = float.Parse(colData[3]);
             monsterData.MoveSpeed = float.Parse(colData[4]);
             monsterData.RotateSpeed = float.Parse(colData[5]);
             monsterData.AttackPower = float.Parse(colData[6]);

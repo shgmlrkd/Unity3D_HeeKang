@@ -5,11 +5,15 @@ public class ItemManager : Singleton<ItemManager>
 {
     private readonly Vector3 _posOffsetY = new Vector3(0.0f, 0.5f, 0.0f);
 
+    private readonly float _expInactiveTime = 300.0f;
+
     private readonly int _itemStartKey = 201;
     private readonly int _oneHundred = 100;
 
+    private float _inGameTime;
     private int _itemCount;
 
+    private bool _isDeadTime = false;
     private bool _isMagnetOn = false;
     public bool IsMagnetOn
     {
@@ -20,6 +24,30 @@ public class ItemManager : Singleton<ItemManager>
     private void Start()
     {
         _itemCount = ItemDataManager.Instance.GetItemsCount();    
+    }
+    private void Update()
+    {
+        // 인게임 시간 받아오기
+        _inGameTime = InGameUIManager.Instance.GetInGameTimer();
+
+        if (_inGameTime >= _expInactiveTime && !_isDeadTime)
+        {
+            _isDeadTime = true;
+            AllExpInactive();
+        }
+    }
+
+    private void AllExpInactive()
+    {
+        List<GameObject> exps = PoolingManager.Instance.GetObjects("Exp");
+        
+        foreach (GameObject exp in exps)
+        {
+            if(exp.activeSelf)
+            {
+                exp.SetActive(false);
+            }
+        }
     }
 
     public void CreateItems(int poolSize, string key)
@@ -55,7 +83,7 @@ public class ItemManager : Singleton<ItemManager>
     public void SpawnExp(float expValue, Vector3 pos)
     {
         GameObject exp = PoolingManager.Instance.Pop("Exp");
-        exp.GetComponent<Exp>().SetExp(expValue, pos);
+        exp.GetComponent<Exp>().SetExp(expValue, pos + _posOffsetY);
     }
 
     public void SpawnRandomItem(Vector3 pos)

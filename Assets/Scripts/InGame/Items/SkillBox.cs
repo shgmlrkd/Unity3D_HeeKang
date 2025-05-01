@@ -10,6 +10,16 @@ public class SkillBox : Item
 
     protected override void Update()
     {
+        // 상자는 안돌고 가만히 있어야 하기 때문에 비워둠
+    }
+
+    public override void SetItemRandomValue(int value, Vector3 pos)
+    {
+        Vector3 position = pos;
+        position.y = 0.0f;
+
+        _itemValue = value;
+        transform.position = position;
     }
 
     private void OnTriggerEnter(Collider other)

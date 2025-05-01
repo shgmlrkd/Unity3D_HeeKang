@@ -63,6 +63,7 @@ public class PlayerStatus : MonoBehaviour
     public void LevelUp()
     {
         _expLevel++;
+
         _playerData = PlayerDataManager.Instance.GetPlayerData(GameManager.Instance.PlayerKey + _expLevel);
 
         _playerStatus.MaxHp = _playerData.Hp;
