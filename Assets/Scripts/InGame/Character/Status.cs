@@ -75,6 +75,12 @@ public class Status
         get { return _statUpdateInterval; }
         set { _statUpdateInterval = value; }
     }
+    // 몬스터 처음 스폰 시간
+    private float _spawnStartTime;
+    public float SpawnStartTime
+    {
+        get { return _spawnStartTime; }
+    }
     // 타입 (근거리, 원거리)
     private int _type;
     public int Type
@@ -92,17 +98,18 @@ public class Status
     }
 
     // 몬스터 Status 초기화
-    public Status(MonsterData data)
+    public Status(MonsterData monsterData, MonsterSpawnData mosnterSpawnData)
     {
-        _maxHp = data.Hp;
-        _speed = data.MoveSpeed;
-        _rotSpeed = data.RotateSpeed;
-        _attackPower = data.AttackPower;
-        _attackInterval = data.AttackInterval;
-        _attackDistance = data.AttackDistance;
-        _lifeTime = data.LifeTime;
-        _stateScaleFactor = data.StatScaleFactor;
-        _statUpdateInterval = data.StatUpdateInterval;
-        _exp = data.Exp;
+        _maxHp = monsterData.Hp;
+        _speed = monsterData.MoveSpeed;
+        _rotSpeed = monsterData.RotateSpeed;
+        _attackPower = monsterData.AttackPower;
+        _attackInterval = monsterData.AttackInterval;
+        _attackDistance = monsterData.AttackDistance;
+        _lifeTime = monsterData.LifeTime;
+        _stateScaleFactor = monsterData.StatScaleFactor;
+        _statUpdateInterval = monsterData.StatUpdateInterval;
+        _exp = monsterData.Exp;
+        _spawnStartTime = mosnterSpawnData.SpawnStartTime;
     }
 }

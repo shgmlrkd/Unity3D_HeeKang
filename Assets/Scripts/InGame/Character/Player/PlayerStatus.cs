@@ -69,8 +69,6 @@ public class PlayerStatus : MonoBehaviour
         _playerStatus.Exp = _playerData.Exp;
         _playerStatus.Speed = _playerData.Speed;
 
-        print(GameManager.Instance.PlayerKey + " "+ _expLevel);
-
         // Ω∫≈≥ ∆–≥Œ ø≠±‚
         InGameUIManager.Instance.SkillPanelOn();
         // Ω√∞£ ∏ÿ√„

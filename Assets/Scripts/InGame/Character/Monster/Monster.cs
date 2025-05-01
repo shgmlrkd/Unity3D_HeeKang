@@ -49,6 +49,7 @@ public class Monster : MonoBehaviour
     private float _inGameTime;
     private float _baseHp;
     private float _baseAtk;
+    private float _spawnStartTime;
     private float _hpBarAlphaValue = 1.0f;
     private float _hpBarVisibleTimer = 0.0f;
 
@@ -78,6 +79,10 @@ public class Monster : MonoBehaviour
         _monsterHpBarSlider = _monsterHpBar.GetComponent<Slider>();
         _monsterHpBarSlider.gameObject.SetActive(false);
 
+        _maxHp = _baseHp;
+        _curHp = _maxHp;
+        _attackPower = _baseAtk;
+
         // 체력바 이미지들 받아오기
         _monsterHpBarImages = _monsterHpBar.GetComponentsInChildren<Image>();
         SetMonsterHpBarAlpha(_one);
@@ -98,16 +103,34 @@ public class Monster : MonoBehaviour
         {
             // 인게임 시간 받아오고
             _inGameTime = InGameUIManager.Instance.GetInGameTimer();
-
+            
+            // 스폰 후 흐른 시간
+            float passedTime = _inGameTime - _spawnStartTime;
+            if (passedTime >= 0)
+            {
+                // 몫이 0보다 클경우 업그레이드 가능
+                int update = (int)(passedTime / _monsterStatus.StatUpdateInterval);
+                if (update > 0)
+                {
+                    // 곱해 줄 계수
+                    float scale = 1 + (_inGameTime / _monsterStatus.StateScaleFactor);
+                    _maxHp = _baseHp * scale;
+                    _curHp = _maxHp;
+                    _attackPower = _baseAtk * scale;
+                    print(_inGameTime + " " + _spawnStartTime + " " + _monsterStatus.StatUpdateInterval);
+                }
+            }
             // 일정 시간이 지났을 경우 HP와 ATK 갱신
-            if ((int)(_inGameTime % _monsterStatus.StatUpdateInterval) == 0)
+            /*if ((int)((_inGameTime - _spawnStartTime) % _monsterStatus.StatUpdateInterval) == 0)
             {
                 // HP = 처음 HP × (1 + (게임 경과 시간 / 스케일 배율))
                 // ATK = 처음 ATK × (1 + (게임 경과 시간 / 스케일 배율))
                 _maxHp = _baseHp * (_one + (int)(_inGameTime / _monsterStatus.StateScaleFactor));
                 _curHp = _maxHp;
                 _attackPower = _baseAtk * (_one + (int)(_inGameTime / _monsterStatus.StateScaleFactor));
-            }
+
+                print(_inGameTime + " " + _spawnStartTime + " " + _monsterStatus.StatUpdateInterval);
+            }*/
         }
 
         // 초기화
@@ -322,11 +345,12 @@ public class Monster : MonoBehaviour
     }
 
     // 몬스터 데이터 세팅
-    protected void SetMonsterData(MonsterData monsterData)
+    protected void SetMonsterData(MonsterData monsterData, MonsterSpawnData monsterSpawnData)
     {
-        _monsterStatus = new Status(monsterData);
+        _monsterStatus = new Status(monsterData, monsterSpawnData);
         _baseHp = _monsterStatus.MaxHp;
         _baseAtk = _monsterStatus.AttackPower;
+        _spawnStartTime = _monsterStatus.SpawnStartTime;
         _isStatSettingEnd = true;
     }
 
@@ -335,8 +359,10 @@ public class Monster : MonoBehaviour
         if (!_isSetting)
         {
             _isSetting = true;
+
             // 키값에 따른 데이터 세팅
-            SetMonsterData(MonsterDataManager.Instance.GetMonsterData(key));
+            MonsterData data = MonsterDataManager.Instance.GetMonsterData(key);
+            SetMonsterData(data, MonsterDataManager.Instance.GetMonsterSpawnData(data.Name));
         }
     }
 

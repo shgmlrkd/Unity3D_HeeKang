@@ -65,6 +65,7 @@ public class MonsterManager : Singleton<MonsterManager>
                 StartCoroutine(SpawnRoutine(data));
                 break;
             case SpawnType.Circle:
+                // 원형으로 플레이어를 조여오는 패턴으로 스폰
                 StartCoroutine(SpawnCircleRoutine(data));
                 break;
         }

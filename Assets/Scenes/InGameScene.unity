@@ -2518,15 +2518,15 @@ MonoBehaviour:
     size: 500
   _monsterPools:
   - name: Slime
-    size: 50
+    size: 0
   - name: Skeleton
     size: 50
   - name: TurtleShell
-    size: 50
+    size: 0
   - name: ChestMonster
-    size: 36
+    size: 0
   - name: Lich
-    size: 50
+    size: 0
   _itemPools:
   - name: Exp
     size: 500
