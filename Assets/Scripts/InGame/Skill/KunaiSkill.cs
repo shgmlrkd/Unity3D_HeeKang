@@ -13,7 +13,7 @@ public class KunaiSkill : Skill
 
     void Start()
     {
-        StartCoroutine(FireLoop());
+        _fireCoroutine = StartCoroutine(FireLoop());
     }
 
     public override void LevelUp()
@@ -63,6 +63,21 @@ public class KunaiSkill : Skill
             Vector3 shotDir = rot * dir;
 
             WeaponManager.Instance.KunaiFire(transform.position, shotDir, _weaponData);
+        }
+    }
+
+    public override void StartSkill()
+    {
+        if (_fireCoroutine == null)
+            _fireCoroutine = StartCoroutine(FireLoop());
+    }
+
+    public override void StopSkill()
+    {
+        if (_fireCoroutine != null)
+        {
+            StopCoroutine(_fireCoroutine);
+            _fireCoroutine = null;
         }
     }
 }   

@@ -2540,7 +2540,7 @@ GameObject:
   - component: {fileID: 5471829592279078940}
   - component: {fileID: 2532882648534957454}
   - component: {fileID: 7942072714754609132}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Misaki Chan
   m_TagString: Player
   m_Icon: {fileID: 0}

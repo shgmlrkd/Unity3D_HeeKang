@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class InGameTime : MonoBehaviour
 {
-    private TextMeshProUGUI _timerText;
+    private PlayerSkill _playerSkill;
     private CameraShaking _camShake;
     private Coroutine _timerCoroutine;
+    private TextMeshProUGUI _timerText;
 
     private readonly float _oneMinute = 60.0f;
+    private readonly float _camShakeDuration = 5.0f;
 
     private float _inGameTimerInitTime;
     private float _minute;
@@ -19,6 +21,20 @@ public class InGameTime : MonoBehaviour
         get { return _inGameTimer; }
     }
 
+    private bool _isBossSpawnTime = false;
+    public bool IsBossSpawnTime
+    {
+        get { return _isBossSpawnTime; }
+    }
+    private bool _isPlayerStop = false;
+    public bool IsPlayerStop
+    {
+        get { return _isPlayerStop; }
+    }
+
+    private bool _isInitTimer = false;
+   
+
     private void Awake()
     {
         _minute = 0.0f;
@@ -28,6 +44,7 @@ public class InGameTime : MonoBehaviour
 
     private void Start()
     {
+        _playerSkill = InGameManager.Instance.Player.GetComponent<PlayerSkill>();
         _timerText = GetComponent<TextMeshProUGUI>();
         _timerCoroutine = StartCoroutine(UpdateTimerCoroutine());
         _inGameTimerInitTime = MonsterManager.Instance.InitTime;
@@ -40,18 +57,26 @@ public class InGameTime : MonoBehaviour
         _second = Mathf.FloorToInt(_inGameTimer % _oneMinute);
 
         _timerText.text = $"{_minute.ToString("00") + " : " + _second.ToString("00")}";
-
-        if (_inGameTimer >= 5 && _timerCoroutine != null)
+        
+        // 게임 시작 5분이 지나면
+        if (_inGameTimer > 60 && _timerCoroutine != null)
         {
-            _inGameTimer = 0.0f;
-            StopCoroutine(_timerCoroutine);
+            _inGameTimer = 0.0f; // 시간을 다시 0분 0초로 초기화
+            StopCoroutine(_timerCoroutine); // 시간 코루틴은 멈춤
             _timerCoroutine = null; // 코루틴을 멈췄으므로 null로 설정
+            _isPlayerStop = true; 
+            _isBossSpawnTime = true; // 이 시간이 지나면 보스 몹을 소환시키기위한 변수
+            _playerSkill.DisablePlayerSkillsForBossIntro(); // 카메라 흔들릴 때 스킬 잠궈놓기
+            _camShake.StartShake(_camShakeDuration); // 카메라 흔들림을 시작
+        }
 
-            // 플레이어의 월드 좌표 말고 메인 카메라의 월드 좌표의 x,z를 흔들어야한다.
-            Vector3 screenPosition = Camera.main.WorldToScreenPoint(InGameManager.Instance.Player.transform.position);
-
-            // 카메라 흔들림을 시작
-            _camShake.StartShake(1.5f, screenPosition);
+        // 카메라 흔들림이 끝나면 타이머를 다시 시작
+        if (_camShake.IsShakeEnd && !_isInitTimer)
+        {
+            _isInitTimer = true;
+            _isPlayerStop = false;
+            _playerSkill.EnablePlayerSkillsAfterBossIntro(); // 카메라 흔들림 끝나고 스킬 해제
+            StartCoroutine(UpdateTimerCoroutine());
         }
     }
 
@@ -63,5 +88,4 @@ public class InGameTime : MonoBehaviour
             yield return null;
         }
     }
-
 }

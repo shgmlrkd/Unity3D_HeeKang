@@ -15,4 +15,14 @@ public class MonsterFireBallSkill : Skill
     {
         WeaponManager.Instance.ShootLichFireBall(transform.position, dir, _monsterWeaponData);
     }
+
+    public override void StartSkill()
+    {
+        
+    }
+
+    public override void StopSkill()
+    {
+       
+    }
 }

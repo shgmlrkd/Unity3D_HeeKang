@@ -7,7 +7,7 @@ public class MonsterManager : Singleton<MonsterManager>
     private Transform _player;
     private List<GameObject> _monsterPool;
     private Dictionary<string, MonsterSpawnerData> _monsterSpawnDataDict;
-    
+
     private LayerMask _groundLayer;
 
     private readonly float _monstersInactiveTime = 300.0f;
@@ -17,7 +17,8 @@ public class MonsterManager : Singleton<MonsterManager>
     }
 
     private float _inGameTime;
-    private float _offset = 0.15f;
+    private float _offset = 0.18f;
+    private float _bossSpawnOffsetY = -1.2f;
 
     private bool _isDeadTime = false;
 
@@ -28,7 +29,7 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private enum SpawnType
     {
-        Normal, Circle
+        Normal, Circle, Boss
     }
 
     private void Awake()
@@ -78,7 +79,36 @@ public class MonsterManager : Singleton<MonsterManager>
                 // 원형으로 플레이어를 조여오는 패턴으로 스폰
                 data.SpawnCoroutine = StartCoroutine(SpawnCircleRoutine(data));
                 break;
+            case SpawnType.Boss:
+                data.SpawnCoroutine = StartCoroutine(SpawnBossRoutine(data));
+                break;
         }
+    }
+
+    private IEnumerator SpawnBossRoutine(MonsterSpawnerData data)
+    {
+        while (true)
+        {
+            // 보스 스폰할 시간이라면
+            if(InGameUIManager.Instance.IsBossSpawnTime())
+            {
+                SpawnBoss(data);
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    private void SpawnBoss(MonsterSpawnerData data)
+    {
+        // 카메라 외곽에서 스폰위치 찾음
+        Vector3 spawnPos = GetRandomOffscreenWorldPos();
+        spawnPos.y = _bossSpawnOffsetY;
+
+        _monsterPool = data.Pool;
+        _monsterPool[0].transform.position = spawnPos;
+        _monsterPool[0].SetActive(true);
     }
 
     private IEnumerator SpawnRoutine(MonsterSpawnerData data)
@@ -205,6 +235,9 @@ public class MonsterManager : Singleton<MonsterManager>
     {
         foreach (KeyValuePair<string, MonsterSpawnerData> pair in _monsterSpawnDataDict)
         {
+            if (pair.Key == "Boss")
+                continue;
+
             if (pair.Value.SpawnCoroutine != null)
             {
                 StopCoroutine(pair.Value.SpawnCoroutine);

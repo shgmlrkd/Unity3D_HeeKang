@@ -18,7 +18,7 @@ public class LaserSkill : Skill
 
     private void Start()
     {
-        StartCoroutine(FireLoop());
+        _fireCoroutine = StartCoroutine(FireLoop());
     }
 
     public override void LevelUp()
@@ -65,6 +65,21 @@ public class LaserSkill : Skill
             Collider target = targetColliders[index];
             WeaponManager.Instance.LaserFire(target.transform.position, _weaponData);
             target.gameObject.GetComponent<Monster>().MonsterGetDamage(_weaponData.AttackPower);
+        }
+    }
+
+    public override void StartSkill()
+    {
+        if (_fireCoroutine == null)
+            _fireCoroutine = StartCoroutine(FireLoop());
+    }
+
+    public override void StopSkill()
+    {
+        if (_fireCoroutine != null)
+        {
+            StopCoroutine(_fireCoroutine);
+            _fireCoroutine = null;
         }
     }
 }

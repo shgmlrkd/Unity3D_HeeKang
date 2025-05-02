@@ -7,7 +7,7 @@ public class Monster : MonoBehaviour
 {
     protected enum MonsterStatus
     {
-        Run, Hit, Rush, Attack, Dead
+        BossIntro, Idle, Run, Hit, Rush, Attack, Dead
     }
 
     protected Transform _player;
@@ -174,7 +174,7 @@ public class Monster : MonoBehaviour
         Action();
     }
 
-    private void Action()
+    protected virtual void Action()
     {
         // 몬스터의 현재 상태에 따라 행동 처리
         switch (_monsterCurrentState)

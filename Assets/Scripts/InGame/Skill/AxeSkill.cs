@@ -155,4 +155,17 @@ public class AxeSkill : Skill
                 axe.SetActive(false);
         }
     }
+
+    public override void StartSkill()
+    {
+        StartCoroutine(AxesLifeCycle(_activateAxes, _weaponData.LifeTime));
+    }
+
+    public override void StopSkill()
+    {
+        foreach (Coroutine coroutine in _runningCoroutines)
+        {
+            StopCoroutine(coroutine);
+        }
+    }
 }

@@ -233,11 +233,11 @@ GameObject:
   - component: {fileID: 3686306645904316712}
   - component: {fileID: 5548295746700600581}
   - component: {fileID: 1305198952932500602}
-  - component: {fileID: 9116190673515359110}
+  - component: {fileID: 2577843351029298197}
   - component: {fileID: 371724360826053369}
   - component: {fileID: 7688595365276905279}
   m_Layer: 6
-  m_Name: Beholder
+  m_Name: Boss
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -253,7 +253,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8430689989690754658}
@@ -309,8 +309,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!135 &9116190673515359110
-SphereCollider:
+--- !u!136 &2577843351029298197
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -327,9 +327,11 @@ SphereCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.6
-  m_Center: {x: 0, y: 1.5, z: 0}
+  serializedVersion: 2
+  m_Radius: 0.8
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.2, z: 0}
 --- !u!114 &371724360826053369
 MonoBehaviour:
   m_ObjectHideFlags: 0

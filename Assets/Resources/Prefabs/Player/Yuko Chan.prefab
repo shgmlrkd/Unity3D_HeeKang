@@ -2377,7 +2377,7 @@ GameObject:
   - component: {fileID: 5157006363609342756}
   - component: {fileID: 877429974154280427}
   - component: {fileID: 7569841133482094689}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Yuko Chan
   m_TagString: Player
   m_Icon: {fileID: 0}

@@ -44,4 +44,19 @@ public class SwordSkill : Skill
 
         WeaponManager.Instance.ThrowSpinningSword(transform.position, dir, _weaponData);
     }
+
+    public override void StartSkill()
+    {
+        if (_fireCoroutine == null)
+            _fireCoroutine = StartCoroutine(FireLoop());
+    }
+
+    public override void StopSkill()
+    {
+        if (_fireCoroutine != null)
+        {
+            StopCoroutine(_fireCoroutine);
+            _fireCoroutine = null;
+        }
+    }
 }

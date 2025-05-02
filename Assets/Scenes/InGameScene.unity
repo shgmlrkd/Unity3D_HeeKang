@@ -2519,9 +2519,11 @@ MonoBehaviour:
   - name: TurtleShell
     size: 30
   - name: ChestMonster
-    size: 36
+    size: 0
   - name: Lich
     size: 30
+  - name: Boss
+    size: 1
   _itemPools:
   - name: Exp
     size: 500

@@ -47,6 +47,27 @@ public class PlayerSkill : MonoBehaviour
         }
     }
 
+    public void EnablePlayerSkillsAfterBossIntro()
+    {
+        for (int i = 0; i < _skills.Count; i++)
+        {
+            if (_skillLevel[i] > 0)
+            {
+                _skills[i].enabled = true;
+                _skills[i].StartSkill(); // 코루틴 시작
+            }
+        }
+    }
+
+    public void DisablePlayerSkillsForBossIntro()
+    {
+        foreach (Skill skill in _skills)
+        {
+            skill.StopSkill(); // 코루틴 멈춤
+            skill.enabled = false;
+        }
+    }
+
     public void PlayerSkillUnlockOrLevelUp(int key)
     {
         // _skills 리스트의 인덱스 번호

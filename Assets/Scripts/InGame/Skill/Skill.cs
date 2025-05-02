@@ -1,7 +1,11 @@
 using UnityEngine;
 
-public class Skill : MonoBehaviour
+public abstract class Skill : MonoBehaviour
 {
+    public abstract void StartSkill();
+    public abstract void StopSkill();
+
+    protected Coroutine _fireCoroutine;
     protected WaitForSeconds _fireInterval;
     public WaitForSeconds FireInterval
     {

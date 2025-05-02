@@ -13,7 +13,7 @@ public class FireBallSkill : Skill
 
     private void Start()
     {
-        StartCoroutine(FireLoop());
+        _fireCoroutine = StartCoroutine(FireLoop());
     }
 
     public override void LevelUp()
@@ -43,5 +43,20 @@ public class FireBallSkill : Skill
         Vector3 dir = target.transform.position - transform.position;
 
         WeaponManager.Instance.ShootFireBall(transform.position, dir, _weaponData);
+    }
+
+    public override void StartSkill()
+    {
+        if (_fireCoroutine == null)
+            _fireCoroutine = StartCoroutine(FireLoop());
+    }
+
+    public override void StopSkill()
+    {
+        if (_fireCoroutine != null)
+        {
+            StopCoroutine(_fireCoroutine);
+            _fireCoroutine = null;
+        }
     }
 }

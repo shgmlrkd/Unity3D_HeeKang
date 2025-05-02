@@ -16,7 +16,14 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        Move();
+        if (!InGameUIManager.Instance.IsBossIntroTime())
+        {
+            Move();
+        }
+        else
+        {
+            _playerAnim.SetBool("IsRunning", false);
+        }
     }
 
     private void Move()

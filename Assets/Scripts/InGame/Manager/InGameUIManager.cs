@@ -127,6 +127,18 @@ public class InGameUIManager : Singleton<InGameUIManager>
         return _playerUIs[(int)PlayerPanel.InGameTimer].GetComponent<Transform>().GetComponent<InGameTime>().InGameTimer;   
     }
 
+    // 보스 스폰 시간일 때 true인 변수 가져오기
+    public bool IsBossSpawnTime()
+    {
+        return _playerUIs[(int)PlayerPanel.InGameTimer].GetComponent<Transform>().GetComponent<InGameTime>().IsBossSpawnTime;
+    }
+
+    // 보스 등장할 때 플레이어 움직임 멈추는 변수 가져오기
+    public bool IsBossIntroTime()
+    {
+        return _playerUIs[(int)PlayerPanel.InGameTimer].GetComponent<Transform>().GetComponent<InGameTime>().IsPlayerStop;
+    }
+
     // 스킬 패널 활성화
     public void SkillPanelOn()
     {

@@ -75,6 +75,12 @@ public class Status
         get { return _statUpdateInterval; }
         set { _statUpdateInterval = value; }
     }
+    private float _range;
+    public float Range
+    {
+        get { return _range; }
+    }
+
     // 몬스터 처음 스폰 시간
     private float _spawnStartTime;
     public float SpawnStartTime
@@ -110,6 +116,7 @@ public class Status
         _stateScaleFactor = monsterData.StatScaleFactor;
         _statUpdateInterval = monsterData.StatUpdateInterval;
         _exp = monsterData.Exp;
+        _range = mosnterSpawnData.SpawnRange;
         _spawnStartTime = mosnterSpawnData.SpawnStartTime;
     }
 }
