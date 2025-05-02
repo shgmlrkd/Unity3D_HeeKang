@@ -5,8 +5,7 @@ using UnityEngine.UI;
 public class SkillButtonController : MonoBehaviour
 {
     private Transform[] _skillBtns;
-    private List<Skill> _playerSkills;
-    private List<int> _skllsLevel;
+    private List<int> _skillsLevel;
     private List<int> _skillKeysCopy; // 스킬 키 인덱스 복사할 공간
     private Dictionary<int, int> _skillLevelDict; // 키값은 테이블 키값, 인수는 레벨
 
@@ -18,7 +17,6 @@ public class SkillButtonController : MonoBehaviour
 
     private void Awake()
     {
-        _skllsLevel = new List<int>();
         // 중복 없는 랜덤 키값 복사할 List
         _skillKeysCopy = new List<int>();
         // 각 스킬의 키값 저장 용도
@@ -40,11 +38,12 @@ public class SkillButtonController : MonoBehaviour
         // 스킬 개수 가져오기
         _skillCount = WeaponDataManager.Instance.WeaponCount;
         _skillMaxLevel = WeaponDataManager.Instance.WeaponMaxLevel;
+        _skillsLevel = InGameManager.Instance.Player.GetComponent<PlayerSkill>().SkillsLevel;
 
         for (int i = 0; i < _skillCount; i++)
         {
             int skillKeyIndex = _skillStartKey + (i * _skillMaxLevel);
-            _skillLevelDict.Add(i, skillKeyIndex);
+            _skillLevelDict.Add(i, skillKeyIndex + _skillsLevel[i]);
         }
 
         // 스킬 버튼 개수 가져오기
@@ -58,13 +57,6 @@ public class SkillButtonController : MonoBehaviour
             _skillBtns[i] = transform.GetChild(i);
             int index = i;
             _skillBtns[i].GetComponent<Button>().onClick.AddListener(() => OnButtonClick(index));
-        }
-
-        _playerSkills = GameObject.Find(GameManager.Instance.PlayerName).GetComponent<PlayerSkill>().Skills;
-
-        foreach(Skill skill in _playerSkills)
-        {
-            _skllsLevel.Add(skill.Level);
         }
     }
 
@@ -119,11 +111,14 @@ public class SkillButtonController : MonoBehaviour
 
     private void SetSkillUI()
     {
+        _skillsLevel = InGameManager.Instance.Player.GetComponent<PlayerSkill>().SkillsLevel;
+
         // 버튼 이미지, 텍스트 바꾸는 작업
         for (int i = 0; i < _skillBtnCount; i++)
         {
             int key = _skillLevelDict[_skillKeysCopy[i]];
-            _skillBtns[i].GetComponent<SkillButton>().SetSkillUI(key);
+            int levelKey = _skillsLevel[_skillKeysCopy[i]] + 1;
+            _skillBtns[i].GetComponent<SkillButton>().SetSkillUI(key, levelKey);
         }
     }
 
