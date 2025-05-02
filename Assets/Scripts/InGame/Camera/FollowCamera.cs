@@ -8,9 +8,7 @@ public class FollowCamera : MonoBehaviour
     private Vector3 _destPos;
 
     private float _camAngleX = 65.0f;
-    [SerializeField]
     private float _distance = 8.0f;
-    [SerializeField]
     private float _height = 16.8f;
     private float _moveDamping = 10.0f;
 

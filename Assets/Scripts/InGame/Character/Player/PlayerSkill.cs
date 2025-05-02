@@ -63,10 +63,5 @@ public class PlayerSkill : MonoBehaviour
         {
             _skills[index].LevelUp();
         }
-
-        foreach (Skill skill in _skills)
-        {
-            print(skill.enabled + " " + skill.Level);
-        }
     }
 }

@@ -11,6 +11,10 @@ public class MonsterManager : Singleton<MonsterManager>
     private LayerMask _groundLayer;
 
     private readonly float _monstersInactiveTime = 300.0f;
+    public float InitTime
+    {
+        get { return _monstersInactiveTime; }
+    }
 
     private float _inGameTime;
     private float _offset = 0.15f;

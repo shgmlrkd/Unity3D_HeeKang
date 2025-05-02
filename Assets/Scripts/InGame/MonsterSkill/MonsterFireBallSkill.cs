@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class MonsterFireBallSkill : Skill
 {
-    [SerializeField]
-    private int _monsterFireBallIndexKey;
+    private int _monsterFireBallIndexKey = 402;
 
     private void Awake()
     {
