@@ -7,7 +7,7 @@ public class SkillButton : MonoBehaviour
 {
     private enum SkillUI
     { 
-        Icon = 1, Text
+        Icon = 1, Description
     }
 
     private Transform[] _skillBtn;
@@ -19,7 +19,7 @@ public class SkillButton : MonoBehaviour
     {
         _skillBtn = GetComponentsInChildren<Transform>();
         _skillIcon = _skillBtn[(int)SkillUI.Icon].GetComponent<Image>();
-        _skillText = _skillBtn[(int)SkillUI.Text].GetComponent<TextMeshProUGUI>();
+        _skillText = _skillBtn[(int)SkillUI.Description].GetComponent<TextMeshProUGUI>();
     }
 
     // 키 값에 따른 스킬 UI 세팅

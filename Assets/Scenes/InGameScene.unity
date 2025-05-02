@@ -997,22 +997,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SkillUIButton
       objectReference: {fileID: 0}
-    - target: {fileID: 6214277109307881984, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6214277109307881984, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6214277109307881984, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6214277109307881984, guid: 77782c6fdec3c1441891cf08a669da0b, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Beholder : FlashDamagedMonster
+public class Boss : FlashDamagedMonster
 {
     /*private MonsterFireBallSkill _monsterFireBallSkill;
 

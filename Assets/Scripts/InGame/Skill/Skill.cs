@@ -23,7 +23,9 @@ public class Skill : MonoBehaviour
 
     protected int _level = 0;
     public int Level
-    { get { return _level; } }
+    { 
+        get { return _level; } 
+    }
 
     protected void InitInterval(WeaponData weaponData)
     {

@@ -4,12 +4,9 @@ using UnityEngine.UI;
 
 public class SkillButtonController : MonoBehaviour
 {
-    private enum SkillBtn
-    {
-        SkillImage = 1, SkillText
-    }
-
     private Transform[] _skillBtns;
+    private List<Skill> _playerSkills;
+    private List<int> _skllsLevel;
     private List<int> _skillKeysCopy; // 스킬 키 인덱스 복사할 공간
     private Dictionary<int, int> _skillLevelDict; // 키값은 테이블 키값, 인수는 레벨
 
@@ -21,10 +18,11 @@ public class SkillButtonController : MonoBehaviour
 
     private void Awake()
     {
-        // 각 스킬의 키값 저장 용도
-        _skillLevelDict = new Dictionary<int, int>();
+        _skllsLevel = new List<int>();
         // 중복 없는 랜덤 키값 복사할 List
         _skillKeysCopy = new List<int>();
+        // 각 스킬의 키값 저장 용도
+        _skillLevelDict = new Dictionary<int, int>();
     }
 
     private void OnEnable()
@@ -60,6 +58,13 @@ public class SkillButtonController : MonoBehaviour
             _skillBtns[i] = transform.GetChild(i);
             int index = i;
             _skillBtns[i].GetComponent<Button>().onClick.AddListener(() => OnButtonClick(index));
+        }
+
+        _playerSkills = GameObject.Find(GameManager.Instance.PlayerName).GetComponent<PlayerSkill>().Skills;
+
+        foreach(Skill skill in _playerSkills)
+        {
+            _skllsLevel.Add(skill.Level);
         }
     }
 
