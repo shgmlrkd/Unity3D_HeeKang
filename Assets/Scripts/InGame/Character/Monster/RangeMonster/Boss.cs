@@ -81,7 +81,8 @@ public class Boss : FlashDamagedMonster
                 HandleAttackState();
                 break;
             case MonsterStatus.Rush:
-                HandleRushState();
+                _monsterCurrentState = MonsterStatus.Idle;
+                //HandleRushState();
                 break;
             case MonsterStatus.Hit:
                 HandleHitState();
@@ -129,8 +130,26 @@ public class Boss : FlashDamagedMonster
         if(_timer >= _idleDuration)
         {
             _timer -= _idleDuration;
-            _monsterCurrentState = MonsterStatus.Attack;
-            //BossNextState((int)BossState.Idle);
+            
+            TransitionFromState((int)BossState.Idle);
+        }
+    }
+
+    protected override void Move()
+    {
+        // 플레이어 방향으로 이동, 회전
+        Vector3 direction = (_player.position - transform.position).normalized;
+        direction.y = 0;
+
+        transform.Translate(direction * _monsterStatus.Speed * Time.deltaTime, Space.World);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * _monsterStatus.RotSpeed);
+       
+        _timer += Time.deltaTime;
+
+        if (_timer >= _idleDuration)
+        {
+            _timer -= _idleDuration;
+            TransitionFromState((int)BossState.Run);
         }
     }
 
@@ -157,10 +176,13 @@ public class Boss : FlashDamagedMonster
                 fireballs[i].SetActive(true);
             }
         }
+
+        TransitionFromState((int)BossState.Attack);
     }
 
     protected override void HandleDeadState()
     {
+        // 슬로우 모션으로 보스가 죽는 애니메이션 실행
         Time.timeScale = 0.25f;
 
         _timer += Time.unscaledDeltaTime;
@@ -173,7 +195,7 @@ public class Boss : FlashDamagedMonster
         }
     }
 
-    private void BossNextState(int prevState)
+    private void TransitionFromState(int prevState)
     {
         // 이미 실행된 상태를 뺀 나머지 목록을 생성
         List<int> availableStates = new List<int>();

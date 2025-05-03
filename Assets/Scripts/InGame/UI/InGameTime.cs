@@ -59,7 +59,7 @@ public class InGameTime : MonoBehaviour
         _timerText.text = $"{_minute.ToString("00") + " : " + _second.ToString("00")}";
         
         // 게임 시작 5분이 지나면
-        if (_inGameTimer > _inGameTimerInitTime && _timerCoroutine != null)
+        if (_inGameTimer > 1 && _timerCoroutine != null)
         {
             StopCoroutine(_timerCoroutine); // 시간 코루틴은 멈춤
             _timerCoroutine = null; // 코루틴을 멈췄으므로 null로 설정
