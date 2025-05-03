@@ -19,7 +19,7 @@ public class Bullet : ThrowWeapon
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Monster"))
+        if (other.CompareTag("Monster") || other.CompareTag("Boss"))
         {
             gameObject.SetActive(false);
         }

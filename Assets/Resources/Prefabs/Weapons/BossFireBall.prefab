@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1621850545993378494}
   - component: {fileID: 2310625552154684638}
   m_Layer: 0
-  m_Name: BeholderFireBall
+  m_Name: BossFireBall
   m_TagString: MonsterWeapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

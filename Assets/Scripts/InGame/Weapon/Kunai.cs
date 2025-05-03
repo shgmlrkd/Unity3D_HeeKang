@@ -37,5 +37,10 @@ public class Kunai : ThrowWeapon
 
             _pierce++;
         }
+
+        if(other.CompareTag("Boss"))
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

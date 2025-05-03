@@ -13,7 +13,7 @@ public class SwordSkill : Skill
 
     void Start()
     {
-        StartCoroutine(FireLoop());
+        _fireCoroutine = StartCoroutine(FireLoop());
     }
 
     public override void LevelUp()

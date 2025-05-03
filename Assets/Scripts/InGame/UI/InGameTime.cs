@@ -59,9 +59,8 @@ public class InGameTime : MonoBehaviour
         _timerText.text = $"{_minute.ToString("00") + " : " + _second.ToString("00")}";
         
         // 게임 시작 5분이 지나면
-        if (_inGameTimer > 60 && _timerCoroutine != null)
+        if (_inGameTimer > _inGameTimerInitTime && _timerCoroutine != null)
         {
-            _inGameTimer = 0.0f; // 시간을 다시 0분 0초로 초기화
             StopCoroutine(_timerCoroutine); // 시간 코루틴은 멈춤
             _timerCoroutine = null; // 코루틴을 멈췄으므로 null로 설정
             _isPlayerStop = true; 
@@ -73,6 +72,7 @@ public class InGameTime : MonoBehaviour
         // 카메라 흔들림이 끝나면 타이머를 다시 시작
         if (_camShake.IsShakeEnd && !_isInitTimer)
         {
+            _inGameTimer = 0.0f; // 시간을 다시 0분 0초로 초기화
             _isInitTimer = true;
             _isPlayerStop = false;
             _playerSkill.EnablePlayerSkillsAfterBossIntro(); // 카메라 흔들림 끝나고 스킬 해제

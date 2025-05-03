@@ -67,8 +67,9 @@ public class PlayerStatus : MonoBehaviour
         _playerData = PlayerDataManager.Instance.GetPlayerData(GameManager.Instance.PlayerKey + _expLevel);
 
         _playerStatus.MaxHp = _playerData.Hp;
-        _playerStatus.Exp = _playerData.Exp;
+        _maxExp = _playerData.Exp;
         _playerStatus.Speed = _playerData.Speed;
+
 
         // 스킬 패널 열기
         InGameUIManager.Instance.SkillPanelOn();

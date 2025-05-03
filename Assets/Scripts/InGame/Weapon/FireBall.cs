@@ -152,6 +152,14 @@ public class FireBall : ThrowWeapon
                 target.MonsterKnockBack(knockBackDir, _weaponKnockBack, _weaponKnockBackLerpTime);
             }
         }
+
+        if(other.CompareTag("Boss") && !_isExplosionParticlePlay)
+        {
+            // 폭발 파티클 실행
+            ExplosionParticleStart();
+            // 데미지 주기
+            other.GetComponent<Monster>().MonsterGetDamage(_weaponAttackPower);
+        }
     }
 
     // 광역 데미지 주는 범위 출력

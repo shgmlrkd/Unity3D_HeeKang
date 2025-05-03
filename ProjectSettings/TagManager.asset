@@ -10,6 +10,7 @@ TagManager:
   - Item
   - AoEWeapon
   - MonsterWeapon
+  - Boss
   layers:
   - Default
   - TransparentFX

@@ -52,9 +52,9 @@ public class WeaponManager : Singleton<WeaponManager>
     }
 
     // 몬스터 무기
-    public void ShootLichFireBall(Vector3 pos, Vector3 dir, MonsterWeaponData data)
+    public void ShootMonsterFireBall(string key, Vector3 pos, Vector3 dir, MonsterWeaponData data)
     {
-        GameObject lichFireBall = PoolingManager.Instance.Pop("LichFireBall");
+        GameObject lichFireBall = PoolingManager.Instance.Pop(key);
         lichFireBall.GetComponent<MonsterFireBall>().Fire(pos, dir, data);
     }
 }

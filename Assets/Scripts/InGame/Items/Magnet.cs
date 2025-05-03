@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Magnet : Item
 {
@@ -13,7 +12,7 @@ public class Magnet : Item
     private List<Transform> _onEnableExps = new List<Transform>();
     private ParticleSystem _magnetParticle;
 
-    private bool _isCollision = false;
+    private bool _isCollision = false; 
 
     private void OnEnable()
     {
@@ -52,6 +51,7 @@ public class Magnet : Item
                 {
                     // 보간 이동
                     exp.position = Vector3.Lerp(exp.position, _player.position, _itemData.LerpTime * Time.deltaTime);
+                    ItemManager.Instance.SetMagnetState(true);
                     allExpInactive = false;
                 }
             }
@@ -59,9 +59,9 @@ public class Magnet : Item
             // 모든 경험치를 먹었을 때 비활성화
             if (allExpInactive)
             {
+                ItemManager.Instance.SetMagnetState(false);
                 gameObject.SetActive(false);
             }
-
         }
     }
 

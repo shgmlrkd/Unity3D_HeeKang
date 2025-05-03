@@ -10,6 +10,8 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private LayerMask _groundLayer;
 
+    private readonly float _bossSpawnRange = 100.0f;
+    private readonly float _bossSpawnOffsetY = 0.5f;
     private readonly float _monstersInactiveTime = 300.0f;
     public float InitTime
     {
@@ -18,7 +20,6 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private float _inGameTime;
     private float _offset = 0.18f;
-    private float _bossSpawnOffsetY = -1.2f;
 
     private bool _isDeadTime = false;
 
@@ -48,6 +49,12 @@ public class MonsterManager : Singleton<MonsterManager>
     {
         // 인게임 시간 받아오기
         _inGameTime = InGameUIManager.Instance.GetInGameTimer();
+
+        /*if(Input.GetKeyDown(KeyCode.I))
+        {
+            SpawnBoss(_monsterSpawnDataDict["Boss"]);
+            print(_monsterSpawnDataDict["Boss"].Pool[0].transform.position);
+        }*/
 
         if(_inGameTime >= _monstersInactiveTime && !_isDeadTime)
         {
@@ -80,6 +87,7 @@ public class MonsterManager : Singleton<MonsterManager>
                 data.SpawnCoroutine = StartCoroutine(SpawnCircleRoutine(data));
                 break;
             case SpawnType.Boss:
+                // 일정 시간 지나면 잡몹들 사라지고 보스 소환
                 data.SpawnCoroutine = StartCoroutine(SpawnBossRoutine(data));
                 break;
         }
@@ -102,9 +110,15 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private void SpawnBoss(MonsterSpawnerData data)
     {
-        // 카메라 외곽에서 스폰위치 찾음
-        Vector3 spawnPos = GetRandomOffscreenWorldPos();
-        spawnPos.y = _bossSpawnOffsetY;
+        Vector3 playerPos = InGameManager.Instance.Player.transform.position;
+
+        // insideUnitCircle은 원 안의 랜덤한 점을 줌
+        Vector2 randomCircleDirection = Random.insideUnitCircle.normalized; // 방향만 필요
+        Vector3 spawnDirection = new Vector3(randomCircleDirection.x, 0.0f, randomCircleDirection.y);
+
+        // 이 방향으로 일정 거리만큼 떨어진 위치
+        Vector3 spawnPos = playerPos + spawnDirection * _bossSpawnRange;
+        spawnPos.y = _bossSpawnOffsetY; // Y 위치 설정
 
         _monsterPool = data.Pool;
         _monsterPool[0].transform.position = spawnPos;

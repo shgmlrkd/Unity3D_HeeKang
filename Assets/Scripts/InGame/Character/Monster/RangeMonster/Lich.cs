@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class Lich : FlashDamagedMonster
 {
+    private Coroutine _fireCoroutine;
     private MonsterFireBallSkill _monsterFireBallSkill;
 
     private float _distance;
-    private int _lichKey = 105;
+
+    private readonly int _lichKey = 105;
+    private readonly int _lichWeaponKey = 401;
 
     private bool _canFireNow = true;
 
@@ -21,12 +24,14 @@ public class Lich : FlashDamagedMonster
     {
         base.Start();
         _monsterFireBallSkill = GetComponent<MonsterFireBallSkill>();
+        _monsterFireBallSkill.SetMonsterWeaponData(_lichWeaponKey);
     }
 
     private void OnEnable()
     {
         SetMonsterKey(_lichKey);
-
+        _canFireNow = true; 
+        _fireCoroutine = null;
         base.OnEnable();
     }
 
@@ -97,9 +102,9 @@ public class Lich : FlashDamagedMonster
             _monsterCurrentState = MonsterStatus.Run;
         }
 
-        if (_canFireNow)
+        if (_canFireNow && _fireCoroutine == null)
         {
-            StartCoroutine(FireRoutine(direction));
+            _fireCoroutine = StartCoroutine(FireRoutine(direction));
         }
     }
 
@@ -108,7 +113,7 @@ public class Lich : FlashDamagedMonster
         _monsterAnimator.SetTrigger("Fire");
         _canFireNow = false; // 발사했으니까 잠깐 막음
 
-        _monsterFireBallSkill.Fire(dir); // 발사
+        _monsterFireBallSkill.Fire("LichFireBall", dir); // 발사
 
         float fireAnimLength = _monsterAnimator.GetCurrentAnimatorStateInfo(0).length;
 
@@ -120,7 +125,10 @@ public class Lich : FlashDamagedMonster
 
         // 대기하다가 이미 Hp가 없다면 종료
         if (_curHp <= 0)
+        {
+            _fireCoroutine = null;
             yield break;
+        }
 
         // Fire 애니메이션이 끝난 후 바로 Idle 상태로 전환
         _monsterAnimator.SetTrigger("Idle");
@@ -129,5 +137,6 @@ public class Lich : FlashDamagedMonster
         yield return new WaitForSeconds(remainingTime);
 
         _canFireNow = true;
+        _fireCoroutine = null;
     }
 }

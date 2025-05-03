@@ -158,7 +158,7 @@ public class Sword : ThrowWeapon
     private void OnTriggerEnter(Collider other)
     {
         // 코루틴을 한번만 실행하기 위해서
-        if (other.CompareTag("Monster"))
+        if (other.CompareTag("Monster") || other.CompareTag("Boss"))
         {
             Collider[] _targetColliders = Physics.OverlapSphere(transform.position, transform.localScale.x, LayerMask.GetMask("Monster"));
 
@@ -183,7 +183,7 @@ public class Sword : ThrowWeapon
     private void OnTriggerStay(Collider other)
     {
         // 충돌 중이라면 일정 시간마다 데미지 주기
-        if (other.CompareTag("Monster"))
+        if (other.CompareTag("Monster") || other.CompareTag("Boss"))
         {
             Monster target = other.gameObject.GetComponent<Monster>();
 

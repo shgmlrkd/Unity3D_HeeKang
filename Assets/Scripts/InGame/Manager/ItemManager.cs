@@ -18,9 +18,9 @@ public class ItemManager : Singleton<ItemManager>
     public bool IsMagnetOn
     {
         get { return _isMagnetOn; }
-        set { _isMagnetOn = value; }
     }
 
+    
     private void Start()
     {
         _itemCount = ItemDataManager.Instance.GetItemsCount();    
@@ -68,16 +68,11 @@ public class ItemManager : Singleton<ItemManager>
                 onEnableObjs.Add(obj.transform);
         }
 
-        if(onEnableObjs.Count > 0)
-        {
-            _isMagnetOn = true;
-        }
-        else
-        {
-            _isMagnetOn = false;
-        }
-
         return onEnableObjs;
+    }
+    public void SetMagnetState(bool state)
+    {
+        _isMagnetOn = state;
     }
 
     public void SpawnExp(float expValue, Vector3 pos)

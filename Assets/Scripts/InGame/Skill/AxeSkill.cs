@@ -158,14 +158,11 @@ public class AxeSkill : Skill
 
     public override void StartSkill()
     {
-        StartCoroutine(AxesLifeCycle(_activateAxes, _weaponData.LifeTime));
+        StartSpinAxe();
     }
 
     public override void StopSkill()
     {
-        foreach (Coroutine coroutine in _runningCoroutines)
-        {
-            StopCoroutine(coroutine);
-        }
+        ClearSpinAxe();
     }
 }

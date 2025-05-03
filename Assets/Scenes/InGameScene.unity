@@ -2510,7 +2510,9 @@ MonoBehaviour:
   - name: Laser
     size: 30
   - name: LichFireBall
-    size: 500
+    size: 80
+  - name: BossFireBall
+    size: 80
   _monsterPools:
   - name: Slime
     size: 30
@@ -2519,7 +2521,7 @@ MonoBehaviour:
   - name: TurtleShell
     size: 30
   - name: ChestMonster
-    size: 0
+    size: 36
   - name: Lich
     size: 30
   - name: Boss
