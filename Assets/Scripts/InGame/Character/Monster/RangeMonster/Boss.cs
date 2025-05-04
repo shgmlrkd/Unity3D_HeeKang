@@ -73,9 +73,6 @@ public class Boss : FlashDamagedMonster
     {
         switch(_monsterCurrentState)
         {
-            case MonsterStatus.BossIntro:
-                Intro();
-                break;
             case MonsterStatus.Idle:
                 HandleIdleState();
                 break;
@@ -288,7 +285,7 @@ public class Boss : FlashDamagedMonster
     {
         _monsterAnimator.SetTrigger("DelayFire");
 
-        // fireball 중 30개만 발사하기 위해 각도 나누기
+        // fireball 중 40개만 발사하기 위해 각도 나누기
         float angleStep = Mathf.PI * 3 / _spinFireBallCount;
 
         int fireBallCount = 0;
