@@ -12,7 +12,7 @@ public class Boss : FlashDamagedMonster
 
     private enum BossAttack
     {
-        BurstFireBall, SpinFireBall
+        BurstFireBall, SpinFireBall, BossAttackCount
     }
 
     private Coroutine _attackRoutine = null;
@@ -20,12 +20,13 @@ public class Boss : FlashDamagedMonster
 
     private Vector3 _direction = new Vector3();
 
-    private readonly float _spinRotDuration = 0.3f; // Spin Attack 할 때 부드러운 회전 시간
     private readonly float _introDuration = 2.0f;
     private readonly float _idleDuration = 1.0f;
     private readonly float _runDuration = 4.0f;
     private readonly float _rushDuration = 2.5f;
     private readonly float _attackDuration = 2.7f;
+    private readonly float _spinFireInterval = 0.01f;
+    private readonly float _spinRotDuration = 0.3f; // Spin Attack 할 때 부드러운 회전 시간
     private readonly float _slowMotionDuration = 2.5f;
 
     private float _rushSpeed = 0.0f;
@@ -34,7 +35,7 @@ public class Boss : FlashDamagedMonster
     private readonly int _bossKey = 106;
     private readonly int _bossWeaponKey = 402;
     private readonly int _burstFireBallCount = 20;
-    private readonly int _spinFireBallCount = 30;
+    private readonly int _spinFireBallCount = 40;
 
     private int[] _bossStateTracker = new int[4];
 
@@ -225,10 +226,18 @@ public class Boss : FlashDamagedMonster
             // 보스 fireball 가져오기
             List<GameObject> fireballs = WeaponManager.Instance.GetObjects("BossFireBall");
 
-            ShootFireballsInCircle(fireballs);
+            int randomAttack = Random.Range(0, (int)BossAttack.BossAttackCount);
 
-            if (_attackRoutine == null)
-                _attackRoutine = StartCoroutine(SpinFireballSequence(fireballs));
+            switch((BossAttack)randomAttack)
+            {
+                case BossAttack.BurstFireBall:
+                    ShootFireballsInCircle(fireballs);
+                    break;
+                case BossAttack.SpinFireBall:
+                    if (_attackRoutine == null)
+                        _attackRoutine = StartCoroutine(SpinFireballSequence(fireballs));
+                    break;
+            }
         }
 
         if (_attackRoutine == null)
@@ -315,7 +324,7 @@ public class Boss : FlashDamagedMonster
                     yield break;
                 }
 
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(_spinFireInterval);
             }
         }
     }
