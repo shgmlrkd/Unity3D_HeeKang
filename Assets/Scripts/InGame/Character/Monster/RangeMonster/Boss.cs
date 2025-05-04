@@ -10,13 +10,20 @@ public class Boss : FlashDamagedMonster
         Idle, Run, Attack, Rush
     }
 
+    private enum BossAttack
+    {
+        BurstFireBall, SpinFireBall
+    }
+
+    private Coroutine _attackRoutine = null;
     private MonsterFireBallSkill _monsterFireBallSkill;
 
     private Vector3 _direction = new Vector3();
 
+    private readonly float _spinRotDuration = 0.3f; // Spin Attack 할 때 부드러운 회전 시간
     private readonly float _introDuration = 2.0f;
     private readonly float _idleDuration = 1.0f;
-    private readonly float _runDuration = 3.0f;
+    private readonly float _runDuration = 4.0f;
     private readonly float _rushDuration = 2.5f;
     private readonly float _attackDuration = 2.7f;
     private readonly float _slowMotionDuration = 2.5f;
@@ -26,7 +33,8 @@ public class Boss : FlashDamagedMonster
 
     private readonly int _bossKey = 106;
     private readonly int _bossWeaponKey = 402;
-    private readonly int _fireBallCount = 20;
+    private readonly int _burstFireBallCount = 20;
+    private readonly int _spinFireBallCount = 30;
 
     private int[] _bossStateTracker = new int[4];
 
@@ -46,7 +54,7 @@ public class Boss : FlashDamagedMonster
     private void Start()
     {
         base.Start();
-        _rushSpeed = _monsterStatus.Speed * 3.3f;
+        _rushSpeed = _monsterStatus.Speed * 2.8f;
         _monsterFireBallSkill = GetComponent<MonsterFireBallSkill>();
         _monsterFireBallSkill.SetMonsterWeaponData(_bossWeaponKey);
     }
@@ -211,44 +219,104 @@ public class Boss : FlashDamagedMonster
         if (!_isAttackState)
         {
             _isAttackState = true;
-            _monsterAnimator.SetTrigger("Fire");
             // Attack 실행 bossStateTracker = [0, 0, 1, 0]
             _bossStateTracker[(int)BossState.Attack]++;
 
             // 보스 fireball 가져오기
             List<GameObject> fireballs = WeaponManager.Instance.GetObjects("BossFireBall");
-            // fireball 중 36개만 발사하기 위해 각도 나누기
-            float angleStep = Mathf.PI * 2 / _fireBallCount;
 
-            // 20개를 360도 각 방향으로 발사
-            int fireBallCount = 0;
-            foreach (GameObject fireball in fireballs)
-            {
-                if (!fireball.activeSelf)
-                {
-                    float angle = angleStep * fireBallCount;
+            ShootFireballsInCircle(fireballs);
 
-                    float x = Mathf.Cos(angle);
-                    float z = Mathf.Sin(angle);
-
-                    Vector3 dir = new Vector3(x, 0.0f, z).normalized;
-
-                    _monsterFireBallSkill.Fire("BossFireBall", dir);
-
-                    fireBallCount++;
-                    if (fireBallCount >= _fireBallCount)
-                        break;
-                }
-            }
+            if (_attackRoutine == null)
+                _attackRoutine = StartCoroutine(SpinFireballSequence(fireballs));
         }
 
-        _timer += Time.deltaTime;
-
-        if (_timer >= _attackDuration)
+        if (_attackRoutine == null)
         {
-            _timer -= _attackDuration;
+            _timer += Time.deltaTime;
 
-            TransitionFromState((int)BossState.Attack);
+            if (_timer >= _attackDuration)
+            {
+                _timer -= _attackDuration;
+
+                TransitionFromState((int)BossState.Attack);
+            }
+        }
+    }
+
+    // 360도 방향으로 일정 수의 파이어볼을 동시에 발사하는 함수
+    private void ShootFireballsInCircle(List<GameObject> fireBalls)
+    {
+        _monsterAnimator.SetTrigger("BurstFire");
+
+        // fireball 중 20개만 발사하기 위해 각도 나누기
+        float angleStep = Mathf.PI * 2 / _burstFireBallCount;
+
+        // 20개를 360도 각 방향으로 발사
+        int fireBallCount = 0;
+        foreach (GameObject fireball in fireBalls)
+        {
+            if (!fireball.activeSelf)
+            {
+                float angle = angleStep * fireBallCount;
+
+                float x = Mathf.Cos(angle);
+                float z = Mathf.Sin(angle);
+
+                Vector3 dir = new Vector3(x, 0.0f, z).normalized;
+
+                _monsterFireBallSkill.Fire("BossFireBall", dir);
+
+                fireBallCount++;
+                if (fireBallCount >= _burstFireBallCount)
+                    break;
+            }
+        }
+    }
+
+    // 540도 방향으로 일정 수의 파이어볼을 딜레이를 줘서 발사하는 함수
+    private IEnumerator SpinFireballSequence(List<GameObject> fireBalls)
+    {
+        _monsterAnimator.SetTrigger("DelayFire");
+
+        // fireball 중 30개만 발사하기 위해 각도 나누기
+        float angleStep = Mathf.PI * 3 / _spinFireBallCount;
+
+        int fireBallCount = 0;
+        foreach (GameObject fireball in fireBalls)
+        {
+            if (!fireball.activeSelf)
+            {
+                float angle = angleStep * fireBallCount;
+
+                float x = Mathf.Cos(angle);
+                float z = Mathf.Sin(angle);
+
+                Vector3 dir = new Vector3(x, 0.0f, z).normalized;
+
+                Quaternion startRot = transform.rotation;
+                Quaternion targetRot = Quaternion.LookRotation(dir);
+
+                float lerpTimer = 0.0f;
+                
+                while (lerpTimer < _one)
+                {
+                    lerpTimer += Time.deltaTime / _spinRotDuration;
+                    transform.rotation = Quaternion.Lerp(startRot, targetRot, lerpTimer);
+                    yield return null;
+                }
+
+                _monsterFireBallSkill.Fire("BossFireBall", dir);
+
+                fireBallCount++;
+                if (fireBallCount >= _spinFireBallCount)
+                {
+                    _attackRoutine = null;
+                    yield break;
+                }
+
+                yield return new WaitForSeconds(0.1f);
+            }
         }
     }
 
@@ -294,13 +362,15 @@ public class Boss : FlashDamagedMonster
 
             // Enum값 BossState에서 MonsterState로 바꾸는거
             _monsterCurrentState = ConvertBossStateToMonsterStatus((BossState)selectedState);
+            print((BossState)selectedState);
         }
     }
 
     // bool형 변수들 리셋
     private void ResetStateFlags()
     {
-        _isIdleState = false; 
+        _isIdleState = false;
+        _isRunState = false;
         _isRushState = false;
         _isAttackState = false;
     }

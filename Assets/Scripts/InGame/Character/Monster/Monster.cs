@@ -50,14 +50,14 @@ public class Monster : MonoBehaviour
     private readonly float _maxAlphaValue = 1.0f;
     private readonly float _minAlphaValue = 0.05f;
 
+    protected readonly float _one = 1;
+
     private float _inGameTime;
     private float _baseHp;
     private float _baseAtk;
     private float _spawnStartTime;
     private float _hpBarAlphaValue = 1.0f;
     private float _hpBarVisibleTimer = 0.0f;
-
-    private readonly int _one = 1;
 
     private int _prevUpgradeCount = 0;
 
