@@ -10,7 +10,7 @@ public class PlayerExpBar : MonoBehaviour
     private TextMeshProUGUI _playerExpBarText;
     private TextMeshProUGUI _playerLevelText;
 
-    private float _toPercent = 100.0f;
+    private readonly float _toPercent = 100.0f;
     private float _curExp = 0.0f;
 
     private enum ExpBar

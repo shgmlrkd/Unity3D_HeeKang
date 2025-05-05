@@ -10,7 +10,7 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private LayerMask _groundLayer;
 
-    private readonly float _bossSpawnRange = 100.0f;
+    private readonly float _bossSpawnRange = 130.0f;
     private readonly float _bossSpawnOffsetY = 0.5f;
     private readonly float _monstersInactiveTime = 300.0f;
     public float InitTime
@@ -112,7 +112,7 @@ public class MonsterManager : Singleton<MonsterManager>
     {
         Vector3 playerPos = InGameManager.Instance.Player.transform.position;
 
-        // insideUnitCircle은 원 안의 랜덤한 점을 줌
+        // insideUnitCircle은 반지름이 1인 원 안의 랜덤한 점을 줌
         Vector2 randomCircleDirection = Random.insideUnitCircle.normalized; // 방향만 필요
         Vector3 spawnDirection = new Vector3(randomCircleDirection.x, 0.0f, randomCircleDirection.y);
 

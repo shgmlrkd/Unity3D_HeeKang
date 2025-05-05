@@ -7,7 +7,7 @@ public class Boss : FlashDamagedMonster
 {
     private enum BossState
     {
-        Idle, Run, Attack, Rush
+        Idle, Run, Attack, Rush, Roar
     }
 
     private enum BossAttack
@@ -20,6 +20,8 @@ public class Boss : FlashDamagedMonster
 
     private Vector3 _direction = new Vector3();
 
+    private readonly float _toPercent = 100.0f;
+    private readonly float _thirty = 30.0f;
     private readonly float _introDuration = 2.0f;
     private readonly float _idleDuration = 1.0f;
     private readonly float _runDuration = 4.0f;
@@ -39,6 +41,7 @@ public class Boss : FlashDamagedMonster
 
     private int[] _bossStateTracker = new int[4];
 
+    private bool _isAngry = false;
     private bool _isIntroEnd = false;
     private bool _isIdleState = false;
     private bool _isRunState = false;
@@ -71,8 +74,17 @@ public class Boss : FlashDamagedMonster
 
     protected override void Action()
     {
+        // 보스 체력 30% 이하
+        if (_curHp / _maxHp * _toPercent <= _thirty)
+        {
+            _isAngry = true;
+        }
+
         switch(_monsterCurrentState)
         {
+            case MonsterStatus.BossIntro:
+                Intro();
+                break;
             case MonsterStatus.Idle:
                 HandleIdleState();
                 break;
@@ -138,7 +150,14 @@ public class Boss : FlashDamagedMonster
         {
             _isIdleState = true;
             // Idle 애니메이션 실행
-            _monsterAnimator.SetTrigger("Idle");
+            if (_isAngry)
+            {
+                _monsterAnimator.SetTrigger("AngryIdle");
+            }
+            else
+            {
+                _monsterAnimator.SetTrigger("Idle");
+            }
             // Idle 실행 bossStateTracker = [1, 0, 0, 0]
             _bossStateTracker[(int)BossState.Idle]++;
         }
@@ -158,6 +177,10 @@ public class Boss : FlashDamagedMonster
         if(!_isRunState)
         {
             _isRunState = true;
+            if (_isAngry)
+            {
+                _monsterAnimator.speed = 1.5f;
+            }
             _monsterAnimator.SetTrigger("Run");
             // Run 실행 bossStateTracker = [0, 1, 0, 0]
             _bossStateTracker[(int)BossState.Run]++;
@@ -175,6 +198,7 @@ public class Boss : FlashDamagedMonster
         if (_timer >= _runDuration)
         {
             _timer -= _runDuration;
+            _monsterAnimator.speed = 1.0f;
             TransitionFromState((int)BossState.Run);
         }
     }
@@ -223,7 +247,7 @@ public class Boss : FlashDamagedMonster
             // 보스 fireball 가져오기
             List<GameObject> fireballs = WeaponManager.Instance.GetObjects("BossFireBall");
 
-            int randomAttack = Random.Range(0, (int)BossAttack.BossAttackCount);
+            int randomAttack = 1;// Random.Range(0, (int)BossAttack.BossAttackCount);
 
             switch((BossAttack)randomAttack)
             {
@@ -283,7 +307,7 @@ public class Boss : FlashDamagedMonster
     // 540도 방향으로 일정 수의 파이어볼을 딜레이를 줘서 발사하는 함수
     private IEnumerator SpinFireballSequence(List<GameObject> fireBalls)
     {
-        _monsterAnimator.SetTrigger("DelayFire");
+        _monsterAnimator.SetTrigger("DelayFireStart");
 
         // fireball 중 40개만 발사하기 위해 각도 나누기
         float angleStep = Mathf.PI * 3 / _spinFireBallCount;
@@ -318,6 +342,8 @@ public class Boss : FlashDamagedMonster
                 if (fireBallCount >= _spinFireBallCount)
                 {
                     _attackRoutine = null;
+                    _monsterAnimator.SetTrigger("DelayFireEnd");
+                    _monsterAnimator.SetBool("IsAngry", _isAngry);
                     yield break;
                 }
 
