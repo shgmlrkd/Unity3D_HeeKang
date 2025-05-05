@@ -2585,7 +2585,7 @@ MonoBehaviour:
   - name: LichFireBall
     size: 80
   - name: BossFireBall
-    size: 80
+    size: 200
   _monsterPools:
   - name: Slime
     size: 30

@@ -34,9 +34,10 @@ public class Boss : FlashDamagedMonster
     private readonly float _shootFireInterval = 0.73f;
     private readonly float _spinRotDuration = 0.3f; // Spin Attack 할 때 부드러운 회전 시간
     private readonly float _slowMotionDuration = 2.5f;
+    private readonly float _fireballAngleOffset = 120.0f;
 
-    private float _rushSpeed = 0.0f;
     private float _timer = 0.0f;
+    private float _rushSpeed = 0.0f;
 
     private readonly int _bossKey = 106;
     private readonly int _bossWeaponKey = 402;
@@ -57,6 +58,7 @@ public class Boss : FlashDamagedMonster
     private bool _isAttackState = false;
     private bool _isBossDead = false;
     private bool _isBossRoar = false;
+    private bool _isRoarEnd = false;
 
     private void Awake()
     {
@@ -184,7 +186,7 @@ public class Boss : FlashDamagedMonster
 
         if(_timer >= _idleDuration)
         {
-            _timer -= _idleDuration;
+            _timer = 0.0f;
             
             TransitionFromState((int)BossState.Idle);
         }
@@ -215,7 +217,7 @@ public class Boss : FlashDamagedMonster
 
         if (_timer >= _runDuration)
         {
-            _timer -= _runDuration;
+            _timer = 0.0f;
             _monsterAnimator.speed = 1.0f;
             TransitionFromState((int)BossState.Run);
         }
@@ -249,7 +251,7 @@ public class Boss : FlashDamagedMonster
 
         if (_timer >= _rushDuration)
         {
-            _timer -= _rushDuration;
+            _timer = 0.0f;
             TransitionFromState((int)BossState.Rush);
         }
     }
@@ -265,7 +267,7 @@ public class Boss : FlashDamagedMonster
             // 보스 fireball 가져오기
             List<GameObject> fireballs = WeaponManager.Instance.GetObjects("BossFireBall");
 
-            int randomAttack = 0; Random.Range(0, (int)BossAttack.BossAttackCount);
+            int randomAttack = 1;// Random.Range(0, (int)BossAttack.BossAttackCount);
 
             switch((BossAttack)randomAttack)
             {
@@ -286,7 +288,7 @@ public class Boss : FlashDamagedMonster
 
             if (_timer >= _attackDuration)
             {
-                _timer -= _attackDuration;
+                _timer = 0.0f;
 
                 TransitionFromState((int)BossState.Attack);
             }
@@ -367,17 +369,11 @@ public class Boss : FlashDamagedMonster
         Vector3 playerPosition = _player.transform.position;
 
         int fireBallCount = 0;
+
         foreach (GameObject fireball in fireBalls)
         {
             if (!fireball.activeSelf)
             {
-                // 보스가 포효를 한다면 코루틴도 멈춤
-                if (_isBossRoar || _curHp <= 0.0f)
-                {
-                    _attackRoutine = null;
-                    yield break;
-                }
-
                 // 플레이어 방향으로 방향 벡터를 구함
                 Vector3 directionToPlayer = (playerPosition - transform.position).normalized;
                 
@@ -391,6 +387,7 @@ public class Boss : FlashDamagedMonster
 
                 Vector3 dir = new Vector3(x, 0.0f, z).normalized;
 
+                // 지금 위치에서 targetRot까지 보간을 이용해서 회전
                 Quaternion startRot = transform.rotation;
                 Quaternion targetRot = Quaternion.LookRotation(dir);
 
@@ -404,6 +401,25 @@ public class Boss : FlashDamagedMonster
                 }
 
                 _monsterFireBallSkill.Fire("BossFireBall", dir);
+
+                // 보스가 포효를 한다면 코루틴도 멈춤
+                if ((!_isRoarEnd && _isBossRoar) || _curHp <= 0.0f)
+                {
+                    _attackRoutine = null;
+                    yield break;
+                }
+
+                if (_isRoar)
+                {
+                    // 좌우 방향 (±120도 회전)
+                    float angleOffset = _fireballAngleOffset * Mathf.Deg2Rad;
+
+                    Vector3 leftDir = new Vector3(Mathf.Cos(angle - angleOffset), 0.0f, Mathf.Sin(angle - angleOffset)).normalized;
+                    Vector3 rightDir = new Vector3(Mathf.Cos(angle + angleOffset), 0.0f, Mathf.Sin(angle + angleOffset)).normalized;
+
+                    _monsterFireBallSkill.Fire("BossFireBall", leftDir);
+                    _monsterFireBallSkill.Fire("BossFireBall", rightDir);
+                }
 
                 fireBallCount++;
                 if (fireBallCount >= _spinFireBallCount)
@@ -431,7 +447,7 @@ public class Boss : FlashDamagedMonster
             // 더해지고 있던 _timer 시간 초기화
             _timer = 0.0f;
             _isBossRoar = true;
-            
+            _isRoarEnd = true;
             _monsterAnimator.Play("Roar");
             Time.timeScale = 0.5f;
         }
@@ -447,7 +463,7 @@ public class Boss : FlashDamagedMonster
 
         if (_timer >= _roarDuration)
         {
-            _timer -= _roarDuration;
+            _timer = 0.0f;
             Time.timeScale = 1.0f;
             _bossState = BossState.Idle;
             _playerSkill.EnablePlayerSkills(); // 플레이어 스킬 다시 해제
@@ -462,15 +478,17 @@ public class Boss : FlashDamagedMonster
             // 다른 state에서 더해지고 있던 _timer 시간 초기화
             _timer = 0.0f;
             _isBossDead = true;
+            print("죽음");
             Time.timeScale = 0.25f;
         }
 
         // 슬로우된 시간에 영향을 안받게
         _timer += Time.unscaledDeltaTime;
+        print(_timer);
 
         if (_timer >= _slowMotionDuration)
         {
-            _timer -= _slowMotionDuration;
+             _timer = 0.0f;
             Time.timeScale = 1.0f;
             _bossState = BossState.None;
             _monsterCurrentState = MonsterStatus.None;
@@ -529,8 +547,8 @@ public class Boss : FlashDamagedMonster
         base.MonsterGetDamage(damage);
         if (_monsterCurrentState == MonsterStatus.Dead)
         {
-            _bossState = BossState.Dead;
             _timer = 0.0f;
+            _bossState = BossState.Dead;
         }
     }
 }
