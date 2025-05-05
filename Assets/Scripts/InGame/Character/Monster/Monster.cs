@@ -7,7 +7,7 @@ public class Monster : MonoBehaviour
 {
     protected enum MonsterStatus
     {
-        BossIntro, Idle, Run, Hit, Rush, Attack, Dead, None
+        Idle, Run, Hit, Rush, Attack, Dead, None
     }
 
     protected Transform _player;

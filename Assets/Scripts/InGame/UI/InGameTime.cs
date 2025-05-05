@@ -20,13 +20,13 @@ public class InGameTime : MonoBehaviour
     private readonly float _oneMinute = 60.0f;
     private readonly float _camShakeDuration = 5.0f;
 
-    private float _inGameTimerInitTime;
     private float _minute;
     private float _second;
     private float _inGameTimer;
+    private float _countupTimer;
     public float InGameTimer
     {
-        get { return _inGameTimer; }
+        get { return _countupTimer; }
     }
 
     private bool _isBossSpawnTime = false;
@@ -50,7 +50,8 @@ public class InGameTime : MonoBehaviour
 
     private void Start()
     {
-        _inGameTimer = 2; //MonsterManager.Instance.InitTime;
+        _inGameTimer = MonsterManager.Instance.InitTime;
+        _countupTimer = 0.0f;
         _timerPhase = TimerPhase.Countdown;
         _playerSkill = InGameManager.Instance.Player.GetComponent<PlayerSkill>();
         _timerText = GetComponent<TextMeshProUGUI>();
@@ -74,7 +75,7 @@ public class InGameTime : MonoBehaviour
             _isPlayerStop = true;
             _isBossSpawnTime = true; // 이 시간이 지나면 보스 몹을 소환시키기위한 변수
 
-            _playerSkill.DisablePlayerSkillsForBossIntro(); // 카메라 흔들릴 때 스킬 잠궈놓기
+            _playerSkill.DisablePlayerSkills(); // 카메라 흔들릴 때 스킬 잠궈놓기
             _camShake.StartShake(_camShakeDuration); // 카메라 흔들림을 시작
         }
 
@@ -84,7 +85,7 @@ public class InGameTime : MonoBehaviour
             _inGameTimer = 0.0f; // 시간 초기화
             _isInitTimer = true;
             _isPlayerStop = false;
-            _playerSkill.EnablePlayerSkillsAfterBossIntro(); // 카메라 흔들림 끝나고 다시 스킬 해제
+            _playerSkill.EnablePlayerSkills(); // 카메라 흔들림 끝나고 다시 스킬 해제
 
             _timerPhase = TimerPhase.Countup; // 상태 전환
             _timerCoroutine = StartCoroutine(UpdateTimerCoroutine());
@@ -99,7 +100,7 @@ public class InGameTime : MonoBehaviour
             if (_timerPhase == TimerPhase.Countdown)
             {
                 _inGameTimer -= Time.deltaTime;
-
+                _countupTimer += Time.deltaTime;
                 if (_inGameTimer <= 0.0f)
                 {
                     _inGameTimer = 0.0f;

@@ -48,7 +48,7 @@ public class PlayerSkill : MonoBehaviour
         }
     }
 
-    public void EnablePlayerSkillsAfterBossIntro()
+    public void EnablePlayerSkills()
     {
         for (int i = 0; i < _skills.Count; i++)
         {
@@ -60,7 +60,7 @@ public class PlayerSkill : MonoBehaviour
         }
     }
 
-    public void DisablePlayerSkillsForBossIntro()
+    public void DisablePlayerSkills()
     {
         foreach (Skill skill in _skills)
         {

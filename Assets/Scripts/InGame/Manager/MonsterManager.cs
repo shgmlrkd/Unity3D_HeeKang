@@ -127,6 +127,7 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private IEnumerator SpawnRoutine(MonsterSpawnerData data)
     {
+        // 줄어드는 타이머이기 때문에 조건을 반대로함
         // 스폰이 시작되기 전에는 계속 기다리기
         while (_inGameTime < data.SpawnData.SpawnStartTime)
         {
@@ -162,6 +163,7 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private IEnumerator SpawnCircleRoutine(MonsterSpawnerData data)
     {
+        // 줄어드는 타이머이기 때문에 조건을 반대로함
         while (_inGameTime < data.SpawnData.SpawnStartTime)
         {
             _inGameTime = InGameUIManager.Instance.GetInGameTimer();  // 시간 갱신
@@ -169,7 +171,7 @@ public class MonsterManager : Singleton<MonsterManager>
         }
 
         // 일정 시간마다 몬스터를 원형으로 배치하는 반복 코루틴
-        while (_inGameTime < data.SpawnData.SpawnEndTime)
+        while (_inGameTime <= data.SpawnData.SpawnEndTime)
         {
             // 원형 배치 실행
             SpawnCircleMonster(data);
