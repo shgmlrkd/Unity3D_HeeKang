@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Video;
 
 public class Boss : FlashDamagedMonster
 {
@@ -34,6 +31,7 @@ public class Boss : FlashDamagedMonster
     private readonly float _roarDuration = 2.0f;
     private readonly float _attackDuration = 2.7f;
     private readonly float _spinFireInterval = 0.01f;
+    private readonly float _shootFireInterval = 0.73f;
     private readonly float _spinRotDuration = 0.3f; // Spin Attack 할 때 부드러운 회전 시간
     private readonly float _slowMotionDuration = 2.5f;
 
@@ -267,12 +265,13 @@ public class Boss : FlashDamagedMonster
             // 보스 fireball 가져오기
             List<GameObject> fireballs = WeaponManager.Instance.GetObjects("BossFireBall");
 
-            int randomAttack = Random.Range(0, (int)BossAttack.BossAttackCount);
+            int randomAttack = 0; Random.Range(0, (int)BossAttack.BossAttackCount);
 
             switch((BossAttack)randomAttack)
             {
                 case BossAttack.BurstFireBall:
-                    ShootFireballsInCircle(fireballs);
+                    if (_attackRoutine == null)
+                        _attackRoutine = StartCoroutine(FireballSequence(fireballs));
                     break;
                 case BossAttack.SpinFireBall:
                     if (_attackRoutine == null)
@@ -295,7 +294,7 @@ public class Boss : FlashDamagedMonster
     }
 
     // 360도 방향으로 일정 수의 파이어볼을 동시에 발사하는 함수
-    private void ShootFireballsInCircle(List<GameObject> fireBalls)
+    private void ShootFireballsInCircle(List<GameObject> fireBalls, float offset = 0.0f)
     {
         _monsterAnimator.SetTrigger("BurstFire");
 
@@ -304,11 +303,12 @@ public class Boss : FlashDamagedMonster
 
         // 20개를 360도 각 방향으로 발사
         int fireBallCount = 0;
+
         foreach (GameObject fireball in fireBalls)
         {
             if (!fireball.activeSelf)
             {
-                float angle = angleStep * fireBallCount;
+                float angle = offset + angleStep * fireBallCount;
 
                 float x = Mathf.Cos(angle);
                 float z = Mathf.Sin(angle);
@@ -324,6 +324,38 @@ public class Boss : FlashDamagedMonster
         }
     }
 
+    private IEnumerator FireballSequence(List<GameObject> fireBalls)
+    {
+        if (!_isRoar)
+        {
+            // 포효 전 fireball 발사
+            _monsterAnimator.SetTrigger("BurstFire");
+            ShootFireballsInCircle(fireBalls);  // 포효 전 발사
+            yield return null;
+        }
+        else
+        {
+            float angleStep = Mathf.PI * 2 / _burstFireBallCount;
+
+            // 포효 후 연속해서 fireball 두 번 발사
+            for (int i = 0; i < 2; i++)
+            { 
+                if(_curHp <= 0.0f)
+                {
+                    _attackRoutine = null;
+                    yield break;
+                }
+
+                _monsterAnimator.SetTrigger("BurstFire");
+                float offset = (i == 1) ? angleStep * 0.5f : 0.0f;
+                ShootFireballsInCircle(fireBalls, offset);
+                yield return new WaitForSeconds(_shootFireInterval);  // 두 번째 발사 사이에 잠시 대기
+            }
+        }
+
+        _attackRoutine = null;
+    }
+
     // 540도 방향으로 일정 수의 파이어볼을 딜레이를 줘서 발사하는 함수
     private IEnumerator SpinFireballSequence(List<GameObject> fireBalls)
     {
@@ -332,19 +364,27 @@ public class Boss : FlashDamagedMonster
         // fireball 중 40개만 발사하기 위해 각도 나누기
         float angleStep = Mathf.PI * 3 / _spinFireBallCount;
 
+        Vector3 playerPosition = _player.transform.position;
+
         int fireBallCount = 0;
         foreach (GameObject fireball in fireBalls)
         {
             if (!fireball.activeSelf)
             {
                 // 보스가 포효를 한다면 코루틴도 멈춤
-                if (_isBossRoar)
+                if (_isBossRoar || _curHp <= 0.0f)
                 {
                     _attackRoutine = null;
                     yield break;
                 }
 
-                float angle = angleStep * fireBallCount;
+                // 플레이어 방향으로 방향 벡터를 구함
+                Vector3 directionToPlayer = (playerPosition - transform.position).normalized;
+                
+                // 플레이어 방향 기준 각도 계산
+                float startAngle = Mathf.Atan2(directionToPlayer.z, directionToPlayer.x); 
+
+                float angle = startAngle + angleStep * fireBallCount;
 
                 float x = Mathf.Cos(angle);
                 float z = Mathf.Sin(angle);
@@ -383,22 +423,27 @@ public class Boss : FlashDamagedMonster
     {
         if(!_isBossRoar)
         {
+            // 상태 초기화가 일어나지 않은 상황에서
+            // Roar 상태로 넘어올 수가 있음
+            // 그래서 초기화 한번 함
+            InitBossStateTracker();
             // 포효상태가 되면 상태 변환이 일어나기 전까지
             // 더해지고 있던 _timer 시간 초기화
             _timer = 0.0f;
             _isBossRoar = true;
+            
             _monsterAnimator.Play("Roar");
             Time.timeScale = 0.5f;
         }
 
         // 여기서 블러 처리 하기
+        
 
         // 보스가 포효하는 동안 플레이어 스킬은 다시 잠궈놓음
         _playerSkill.DisablePlayerSkills();
 
         // 슬로우된 시간에 영향을 안받게
         _timer += Time.unscaledDeltaTime;
-        print(_timer);
 
         if (_timer >= _roarDuration)
         {
@@ -422,7 +467,6 @@ public class Boss : FlashDamagedMonster
 
         // 슬로우된 시간에 영향을 안받게
         _timer += Time.unscaledDeltaTime;
-        print(_timer);
 
         if (_timer >= _slowMotionDuration)
         {
@@ -459,7 +503,15 @@ public class Boss : FlashDamagedMonster
             _bossStateTracker[selectedState]++; // 새 상태 +1
 
             _bossState = (BossState)selectedState;
-            //((BossState)selectedState);
+            print(_bossState);
+        }
+    }
+
+    private void InitBossStateTracker()
+    {
+        for (int i = 0; i < _bossStateTracker.Length; i++)
+        {
+            _bossStateTracker[i] = 0;
         }
     }
 

@@ -5,7 +5,7 @@ public class InGameUIManager : Singleton<InGameUIManager>
 {
     private enum InGamePanel
     {
-        PlayerPanel = 1, SkillPanel, KillCntPanel, GoldCntPanel
+        PlayerPanel = 2, SkillPanel, KillCntPanel, GoldCntPanel
     }
 
     private enum PlayerPanel
