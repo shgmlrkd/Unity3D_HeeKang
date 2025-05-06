@@ -1,11 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InGameUIManager : Singleton<InGameUIManager>
 {
     private enum InGamePanel
     {
-        PlayerPanel = 2, SkillPanel, KillCntPanel, GoldCntPanel
+        RadialBlurImage, PlayerPanel = 3, SkillPanel, KillCntPanel, GoldCntPanel
     }
 
     private enum PlayerPanel
@@ -27,6 +28,11 @@ public class InGameUIManager : Singleton<InGameUIManager>
     private Transform[] _killCountUIs;
     private Transform[] _goldCountUIs;
     private Transform _inGameCanvas;
+    private Transform _radialBlurTransform;
+
+    private Material _radialBlurMat;
+
+    private Vector3 _radialBlurScale = new Vector3(7.0f, 2.0f, 1.0f);
 
     private int _panelChildrenCount;
     private int _playerPanelChildrenCount;
@@ -44,6 +50,7 @@ public class InGameUIManager : Singleton<InGameUIManager>
         {
             _isStart = true;
             _inGameCanvas = GameObject.Find("InGameCanvas").GetComponent<Transform>();
+            _radialBlurMat = Resources.Load<Material>("Materials/RadialBlurMaterial");
 
             // 인게임 패널 세팅
             SetInGamePanel();
@@ -73,6 +80,20 @@ public class InGameUIManager : Singleton<InGameUIManager>
         {
             _inGamePanels[i] = _inGameCanvas.GetChild(i);
         }
+    }
+
+    public void SetRadialBlurImage(Vector3 pos)
+    {
+        _radialBlurTransform = _inGamePanels[(int)InGamePanel.RadialBlurImage];
+        _radialBlurTransform.gameObject.GetComponent<RawImage>().material = _radialBlurMat;
+        Vector3 position = new Vector3(pos.x / Screen.width, pos.y / Screen.height, 0.0f);
+        _radialBlurMat.SetVector("_Scale", _radialBlurScale);
+        _radialBlurMat.SetVector("_Position", position);
+    }
+
+    public void ClearRadialBlur()
+    {
+        _radialBlurTransform.gameObject.GetComponent<RawImage>().material = null;
     }
 
     // PlayerPanel의 자식 UI들을 정리하는 함수

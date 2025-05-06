@@ -28,6 +28,8 @@ public class Kunai : ThrowWeapon
 
     private void OnTriggerEnter(Collider other)
     {
+        base.OnTriggerEnter(other);
+
         if(other.CompareTag("Monster"))
         {
             if ( _pierce == _weaponPierce)
@@ -42,5 +44,8 @@ public class Kunai : ThrowWeapon
         {
             gameObject.SetActive(false);
         }
+    }
+    protected new void OnTriggerStay(Collider other)
+    {
     }
 }

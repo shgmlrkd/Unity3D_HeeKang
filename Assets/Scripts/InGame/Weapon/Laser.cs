@@ -46,4 +46,11 @@ public class Laser : Weapon
         _weaponAttackPower = data.AttackPower;
     }
 
+    protected new void OnTriggerEnter(Collider other)
+    {
+    }
+
+    protected new void OnTriggerStay(Collider other)
+    {
+    }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class MonsterFireBall : FireBall
 {
@@ -25,6 +26,11 @@ public class MonsterFireBall : FireBall
             ExplosionParticleStart();
 
             other.gameObject.GetComponent<PlayerGetDamage>().GetDamage(_weaponAttackPower);
+            DamageTextManager.Instance.ShowDamageText(other.transform, _weaponAttackPower, Color.red);
         }
+    }
+
+    protected new void OnTriggerStay(Collider other)
+    {
     }
 }

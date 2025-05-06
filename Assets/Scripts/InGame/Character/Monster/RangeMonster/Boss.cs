@@ -89,7 +89,7 @@ public class Boss : FlashDamagedMonster
     protected override void Action()
     {
         // 보스 체력 30% 이하
-        if (_curHp / _maxHp * _toPercent <= 85 && !_isRoar)
+        if (_curHp / _maxHp * _toPercent <= 90 && !_isRoar)
         {
             _isRoar = true;
             _bossState = BossState.Roar;
@@ -270,7 +270,7 @@ public class Boss : FlashDamagedMonster
             // 보스 fireball 가져오기
             List<GameObject> fireballs = WeaponManager.Instance.GetObjects("BossFireBall");
 
-            int randomAttack = 1;// Random.Range(0, (int)BossAttack.BossAttackCount);
+            int randomAttack = Random.Range(0, (int)BossAttack.BossAttackCount);
 
             switch((BossAttack)randomAttack)
             {
@@ -456,10 +456,11 @@ public class Boss : FlashDamagedMonster
             InitBossStateTracker();
             // 보스가 포효하는 동안 플레이어 스킬은 다시 잠궈놓음
             _playerSkill.DisablePlayerSkills();
+            // 보스 월드 위치 -> 스크린 위치 변환
+            Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
+            // 레이디얼 블러 위치 넘겨주기
+            InGameUIManager.Instance.SetRadialBlurImage(pos);
         }
-
-        // 여기서 블러 처리 하기
-        
 
         // 슬로우된 시간에 영향을 안받게
         _timer += Time.unscaledDeltaTime;
@@ -470,6 +471,8 @@ public class Boss : FlashDamagedMonster
             _playerMove.IsMoveStop = false;
             Time.timeScale = 1.0f;
             _bossState = BossState.Idle;
+            // 레이디얼 블러 클리어
+            InGameUIManager.Instance.ClearRadialBlur();
             _playerSkill.EnablePlayerSkills(); // 플레이어 스킬 다시 해제
         }
     }

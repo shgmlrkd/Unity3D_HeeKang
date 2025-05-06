@@ -492,6 +492,7 @@ public class Monster : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _player.gameObject.GetComponent<PlayerGetDamage>().GetDamage(_attackPower);
+            DamageTextManager.Instance.ShowDamageText(_player, _attackPower, Color.red);
         }
     }
 
@@ -504,6 +505,7 @@ public class Monster : MonoBehaviour
             {
                 _attackTimer -= _monsterStatus.AttackInterval;
                 _player.gameObject.GetComponent<PlayerGetDamage>().GetDamage(_attackPower);
+                DamageTextManager.Instance.ShowDamageText(_player, _attackPower, Color.red);
             }
         }
     }

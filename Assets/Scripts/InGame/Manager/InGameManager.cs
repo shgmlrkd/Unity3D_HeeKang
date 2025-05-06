@@ -25,6 +25,8 @@ public class InGameManager : MonoBehaviour
     private PoolData[] _monsterPools;
     [SerializeField] 
     private PoolData[] _itemPools;
+    [SerializeField]
+    private PoolData _damageTextPool;
 
     void Awake()
     {
@@ -45,6 +47,9 @@ public class InGameManager : MonoBehaviour
         // 아이템들
         foreach (PoolData pool in _itemPools)
             ItemManager.Instance.CreateItems(pool.size, pool.name);
+
+        // 데미지 UI
+        DamageTextManager.Instance.CreateDamageTexts(_damageTextPool.size, _damageTextPool.name);
     }
 
     private void SpawnPlayer()

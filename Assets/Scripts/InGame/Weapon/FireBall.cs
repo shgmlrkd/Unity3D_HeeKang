@@ -150,6 +150,7 @@ public class FireBall : ThrowWeapon
                 // 데미지 주고 넉백 시키기
                 target.MonsterGetDamage(_weaponAttackPower);
                 target.MonsterKnockBack(knockBackDir, _weaponKnockBack, _weaponKnockBackLerpTime);
+                DamageTextManager.Instance.ShowDamageText(target.transform, _weaponAttackPower, _color);
             }
         }
 
@@ -159,6 +160,7 @@ public class FireBall : ThrowWeapon
             ExplosionParticleStart();
             // 데미지 주기
             other.GetComponent<Monster>().MonsterGetDamage(_weaponAttackPower);
+            DamageTextManager.Instance.ShowDamageText(other.transform, _weaponAttackPower, _color);
         }
     }
 

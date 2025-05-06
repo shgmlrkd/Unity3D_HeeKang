@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
 
 public class Sword : ThrowWeapon
 {
@@ -165,6 +162,7 @@ public class Sword : ThrowWeapon
             foreach (Collider targetCollider in _targetColliders)
             {
                 targetCollider.gameObject.GetComponent<Monster>().MonsterGetDamage(_weaponAttackPower);
+                DamageTextManager.Instance.ShowDamageText(targetCollider.transform, _weaponAttackPower, _color);
             }
 
             if (!_isCollision)
@@ -193,6 +191,7 @@ public class Sword : ThrowWeapon
             {
                 _triggerStayTimer -= _triggerStayAttackInterval;
                 target.MonsterGetDamage(_weaponAttackPower);
+                DamageTextManager.Instance.ShowDamageText(target.transform, _weaponAttackPower, _color);
             }
         }
     }

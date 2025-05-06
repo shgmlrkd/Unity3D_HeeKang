@@ -49,6 +49,8 @@ public class Axe : Weapon
 
     private void OnTriggerEnter(Collider other)
     {
+        base.OnTriggerEnter(other);
+
         // 몬스터와 충돌하고 넉백 수치가 있을 때
         if (other.CompareTag("Monster") && _weaponKnockBack > 0)
         {
@@ -59,5 +61,9 @@ public class Axe : Weapon
 
             target.MonsterKnockBack(knockBackDir, _weaponKnockBack, _weaponKnockBackLerpTime);
         }
+    }
+
+    protected new void OnTriggerStay(Collider other)
+    {
     }
 }

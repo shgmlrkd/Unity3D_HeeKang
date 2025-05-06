@@ -4,6 +4,7 @@ public class Weapon : MonoBehaviour
 {
     protected Collider _weaponCollider;
 
+    protected Color _color = Color.white;
     protected Vector3 _direction;
 
     protected readonly float _maxAlphaValue = 1.0f;
@@ -48,6 +49,22 @@ public class Weapon : MonoBehaviour
                 _timer -= _weaponLifeTimer;
                 gameObject.SetActive(false);
             }
+        }
+    }
+
+    protected void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Monster") || other.CompareTag("Boss"))
+        {
+            DamageTextManager.Instance.ShowDamageText(other.transform, _weaponAttackPower, _color);
+        }
+    }
+
+    protected void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Monster") || other.CompareTag("Boss"))
+        {
+            DamageTextManager.Instance.ShowDamageText(other.transform, _weaponAttackPower, _color);
         }
     }
 
