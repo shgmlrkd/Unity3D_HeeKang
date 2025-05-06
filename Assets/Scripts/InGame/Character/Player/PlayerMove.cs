@@ -7,6 +7,12 @@ public class PlayerMove : MonoBehaviour
 
     private float _playerRotateSpeed = 12.0f;
     private bool _isRunning = false;
+    private bool _isMoveStop = false;
+    public bool IsMoveStop
+    {
+        get { return _isMoveStop; }
+        set { _isMoveStop = value; }
+    }
 
     private void Start()
     {
@@ -16,12 +22,13 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        if (!InGameUIManager.Instance.IsBossIntroTime())
+        if (!_isMoveStop)
         {
             Move();
         }
         else
-        {
+        {   
+            // 보스 인트로 씬, 포효 할때 애니메이션 멈추기 위한거
             _playerAnim.SetBool("IsRunning", false);
         }
     }

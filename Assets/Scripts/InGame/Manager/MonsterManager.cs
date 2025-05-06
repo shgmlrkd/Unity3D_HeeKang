@@ -5,6 +5,11 @@ using System.Collections.Generic;
 public class MonsterManager : Singleton<MonsterManager>
 {
     private Transform _player;
+    private Boss _boss;
+    public Boss Boss
+    {
+        get { return _boss; }
+    }
     private List<GameObject> _monsterPool;
     private Dictionary<string, MonsterSpawnerData> _monsterSpawnDataDict;
 
@@ -120,6 +125,7 @@ public class MonsterManager : Singleton<MonsterManager>
         Vector3 spawnPos = playerPos + spawnDirection * _bossSpawnRange;
         spawnPos.y = _bossSpawnOffsetY; // Y 위치 설정
 
+        _boss = data.Pool[0].GetComponent<Boss>();
         _monsterPool = data.Pool;
         _monsterPool[0].transform.position = spawnPos;
         _monsterPool[0].SetActive(true);

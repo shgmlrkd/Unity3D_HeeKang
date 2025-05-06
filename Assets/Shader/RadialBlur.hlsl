@@ -3,7 +3,7 @@
     float width = MainTex.texelSize.z;
     float height = MainTex.texelSize.w;
     
-    float2 radiusUV = UV - Position;
+    float2 radiusUV = UV - float2(0.5f, 0.5f);
     float r = length(radiusUV);
     radiusUV /= r;
     

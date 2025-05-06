@@ -1288,7 +1288,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &736615888
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2588,15 +2588,15 @@ MonoBehaviour:
     size: 200
   _monsterPools:
   - name: Slime
-    size: 30
+    size: 0
   - name: Skeleton
-    size: 30
+    size: 0
   - name: TurtleShell
-    size: 30
+    size: 0
   - name: ChestMonster
-    size: 36
+    size: 0
   - name: Lich
-    size: 30
+    size: 0
   - name: Boss
     size: 1
   _itemPools:

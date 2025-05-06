@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class InGameTime : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class InGameTime : MonoBehaviour
         Countup    // 0초부터 상승
     }
 
+    private PlayerMove _playerMove;
     private PlayerSkill _playerSkill;
     private CameraShaking _camShake;
     private Coroutine _timerCoroutine;
@@ -34,11 +36,6 @@ public class InGameTime : MonoBehaviour
     {
         get { return _isBossSpawnTime; }
     }
-    private bool _isPlayerStop = false;
-    public bool IsPlayerStop
-    {
-        get { return _isPlayerStop; }
-    }
 
     private bool _isInitTimer = false;
    
@@ -50,9 +47,10 @@ public class InGameTime : MonoBehaviour
 
     private void Start()
     {
-        _inGameTimer = MonsterManager.Instance.InitTime;
+        _inGameTimer = 1;// MonsterManager.Instance.InitTime;
         _countupTimer = 0.0f;
         _timerPhase = TimerPhase.Countdown;
+        _playerMove = InGameManager.Instance.Player.GetComponent<PlayerMove>();
         _playerSkill = InGameManager.Instance.Player.GetComponent<PlayerSkill>();
         _timerText = GetComponent<TextMeshProUGUI>();
         _timerCoroutine = StartCoroutine(UpdateTimerCoroutine());
@@ -72,7 +70,7 @@ public class InGameTime : MonoBehaviour
             StopCoroutine(_timerCoroutine); // 시간 코루틴은 멈춤
             _timerCoroutine = null; // 코루틴을 멈췄으므로 null로 설정
 
-            _isPlayerStop = true;
+            _playerMove.IsMoveStop = true;
             _isBossSpawnTime = true; // 이 시간이 지나면 보스 몹을 소환시키기위한 변수
 
             _playerSkill.DisablePlayerSkills(); // 카메라 흔들릴 때 스킬 잠궈놓기
@@ -84,7 +82,7 @@ public class InGameTime : MonoBehaviour
         {
             _inGameTimer = 0.0f; // 시간 초기화
             _isInitTimer = true;
-            _isPlayerStop = false;
+            _playerMove.IsMoveStop = false;
             _playerSkill.EnablePlayerSkills(); // 카메라 흔들림 끝나고 다시 스킬 해제
 
             _timerPhase = TimerPhase.Countup; // 상태 전환

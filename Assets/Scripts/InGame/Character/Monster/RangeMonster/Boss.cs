@@ -14,6 +14,7 @@ public class Boss : FlashDamagedMonster
         BurstFireBall, SpinFireBall, BossAttackCount
     }
 
+    private PlayerMove _playerMove;
     private PlayerSkill _playerSkill;
     private Coroutine _attackRoutine = null;
     private MonsterFireBallSkill _monsterFireBallSkill;
@@ -71,7 +72,8 @@ public class Boss : FlashDamagedMonster
     {
         base.Start();
 
-        _playerSkill = InGameManager.Instance.Player.GetComponent<PlayerSkill>();
+        _playerMove = InGameManager.Instance.Player.GetComponent<PlayerMove>();
+        _playerSkill = _player.gameObject.GetComponent<PlayerSkill>();
         _rushSpeed = _monsterStatus.Speed * 2.8f;
         _monsterFireBallSkill = GetComponent<MonsterFireBallSkill>();
         _monsterFireBallSkill.SetMonsterWeaponData(_bossWeaponKey);
@@ -87,7 +89,7 @@ public class Boss : FlashDamagedMonster
     protected override void Action()
     {
         // 보스 체력 30% 이하
-        if (_curHp / _maxHp * _toPercent <= _thirty && !_isRoar)
+        if (_curHp / _maxHp * _toPercent <= 85 && !_isRoar)
         {
             _isRoar = true;
             _bossState = BossState.Roar;
@@ -140,7 +142,7 @@ public class Boss : FlashDamagedMonster
             if (_timer >= _introDuration)
             {
                 _timer = 0.0f;
-                _bossState = BossState.Idle;
+                _bossState = BossState.Attack;
             }
 
             return; // 더 이상 이동하지 않음
@@ -172,6 +174,7 @@ public class Boss : FlashDamagedMonster
             // Idle 애니메이션 실행
             if (_isRoar)
             {
+                _isRoarEnd = true;
                 _monsterAnimator.SetTrigger("AngryIdle");
             }
             else
@@ -406,6 +409,8 @@ public class Boss : FlashDamagedMonster
                 if ((!_isRoarEnd && _isBossRoar) || _curHp <= 0.0f)
                 {
                     _attackRoutine = null;
+                    _isAttackState = false;
+                    _bossStateTracker[(int)BossState.Attack] = 0;
                     yield break;
                 }
 
@@ -439,24 +444,22 @@ public class Boss : FlashDamagedMonster
     {
         if(!_isBossRoar)
         {
-            // 상태 초기화가 일어나지 않은 상황에서
-            // Roar 상태로 넘어올 수가 있음
-            // 그래서 초기화 한번 함
-            InitBossStateTracker();
             // 포효상태가 되면 상태 변환이 일어나기 전까지
             // 더해지고 있던 _timer 시간 초기화
             _timer = 0.0f;
             _isBossRoar = true;
-            _isRoarEnd = true;
+            _playerMove.IsMoveStop = true;
             _monsterAnimator.Play("Roar");
             Time.timeScale = 0.5f;
+            // 다른 상태에서 상태 초기화가 일어나지 않은 상황에서
+            // Roar 상태로 넘어올 수가 있음 그래서 초기화 한번 함
+            InitBossStateTracker();
+            // 보스가 포효하는 동안 플레이어 스킬은 다시 잠궈놓음
+            _playerSkill.DisablePlayerSkills();
         }
 
         // 여기서 블러 처리 하기
         
-
-        // 보스가 포효하는 동안 플레이어 스킬은 다시 잠궈놓음
-        _playerSkill.DisablePlayerSkills();
 
         // 슬로우된 시간에 영향을 안받게
         _timer += Time.unscaledDeltaTime;
@@ -464,6 +467,7 @@ public class Boss : FlashDamagedMonster
         if (_timer >= _roarDuration)
         {
             _timer = 0.0f;
+            _playerMove.IsMoveStop = false;
             Time.timeScale = 1.0f;
             _bossState = BossState.Idle;
             _playerSkill.EnablePlayerSkills(); // 플레이어 스킬 다시 해제
@@ -525,6 +529,7 @@ public class Boss : FlashDamagedMonster
         }
     }
 
+    // 포효 후 보스 상태 선택을 리셋하기 위해 보스 상태 배열 초기화
     private void InitBossStateTracker()
     {
         for (int i = 0; i < _bossStateTracker.Length; i++)
