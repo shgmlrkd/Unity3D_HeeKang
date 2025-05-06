@@ -135,6 +135,24 @@ public class Boss : FlashDamagedMonster
 
     private void Intro()
     {
+        Vector3 direction = (_player.position - transform.position).normalized;
+        direction.y = 0.0f;
+
+        float distance = Vector3.Distance(_player.position, transform.position);
+
+        // 플레이어와 일정거리가 될 때까지 이동
+        if (distance >= _monsterStatus.Range)
+        {
+            _playerMove.StopRunSound();
+            transform.Translate(direction * _monsterStatus.Speed * Time.deltaTime, Space.World);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * _monsterStatus.RotSpeed);
+        }
+        else
+        {
+            // 범위에 도달하면 인트로 상태를 true로 전환
+            _isIntroEnd = true;
+        }
+
         if (_isIntroEnd)
         {
             _timer += Time.deltaTime;
@@ -144,25 +162,6 @@ public class Boss : FlashDamagedMonster
                 _timer = 0.0f;
                 _bossState = BossState.Attack;
             }
-
-            return; // 더 이상 이동하지 않음
-        }
-
-        Vector3 direction = (_player.position - transform.position).normalized;
-        direction.y = 0.0f;
-
-        float distance = Vector3.Distance(_player.position, transform.position);
-
-        // 플레이어와 일정거리가 될 때까지 이동
-        if (distance >= _monsterStatus.Range)
-        {
-            transform.Translate(direction * _monsterStatus.Speed * Time.deltaTime, Space.World);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * _monsterStatus.RotSpeed);
-        }
-        else
-        {
-            // 범위에 도달하면 인트로 상태를 true로 전환
-            _isIntroEnd = true;
         }
     }
 
@@ -449,6 +448,7 @@ public class Boss : FlashDamagedMonster
             _timer = 0.0f;
             _isBossRoar = true;
             _playerMove.IsMoveStop = true;
+            _playerMove.StopRunSound();
             _monsterAnimator.Play("Roar");
             Time.timeScale = 0.5f;
             // 다른 상태에서 상태 초기화가 일어나지 않은 상황에서
@@ -485,6 +485,7 @@ public class Boss : FlashDamagedMonster
             // 다른 state에서 더해지고 있던 _timer 시간 초기화
             _timer = 0.0f;
             _isBossDead = true;
+            _playerMove.SetPlayerRunSoundSlow();
             print("죽음");
             Time.timeScale = 0.25f;
         }
@@ -497,6 +498,7 @@ public class Boss : FlashDamagedMonster
         {
              _timer = 0.0f;
             Time.timeScale = 1.0f;
+            _playerMove.ResetPlayerRunSoundPitch();
             _bossState = BossState.None;
             _monsterCurrentState = MonsterStatus.None;
         }

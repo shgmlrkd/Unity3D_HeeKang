@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    protected enum WeaponSound
+    {
+        HitSound, FireSound
+    }
+
+    protected AudioClip[] _soundClip;
+    protected AudioSource _soundSource;
     protected Collider _weaponCollider;
 
     protected Color _color = Color.white;
@@ -36,6 +43,10 @@ public class Weapon : MonoBehaviour
     protected void Start()
     {
         _weaponCollider = GetComponent<Collider>();
+        _soundSource = GetComponent<AudioSource>();
+
+        /*_soundClip = new AudioClip[2];
+        _soundClip[(int)WeaponSound.HitSound] = Resources.Load<AudioClip>("Sounds/MonsterHitSound");*/
     }
 
     protected virtual void LifeTimer()
@@ -56,6 +67,8 @@ public class Weapon : MonoBehaviour
     {
         if (other.CompareTag("Monster") || other.CompareTag("Boss"))
         {
+           /* _soundSource.PlayOneShot(_soundClip[(int)WeaponSound.HitSound]);
+            print(_soundClip[(int)WeaponSound.HitSound]);*/
             DamageTextManager.Instance.ShowDamageText(other.transform, _weaponAttackPower, _color);
         }
     }

@@ -1652,19 +1652,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a8448db27f5c54ebe1a11ea5308d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _soundsInfo:
-  - Key: 0
-    Clip: {fileID: 8300000, guid: 41b766a1940c04e46a41643b5c315e6c, type: 3}
-  - Key: 0
-    Clip: {fileID: 8300000, guid: 41b766a1940c04e46a41643b5c315e6c, type: 3}
-  - Key: 0
-    Clip: {fileID: 8300000, guid: 41b766a1940c04e46a41643b5c315e6c, type: 3}
-  - Key: 0
-    Clip: {fileID: 8300000, guid: 41b766a1940c04e46a41643b5c315e6c, type: 3}
-  - Key: 0
-    Clip: {fileID: 8300000, guid: 41b766a1940c04e46a41643b5c315e6c, type: 3}
-  _bgmSource: {fileID: 1581812360}
-  _fxSource: {fileID: 1581812359}
 --- !u!1 &2093992239
 GameObject:
   m_ObjectHideFlags: 0
