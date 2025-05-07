@@ -47,7 +47,7 @@ public class InGameTime : MonoBehaviour
 
     private void Start()
     {
-        _inGameTimer = 1;// MonsterManager.Instance.InitTime;
+        _inGameTimer = MonsterManager.Instance.InitTime;
         _countupTimer = 0.0f;
         _timerPhase = TimerPhase.Countdown;
         _playerMove = InGameManager.Instance.Player.GetComponent<PlayerMove>();
