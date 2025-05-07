@@ -41,6 +41,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        SoundManager.Instance.PlayBGM(SoundKey.TitleBGM, 0.01f);
+    }
+
     public void SetPlayer(int key, int skillIndex, string playerPrefabName)
     {
         _playerKey = key;

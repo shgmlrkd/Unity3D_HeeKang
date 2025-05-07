@@ -32,9 +32,10 @@ public class SelectPlayerButtonController : MonoBehaviour
     {
         int key = _selectPlayerStartIndex + index;
         SelectPlayerData selectPlayerData = SelectPlayerDataManager.Instance.GetSelectPlayerData(key);
-
+        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.04f);
         GameManager.Instance.SetPlayer(selectPlayerData.PlayerKey, selectPlayerData.SkillIndex, selectPlayerData.PlayerName);
         SceneManager.LoadScene("InGameScene");
+        SoundManager.Instance.StopBGM();
     }
 
     private void SetSelectPlayerBtnUI()

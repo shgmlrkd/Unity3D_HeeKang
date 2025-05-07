@@ -1,9 +1,10 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class SkillButton : MonoBehaviour
+public class SkillButton : MonoBehaviour, IPointerEnterHandler
 {
     private enum SkillUI
     { 
@@ -31,5 +32,10 @@ public class SkillButton : MonoBehaviour
         _skillIcon.sprite = Resources.Load<Sprite>(data.UIPath);
         _skillText.text = data.Description;
         _skillLevel.text = "Level " + levelKey.ToString();
-    }   
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SoundManager.Instance.PlayFX(SoundKey.SkillButtonClickSound, 0.04f);
+    }
 }

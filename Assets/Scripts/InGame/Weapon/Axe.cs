@@ -49,7 +49,11 @@ public class Axe : Weapon
 
     private void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerEnter(other);
+        if (other.CompareTag("Monster") || other.CompareTag("Boss"))
+        {
+            SoundManager.Instance.PlayFX(SoundKey.AxeHitSound, 0.04f);
+            DamageTextManager.Instance.ShowDamageText(other.transform, _weaponAttackPower, _color);
+        }
 
         // 몬스터와 충돌하고 넉백 수치가 있을 때
         if (other.CompareTag("Monster") && _weaponKnockBack > 0)

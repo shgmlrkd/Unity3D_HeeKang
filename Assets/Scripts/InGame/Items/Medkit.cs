@@ -13,6 +13,7 @@ public class Medkit : Item
         if(other.CompareTag("Player"))
         {
             gameObject.SetActive(false);
+            SoundManager.Instance.PlayFX(SoundKey.HpRecoverySound, 0.2f);
             PlayerHpBar playerHp = other.GetComponent<PlayerHpBar>();
             playerHp.PlayerGetHeal(_itemValue);
         }

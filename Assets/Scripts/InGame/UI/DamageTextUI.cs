@@ -19,7 +19,7 @@ public class DamageTextUI : MonoBehaviour
     // 데미지 텍스트 설정
     public void SetDamageText(Transform transform, float damage, Color color)
     {
-        _damageText.text = damage.ToString();
+        _damageText.text = damage.ToString("F0");
         color.a = 1.0f;
         _damageText.color = color;
         _monsterTransform = transform;

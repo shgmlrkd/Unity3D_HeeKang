@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
 public class Laser : Weapon
 {
@@ -44,13 +43,5 @@ public class Laser : Weapon
         transform.position = pos;
         _weaponLifeTimer = data.LifeTime;
         _weaponAttackPower = data.AttackPower;
-    }
-
-    protected new void OnTriggerEnter(Collider other)
-    {
-    }
-
-    protected new void OnTriggerStay(Collider other)
-    {
     }
 }

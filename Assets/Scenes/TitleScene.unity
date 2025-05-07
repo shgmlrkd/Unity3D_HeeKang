@@ -1652,6 +1652,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a8448db27f5c54ebe1a11ea5308d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _soundsInfo:
+  - Key: 0
+    Clip: {fileID: 8300000, guid: 9789dc71e0a2c3642a8c80c4e0b46d36, type: 3}
+  - Key: 1
+    Clip: {fileID: 8300000, guid: 5ff1c6b8bbf4d464bae57eedb1796efb, type: 3}
+  - Key: 2
+    Clip: {fileID: 8300000, guid: 43db44357b200464cb65c0b710a8d2ce, type: 3}
+  - Key: 3
+    Clip: {fileID: 8300000, guid: c9d7c3f797d217e41af2833cbd7d949e, type: 3}
+  - Key: 4
+    Clip: {fileID: 8300000, guid: fc9f962eee546c549a28b1bd51d122c5, type: 3}
+  - Key: 5
+    Clip: {fileID: 8300000, guid: a42a742641945cc4c905bb32b7ebe20b, type: 3}
+  - Key: 6
+    Clip: {fileID: 8300000, guid: d06a22c91dd208848a1dfc03a59ac729, type: 3}
+  - Key: 7
+    Clip: {fileID: 8300000, guid: 0ca9d9b624267ad4ab8f9e3f1e9141e7, type: 3}
+  - Key: 8
+    Clip: {fileID: 8300000, guid: 8b461a2c79caf924a8856dbd0f8273fc, type: 3}
+  - Key: 9
+    Clip: {fileID: 8300000, guid: fb7300fa84958594d889b9db375041a1, type: 3}
+  - Key: 10
+    Clip: {fileID: 8300000, guid: f79f7b54d27c6fd41a25330ae5fb043c, type: 3}
+  - Key: 11
+    Clip: {fileID: 8300000, guid: 19a3492d51af62c4184efbd6630244b8, type: 3}
+  - Key: 12
+    Clip: {fileID: 8300000, guid: a886fa78b58a781469c52373c9693e4c, type: 3}
+  - Key: 13
+    Clip: {fileID: 8300000, guid: 5863fc16f3f52de4bbce9d8284125bcb, type: 3}
+  - Key: 14
+    Clip: {fileID: 8300000, guid: 0d66407a9894a4c46a85f9caa43150de, type: 3}
+  - Key: 15
+    Clip: {fileID: 8300000, guid: d2939673879aa0346914d19ad29bdcd1, type: 3}
+  _bgmSource: {fileID: 1581812360}
+  _fxSource: {fileID: 1581812359}
 --- !u!1 &2093992239
 GameObject:
   m_ObjectHideFlags: 0

@@ -47,9 +47,10 @@ public class InGameTime : MonoBehaviour
 
     private void Start()
     {
-        _inGameTimer = MonsterManager.Instance.InitTime;
+        _inGameTimer = 10;// MonsterManager.Instance.InitTime;
         _countupTimer = 0.0f;
         _timerPhase = TimerPhase.Countdown;
+        SoundManager.Instance.PlayBGM(SoundKey.NormalBGM, 0.025f);
         _playerMove = InGameManager.Instance.Player.GetComponent<PlayerMove>();
         _playerSkill = InGameManager.Instance.Player.GetComponent<PlayerSkill>();
         _timerText = GetComponent<TextMeshProUGUI>();
@@ -69,7 +70,8 @@ public class InGameTime : MonoBehaviour
         {
             StopCoroutine(_timerCoroutine); // 시간 코루틴은 멈춤
             _timerCoroutine = null; // 코루틴을 멈췄으므로 null로 설정
-
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlayFX(SoundKey.BossIntroSound, 0.04f);
             _playerMove.IsMoveStop = true;
             _isBossSpawnTime = true; // 이 시간이 지나면 보스 몹을 소환시키기위한 변수
 
@@ -84,6 +86,7 @@ public class InGameTime : MonoBehaviour
             _isInitTimer = true;
             _playerMove.IsMoveStop = false;
             _playerSkill.EnablePlayerSkills(); // 카메라 흔들림 끝나고 다시 스킬 해제
+            SoundManager.Instance.PlayBGM(SoundKey.BossBGM, 0.04f);
 
             _timerPhase = TimerPhase.Countup; // 상태 전환
             _timerCoroutine = StartCoroutine(UpdateTimerCoroutine());

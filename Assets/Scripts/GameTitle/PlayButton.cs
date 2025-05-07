@@ -37,6 +37,8 @@ public class PlayButton : MonoBehaviour
     // 플레이 버튼을 누르면 선택 창이 뜸
     private void OnSelectPlayerPanel()
     {
+        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.04f);
+
         for (int i = (int)SelectPlayerUI.SelectPlayerPanel; i < _playButtonChildCount; i++)
         {
             _childrenTransforms[i].gameObject.SetActive(true);
