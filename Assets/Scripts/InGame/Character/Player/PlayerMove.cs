@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    private AudioClip _playerRunSoundClip;
-    private AudioSource _playerRunSound;
     private Animator _playerAnim;
     private PlayerStatus _player;
 
@@ -21,11 +19,6 @@ public class PlayerMove : MonoBehaviour
         _player = GetComponent<PlayerStatus>();
 
         _playerAnim = GetComponent<Animator>();
-
-        _playerRunSoundClip = Resources.Load<AudioClip>("Sounds/PlayerRunSound");
-        _playerRunSound = GetComponent<AudioSource>();
-        _playerRunSound.clip = _playerRunSoundClip;
-        _playerRunSound.volume = 0.5f;
     }
 
     void Update()
@@ -50,39 +43,12 @@ public class PlayerMove : MonoBehaviour
             _isRunning = true;
             transform.Translate(inputDir.normalized * _player.Status.Speed * Time.deltaTime, Space.World);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(inputDir), Time.deltaTime * _playerRotateSpeed);
-
-            if (!_playerRunSound.isPlaying)
-            {
-                _playerRunSound.loop = true; // 반복 재생
-                _playerRunSound.Play();
-            }
         }
         else
         {
             _isRunning = false;
-
-            // 움직임 멈췄을 때 소리 정지
-            if (_playerRunSound.isPlaying)
-            {
-                _playerRunSound.Stop();
-            }
         }
 
         _playerAnim.SetBool("IsRunning", _isRunning);
-    }
-
-    public void StopRunSound()
-    {
-        _playerRunSound.Stop();
-    }
-
-    public void SetPlayerRunSoundSlow()
-    {
-        _playerRunSound.pitch = 0.25f;
-    }
-
-    public void ResetPlayerRunSoundPitch()
-    {
-        _playerRunSound.pitch = 1.0f;
     }
 }
