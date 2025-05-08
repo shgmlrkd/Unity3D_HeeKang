@@ -89,7 +89,7 @@ public class Boss : FlashDamagedMonster
     protected override void Action()
     {
         // 보스 체력 30% 이하
-        if (_curHp / _maxHp * _toPercent <= 40 && !_isRoar)
+        if (_curHp / _maxHp * _toPercent <= _thirty && !_isRoar)
         {
             _isRoar = true;
             _bossState = BossState.Roar;

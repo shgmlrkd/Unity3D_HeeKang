@@ -61,7 +61,7 @@ public class MonsterManager : Singleton<MonsterManager>
             print(_monsterSpawnDataDict["Boss"].Pool[0].transform.position);
         }*/
 
-        if(_inGameTime >= 30 && !_isDeadTime)//_monstersInactiveTime && !_isDeadTime)
+        if(_inGameTime >= _monstersInactiveTime && !_isDeadTime)
         {
             _isDeadTime = true;
             AllMonstersInactive();
