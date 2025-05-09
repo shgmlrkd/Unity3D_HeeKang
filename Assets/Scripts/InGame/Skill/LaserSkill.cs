@@ -65,7 +65,7 @@ public class LaserSkill : Skill
             Collider target = targetColliders[index];
             WeaponManager.Instance.LaserFire(target.transform.position, _weaponData);
             target.gameObject.GetComponent<Monster>().MonsterGetDamage(_weaponData.AttackPower);
-            SoundManager.Instance.PlayFX(SoundKey.LaserHitSound, 0.04f);
+            SoundManager.Instance.PlayFX(SoundKey.LaserHitSound, 0.04f / projectileCount);
             DamageTextManager.Instance.ShowDamageText(target.transform, _weaponData.AttackPower, Color.white);
         }
     }

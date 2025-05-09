@@ -34,7 +34,7 @@ public class Boss : FlashDamagedMonster
     private readonly float _spinFireInterval = 0.01f;
     private readonly float _shootFireInterval = 0.73f;
     private readonly float _spinRotDuration = 0.3f; // Spin Attack 할 때 부드러운 회전 시간
-    private readonly float _slowMotionDuration = 2.5f;
+    private readonly float _slowMotionDuration = 1.8f;
     private readonly float _fireballAngleOffset = 120.0f;
 
     private float _timer = 0.0f;
@@ -500,10 +500,28 @@ public class Boss : FlashDamagedMonster
         {
              _timer = 0.0f;
             Time.timeScale = 1.0f;
+            SoundManager.Instance.StopBGM();
             SoundManager.Instance.PlayFX(SoundKey.VictorySound, 0.03f);
             _bossState = BossState.None;
             _monsterCurrentState = MonsterStatus.None;
         }
+    }
+
+    public override void OnInActive()
+    {
+        base.OnInActive();
+        InGameUIManager.Instance.OnGameClearPanel();
+    }
+
+    protected override void HandleHitState()
+    {
+        if (_curHp <= 0.0f)
+        { 
+            _monsterCurrentState = MonsterStatus.Dead;
+            return;
+        }
+
+        base.HandleHitState();
     }
 
     private void TransitionFromState(int prevState)

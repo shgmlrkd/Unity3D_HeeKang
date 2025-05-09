@@ -385,10 +385,13 @@ public class Monster : MonoBehaviour
             _curHp = 0;
             InGameUIManager.Instance.SetKillCountText();
             _monsterCollider.enabled = false;
-
+            
             // 경험치와 랜덤 아이템 떨구기 (경험치 100%, 아이템 확률)
-            ItemManager.Instance.SpawnExp(_monsterStatus.Exp, transform.position);
-            ItemManager.Instance.SpawnRandomItem(transform.position);
+            if (CompareTag("Monster")) // 보스는 아이템 없음
+            {
+                ItemManager.Instance.SpawnExp(_monsterStatus.Exp, transform.position);
+                ItemManager.Instance.SpawnRandomItem(transform.position);
+            }
 
             // 페이드 아웃하면서 죽는애니메이션
             StartCoroutine(FadeOutOnDeath());
@@ -474,7 +477,7 @@ public class Monster : MonoBehaviour
     }
 
     // 몬스터 끄기 (애니메이션 키)
-    public void OnInActive()
+    public virtual void OnInActive()
     {
         gameObject.SetActive(false);
     }

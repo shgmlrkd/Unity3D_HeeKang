@@ -1,12 +1,13 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InGameUIManager : Singleton<InGameUIManager>
 {
     private enum InGamePanel
     {
-        RadialBlurImage, PlayerPanel = 3, SkillPanel, KillCntPanel, GoldCntPanel
+        RadialBlurImage, PlayerPanel = 3, SkillPanel, KillCntPanel, GoldCntPanel, GameClearPanel
     }
 
     private enum PlayerPanel
@@ -23,22 +24,35 @@ public class InGameUIManager : Singleton<InGameUIManager>
         GoldCount = 1
     }
 
+    private enum GameClearUI
+    {
+        GameClearPanel, ClearTimeRecord = 2, RankName, RankingNameSubmitButton = 6
+    }
+
     private Transform[] _inGamePanels;
     private Transform[] _playerUIs;
     private Transform[] _killCountUIs;
     private Transform[] _goldCountUIs;
+    private Transform[] _gameClearUIs;
     private Transform _inGameCanvas;
     private Transform _radialBlurTransform;
+
+    private Button _registerRankingButton;
 
     private Material _radialBlurMat;
 
     private Vector3 _radialBlurScale = new Vector3(7.0f, 2.0f, 1.0f);
 
+    private readonly float _oneMinute = 60.0f;
+    private float _clearTime = 0.0f;
+
+    private string[] _bestName =  new string[10];
+    private float[] _bestClearTime = new float[10];
+
     private int _panelChildrenCount;
     private int _playerPanelChildrenCount;
     private int _killCountPanelChildrenCount;
     private int _goldCountPanelChildrenCount;
-
     private int _killCount = 0;
     private int _goldCount = 0;
 
@@ -64,8 +78,17 @@ public class InGameUIManager : Singleton<InGameUIManager>
             SetGoldCountPanel();
             // 골드 개수 초기화
             SetGoldCountText();
+            // 게임 클리어 UI들 초기화
+            SetGameClearPanel();
+
             _inGamePanels[(int)InGamePanel.SkillPanel].gameObject.SetActive(false);
         }
+    }
+
+    private void Start()
+    {
+        _registerRankingButton = _gameClearUIs[(int)GameClearUI.RankingNameSubmitButton].GetComponent<Button>();
+        _registerRankingButton.onClick.AddListener(() => OnClickRegisterRanking());
     }
 
     // InGameCanvas 하위의 패널들을 배열로 정리하는 함수
@@ -108,6 +131,12 @@ public class InGameUIManager : Singleton<InGameUIManager>
         {
             _playerUIs[i] = _inGamePanels[(int)InGamePanel.PlayerPanel].GetChild(i);
         }
+    }
+
+    private void SetGameClearPanel()
+    {
+        _gameClearUIs = _inGamePanels[(int)InGamePanel.GameClearPanel].GetComponentsInChildren<Transform>();
+        _gameClearUIs[(int)GameClearUI.GameClearPanel].gameObject.SetActive(false);
     }
 
     private void SetKillCountPanel()
@@ -174,5 +203,72 @@ public class InGameUIManager : Singleton<InGameUIManager>
     public void SetGoldCountText()
     {
         _goldCountUIs[(int)GoldCountPanel.GoldCount].GetComponent<TextMeshProUGUI>().text = "X " + _goldCount++.ToString();
+    }
+
+    public void OnGameClearPanel()
+    {
+        Time.timeScale = 0.0f;
+        _gameClearUIs[(int)GameClearUI.GameClearPanel].gameObject.SetActive(true);
+    }
+
+    public void RecordClearTime(float timer)
+    {
+        TextMeshProUGUI clearTimeText = _gameClearUIs[(int)GameClearUI.ClearTimeRecord].GetComponent<TextMeshProUGUI>();
+        _clearTime = timer;
+        float mintue = Mathf.FloorToInt(timer / _oneMinute);
+        float second = Mathf.FloorToInt(timer % _oneMinute);
+
+        clearTimeText.text = $"클리어 시간   {mintue.ToString("00") + " : " + second.ToString("00")}";
+    }
+
+    private void OnClickRegisterRanking()
+    {
+        InputField playerName = _gameClearUIs[(int)GameClearUI.RankName].GetComponent<InputField>();
+
+        RankingSet(playerName.text, _clearTime);
+
+        Time.timeScale = 1.0f;
+        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.04f);
+        SceneManager.LoadScene("TitleScene");
+    }
+
+    private void RankingSet(string curName, float curClearTime)
+    {
+        PlayerPrefs.SetString("CurPlayerName", curName);
+        PlayerPrefs.SetFloat("CurClearTime", curClearTime);
+
+        float tempClearTime = 0.0f;
+        string tempName = "";
+
+        for(int i = 0; i < _bestClearTime.Length; i++)
+        {
+            _bestName[i] = PlayerPrefs.GetString(i + "BestName");
+            _bestClearTime[i] = PlayerPrefs.GetFloat(i + "BestClearTime");
+            if(_bestClearTime[i] == 0.0f)
+            {
+                _bestClearTime[i] = float.MaxValue;
+            }
+
+            while (_bestClearTime[i] > curClearTime)
+            {
+                tempClearTime = _bestClearTime[i];
+                tempName = _bestName[i];
+                _bestClearTime[i] = curClearTime;
+                _bestName[i] = curName;
+
+                PlayerPrefs.SetString(i + "BestName", curName);
+                PlayerPrefs.SetFloat(i + "BestClearTime", curClearTime);
+
+                curClearTime = tempClearTime;
+                curName = tempName;
+            }
+        }
+
+        for(int i = 0; i < _bestClearTime.Length; i++)
+        {
+            PlayerPrefs.SetString(i + "BestName", _bestName[i]);
+            PlayerPrefs.SetFloat(i + "BestClearTime", _bestClearTime[i]);
+            print(_bestName[i] + " : " + _bestClearTime[i]);
+        }
     }
 }

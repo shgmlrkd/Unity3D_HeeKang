@@ -38,7 +38,12 @@ public class InGameTime : MonoBehaviour
     }
 
     private bool _isInitTimer = false;
-   
+    private bool _isGameClear = false;
+    public bool IsGameClear
+    {
+        get { return _isGameClear; }
+    }
+
     private void Awake()
     {
         _minute = 0.0f;
@@ -47,7 +52,7 @@ public class InGameTime : MonoBehaviour
 
     private void Start()
     {
-        _inGameTimer = MonsterManager.Instance.InitTime;
+        _inGameTimer = 1; //MonsterManager.Instance.InitTime;
         _countupTimer = 0.0f;
         _timerPhase = TimerPhase.Countdown;
         SoundManager.Instance.PlayBGM(SoundKey.NormalBGM, 0.025f);
@@ -90,6 +95,17 @@ public class InGameTime : MonoBehaviour
 
             _timerPhase = TimerPhase.Countup; // 상태 전환
             _timerCoroutine = StartCoroutine(UpdateTimerCoroutine());
+        }
+
+        if(MonsterManager.Instance.Boss != null && _timerCoroutine != null)
+        {
+            if (MonsterManager.Instance.Boss.MonsterCurHp <= 0.0f && !_isGameClear)
+            {
+                _isGameClear = true;
+                StopCoroutine(_timerCoroutine);
+                _timerCoroutine = null;
+                InGameUIManager.Instance.RecordClearTime(_inGameTimer);
+            }
         }
     }
 

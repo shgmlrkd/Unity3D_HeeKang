@@ -10,6 +10,8 @@ public class Sword : ThrowWeapon
     private readonly float _triggerStayAttackInterval = 1.0f;
     private float _triggerStayTimer = 0.0f;
 
+    private int _overlapCount = 0;
+
     private bool _isCollision = false;
 
     private void Awake()
@@ -158,11 +160,12 @@ public class Sword : ThrowWeapon
         if (other.CompareTag("Monster") || other.CompareTag("Boss"))
         {
             Collider[] _targetColliders = Physics.OverlapSphere(transform.position, transform.localScale.x, LayerMask.GetMask("Monster"));
+            _overlapCount = _targetColliders.Length;
 
             foreach (Collider targetCollider in _targetColliders)
             {
                 targetCollider.gameObject.GetComponent<Monster>().MonsterGetDamage(_weaponAttackPower);
-                SoundManager.Instance.PlayFX(SoundKey.NormalWeaponHitSound, 0.01f);
+                SoundManager.Instance.PlayFX(SoundKey.NormalWeaponHitSound, 0.04f / _overlapCount);
                 DamageTextManager.Instance.ShowDamageText(targetCollider.transform, _weaponAttackPower, _color);
             }
 
@@ -192,7 +195,7 @@ public class Sword : ThrowWeapon
             {
                 _triggerStayTimer -= _triggerStayAttackInterval;
                 target.MonsterGetDamage(_weaponAttackPower);
-                SoundManager.Instance.PlayFX(SoundKey.NormalWeaponHitSound, 0.01f);
+                SoundManager.Instance.PlayFX(SoundKey.NormalWeaponHitSound, 0.04f / _overlapCount);
                 DamageTextManager.Instance.ShowDamageText(target.transform, _weaponAttackPower, _color);
             }
         }

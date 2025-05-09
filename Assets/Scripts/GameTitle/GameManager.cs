@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -40,12 +41,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    private void Start()
-    {
-        SoundManager.Instance.PlayBGM(SoundKey.TitleBGM, 0.01f);
-    }
-
+    
     public void SetPlayer(int key, int skillIndex, string playerPrefabName)
     {
         _playerKey = key;
