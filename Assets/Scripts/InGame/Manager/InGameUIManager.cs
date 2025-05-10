@@ -1,4 +1,6 @@
+using Photon.Pun;
 using TMPro;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -46,9 +48,6 @@ public class InGameUIManager : Singleton<InGameUIManager>
     private readonly float _oneMinute = 60.0f;
     private float _clearTime = 0.0f;
 
-    private string[] _bestName =  new string[10];
-    private float[] _bestClearTime = new float[10];
-
     private int _panelChildrenCount;
     private int _playerPanelChildrenCount;
     private int _killCountPanelChildrenCount;
@@ -65,7 +64,7 @@ public class InGameUIManager : Singleton<InGameUIManager>
             _isStart = true;
             _inGameCanvas = GameObject.Find("InGameCanvas").GetComponent<Transform>();
             _radialBlurMat = Resources.Load<Material>("Materials/RadialBlurMaterial");
-
+            
             // 인게임 패널 세팅
             SetInGamePanel();
             // 플레이어 UI 패널 세팅
@@ -223,52 +222,16 @@ public class InGameUIManager : Singleton<InGameUIManager>
 
     private void OnClickRegisterRanking()
     {
-        InputField playerName = _gameClearUIs[(int)GameClearUI.RankName].GetComponent<InputField>();
+        InputField playerNameInput = _gameClearUIs[(int)GameClearUI.RankName].GetComponent<InputField>();
+        string playerName = playerNameInput.text;
 
-        RankingSet(playerName.text, _clearTime);
+        // RankingSet RPC 호출 (playerName과 _clearTime을 보내는 부분)
+        GameManager.Instance.PhotonView.RPC("RankingSet", RpcTarget.MasterClient, playerName, _clearTime);
+        //RankingSet(playerName.text, _clearTime);
 
         Time.timeScale = 1.0f;
         SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.04f);
+        GameManager.Instance.DestroyGameManager();
         SceneManager.LoadScene("TitleScene");
-    }
-
-    private void RankingSet(string curName, float curClearTime)
-    {
-        PlayerPrefs.SetString("CurPlayerName", curName);
-        PlayerPrefs.SetFloat("CurClearTime", curClearTime);
-
-        float tempClearTime = 0.0f;
-        string tempName = "";
-
-        for(int i = 0; i < _bestClearTime.Length; i++)
-        {
-            _bestName[i] = PlayerPrefs.GetString(i + "BestName");
-            _bestClearTime[i] = PlayerPrefs.GetFloat(i + "BestClearTime");
-            if(_bestClearTime[i] == 0.0f)
-            {
-                _bestClearTime[i] = float.MaxValue;
-            }
-
-            while (_bestClearTime[i] > curClearTime)
-            {
-                tempClearTime = _bestClearTime[i];
-                tempName = _bestName[i];
-                _bestClearTime[i] = curClearTime;
-                _bestName[i] = curName;
-
-                PlayerPrefs.SetString(i + "BestName", curName);
-                PlayerPrefs.SetFloat(i + "BestClearTime", curClearTime);
-
-                curClearTime = tempClearTime;
-                curName = tempName;
-            }
-        }
-
-        for(int i = 0; i < _bestClearTime.Length; i++)
-        {
-            PlayerPrefs.SetString(i + "BestName", _bestName[i]);
-            PlayerPrefs.SetFloat(i + "BestClearTime", _bestClearTime[i]);
-            print(_bestName[i] + " : " + _bestClearTime[i]);
-        }
     }
 }

@@ -488,13 +488,11 @@ public class Boss : FlashDamagedMonster
             _timer = 0.0f;
             _isBossDead = true;
             SoundManager.Instance.PlayFX(SoundKey.BossDeathSound, 0.04f);
-            print("죽음");
             Time.timeScale = 0.25f;
         }
 
         // 슬로우된 시간에 영향을 안받게
         _timer += Time.unscaledDeltaTime;
-        print(_timer);
 
         if (_timer >= _slowMotionDuration)
         {
@@ -550,7 +548,6 @@ public class Boss : FlashDamagedMonster
             _bossStateTracker[selectedState]++; // 새 상태 +1
 
             _bossState = (BossState)selectedState;
-            print(_bossState);
         }
     }
 

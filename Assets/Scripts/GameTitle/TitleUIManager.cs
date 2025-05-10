@@ -24,6 +24,8 @@ public class TitleUIManager : MonoBehaviour
     private Transform[] _rankingUIs;
     private Transform[] _rankingUIsChildren;
 
+    private GameObject[] _topTenRanks;
+
     private Button _playBtn;
     private Button _rankBtn;
     private Button _rankCloseBtn;
@@ -50,6 +52,9 @@ public class TitleUIManager : MonoBehaviour
     private void Start()
     {
         SoundManager.Instance.PlayBGM(SoundKey.TitleBGM, 0.01f);
+
+        _topTenRanks = new GameObject[_rankCount];
+
         _playBtn = _titleUIs[(int)TitlePanel.PlayButton].GetComponent<Button>();
         _rankBtn = _titleUIs[(int)TitlePanel.RankButton].GetComponent<Button>();
         _rankCloseBtn = _rankingUIsChildren[(int)RankingPanel.RankingCloseButton].GetComponent<Button>();
@@ -73,7 +78,7 @@ public class TitleUIManager : MonoBehaviour
             string nameKey = i + "BestName";
             string timeKey = i + "BestClearTime";
 
-            string name = PlayerPrefs.GetString(i + "BestName");
+            string name = PlayerPrefs.GetString(nameKey);
 
             if (string.IsNullOrEmpty(name))
             {
@@ -96,6 +101,7 @@ public class TitleUIManager : MonoBehaviour
             }
 
             GameObject instance = Instantiate(textPrefab, rankParent);
+            _topTenRanks[i] = instance;
             TextMeshProUGUI[] text = instance.GetComponentsInChildren<TextMeshProUGUI>();
 
             text[(int)RankText.Number].text = rankId.ToString();
@@ -104,7 +110,45 @@ public class TitleUIManager : MonoBehaviour
         }
     }
 
-    private void SetTitlePanel()
+    private void CurrentRanking()
+    {
+        for (int i = 0; i < _rankCount; i++)
+        {
+            int rankId = i + 1;
+            string nameKey = i + "BestName";
+            string timeKey = i + "BestClearTime";
+
+            string name = PlayerPrefs.GetString(nameKey);
+
+            if (string.IsNullOrEmpty(name))
+            {
+                name = "----";
+            }
+
+            string displayTime;
+
+            float clearTime = PlayerPrefs.GetFloat(timeKey);
+
+            if (clearTime >= float.MaxValue || clearTime == 0.0f)
+            {
+                displayTime = "-- : --";
+            }
+            else
+            {
+                float minute = Mathf.FloorToInt(clearTime / _oneMinute);
+                float second = Mathf.FloorToInt(clearTime % _oneMinute);
+                displayTime = $"{minute:00} : {second:00}";
+            }
+
+            TextMeshProUGUI[] text = _topTenRanks[i].GetComponentsInChildren<TextMeshProUGUI>();
+
+            text[(int)RankText.Number].text = rankId.ToString();
+            text[(int)RankText.Name].text = name;
+            text[(int)RankText.Record].text = displayTime;
+        }
+    }
+
+        private void SetTitlePanel()
     {
         int panelChildrenCount = _title.childCount;
 
@@ -149,6 +193,7 @@ public class TitleUIManager : MonoBehaviour
 
     private void OnClickRankButton()
     {
+        CurrentRanking();
         SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.04f);
         _rankingUIs[(int)RankingPanel.RankingButtonPanel].gameObject.SetActive(true);
     }
