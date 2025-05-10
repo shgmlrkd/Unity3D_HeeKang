@@ -87,6 +87,7 @@ public class InGameUIManager : Singleton<InGameUIManager>
     private void Start()
     {
         _registerRankingButton = _gameClearUIs[(int)GameClearUI.RankingNameSubmitButton].GetComponent<Button>();
+        // 랭킹 등록 확인 버튼 클릭 이벤트
         _registerRankingButton.onClick.AddListener(() => OnClickRegisterRanking());
     }
 
@@ -225,10 +226,9 @@ public class InGameUIManager : Singleton<InGameUIManager>
         InputField playerNameInput = _gameClearUIs[(int)GameClearUI.RankName].GetComponent<InputField>();
         string playerName = playerNameInput.text;
 
-        // RankingSet RPC 호출 (playerName과 _clearTime을 보내는 부분)
+        // 클리어 기록을 마스터 클라이언트에 전달하여 랭킹 갱신 요청
         GameManager.Instance.PhotonView.RPC("RankingSet", RpcTarget.MasterClient, playerName, _clearTime);
-        //RankingSet(playerName.text, _clearTime);
-
+        
         Time.timeScale = 1.0f;
         SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.04f);
         GameManager.Instance.DestroyGameManager();

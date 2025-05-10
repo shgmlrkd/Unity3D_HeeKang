@@ -8,7 +8,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 {
     private void Start()
     {
-        // 서버 연결을 위한 준비가 완료되 상태일 때
+        // 서버에 연결할 준비가 완료된 상태일 때 연결하기
         if (PhotonNetwork.NetworkClientState == ClientState.PeerCreated)
         {
             PhotonNetwork.ConnectUsingSettings();
