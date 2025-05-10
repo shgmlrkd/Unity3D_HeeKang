@@ -2006,6 +2006,7 @@ GameObject:
   - component: {fileID: 1581812357}
   - component: {fileID: 1581812356}
   - component: {fileID: 1581812358}
+  - component: {fileID: 1581812362}
   - component: {fileID: 1581812361}
   - component: {fileID: 1581812360}
   - component: {fileID: 1581812359}
@@ -2296,6 +2297,18 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: d2939673879aa0346914d19ad29bdcd1, type: 3}
   _bgmSource: {fileID: 1581812360}
   _fxSource: {fileID: 1581812359}
+--- !u!114 &1581812362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1581812355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e41e4c98d8c60fb4bb0c8a30ec9cf67a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1725482271
 GameObject:
   m_ObjectHideFlags: 0
