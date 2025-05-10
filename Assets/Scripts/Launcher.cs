@@ -14,8 +14,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         print("연결");
-        PhotonNetwork.JoinRandomRoom();
+        PhotonNetwork.JoinOrCreateRoom("UnityChanSurvivors", new RoomOptions { MaxPlayers = 4 }, TypedLobby.Default);
     }
+
     public override void OnJoinedRoom()
     {
         print("입장");
