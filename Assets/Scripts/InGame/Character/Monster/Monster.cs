@@ -7,7 +7,7 @@ public class Monster : MonoBehaviour
 {
     protected enum MonsterStatus
     {
-        Idle, Run, Hit, Rush, Attack, Dead, None
+        Idle, Trace, Hit, Rush, Attack, Dead, None
     }
 
     protected Transform _player;
@@ -24,7 +24,7 @@ public class Monster : MonoBehaviour
 
     protected Status _monsterStatus;
 
-    protected MonsterStatus _monsterCurrentState = MonsterStatus.Run;
+    protected MonsterStatus _monsterCurrentState = MonsterStatus.Trace;
 
     protected Vector3 _moveOffset;
     protected AnimatorStateInfo _monsterAnimStateInfo;
@@ -130,7 +130,7 @@ public class Monster : MonoBehaviour
         _curHp = _maxHp;
 
         _hpBarVisibleTimer = 0.0f;
-        _monsterCurrentState = MonsterStatus.Run;
+        _monsterCurrentState = MonsterStatus.Trace;
 
         _isFadeOut = false;
         _isHpBarVisible = false;
@@ -180,7 +180,7 @@ public class Monster : MonoBehaviour
         switch (_monsterCurrentState)
         {
             // 몬스터가 Run 상태면 조건 확인 후 Move() 실행
-            case MonsterStatus.Run:
+            case MonsterStatus.Trace:
                 if (CanMove())
                 { 
                     Move();
@@ -307,7 +307,7 @@ public class Monster : MonoBehaviour
 
     protected virtual void Move()
     {
-        _monsterCurrentState = MonsterStatus.Run;
+        _monsterCurrentState = MonsterStatus.Trace;
         // 플레이어 방향으로 이동, 회전
         Vector3 direction = (_player.position - transform.position).normalized;
         direction.y = 0;
@@ -332,7 +332,7 @@ public class Monster : MonoBehaviour
     // 기본적으로 Run 상태로 돌아감
     protected virtual void HandleHitState()
     {
-        _monsterCurrentState = MonsterStatus.Run;
+        _monsterCurrentState = MonsterStatus.Trace;
     }
     protected virtual void HandleRushState()
     {
@@ -341,7 +341,7 @@ public class Monster : MonoBehaviour
 
     protected virtual void HandleAttackState()
     {
-        _monsterCurrentState = MonsterStatus.Run;
+        _monsterCurrentState = MonsterStatus.Trace;
     }
 
     protected virtual void HandleDeadState()

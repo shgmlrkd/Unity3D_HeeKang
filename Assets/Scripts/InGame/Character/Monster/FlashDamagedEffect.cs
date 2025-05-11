@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlashDamagedMonster : Monster
+public class FlashDamagedEffect : Monster
 {
     protected Renderer[] _monsterRenderers;
 

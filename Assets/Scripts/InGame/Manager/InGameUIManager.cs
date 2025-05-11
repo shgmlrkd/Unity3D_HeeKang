@@ -105,11 +105,15 @@ public class InGameUIManager : Singleton<InGameUIManager>
         }
     }
 
-    public void SetRadialBlurImage(Vector3 pos)
+    public void SetRadialBlurImage(Vector3 worldPos)
     {
         _radialBlurTransform = _inGamePanels[(int)InGamePanel.RadialBlurImage];
         _radialBlurTransform.gameObject.GetComponent<RawImage>().material = _radialBlurMat;
-        Vector3 position = new Vector3(pos.x / Screen.width, pos.y / Screen.height, 0.0f);
+        // 보스 월드 위치 -> 스크린 위치 변환
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+        // 스크린 좌표를 정규화된 UV 좌표로 변환
+        Vector3 position = new Vector3(screenPos.x / Screen.width, screenPos.y / Screen.height, 0.0f);
+        // Radial Blur 머티리얼에 스케일 및 중심 위치 설정
         _radialBlurMat.SetVector("_Scale", _radialBlurScale);
         _radialBlurMat.SetVector("_Position", position);
     }

@@ -57,7 +57,7 @@ public class Turtle : Monster
             {
                 _isReached = true;
                 _rushTimer -= _rushDuration;
-                _monsterCurrentState = MonsterStatus.Run;
+                _monsterCurrentState = MonsterStatus.Trace;
                 _monsterAnimator.SetBool("IsReached", _isReached);
             }
         }

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Lich : FlashDamagedMonster
+public class Lich : FlashDamagedEffect
 {
     private Coroutine _fireCoroutine;
     private MonsterFireBallSkill _monsterFireBallSkill;
@@ -37,7 +37,7 @@ public class Lich : FlashDamagedMonster
 
     protected override void Move()
     {
-        _monsterCurrentState = MonsterStatus.Run;
+        _monsterCurrentState = MonsterStatus.Trace;
 
         _distance = Vector3.Distance(_player.position, transform.position);
 
@@ -81,7 +81,7 @@ public class Lich : FlashDamagedMonster
         }
         else
         {
-            _monsterCurrentState = MonsterStatus.Run;
+            _monsterCurrentState = MonsterStatus.Trace;
         }
     }
 
@@ -99,7 +99,7 @@ public class Lich : FlashDamagedMonster
         // 멀어지면 Run 상태로 바꿈
         if (_distance > _monsterStatus.AttackDistance)
         {
-            _monsterCurrentState = MonsterStatus.Run;
+            _monsterCurrentState = MonsterStatus.Trace;
         }
 
         if (_canFireNow && _fireCoroutine == null)

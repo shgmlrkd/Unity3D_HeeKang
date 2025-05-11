@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Slime : FlashDamagedMonster
+public class Slime : FlashDamagedEffect
 {
     private int _slimeKey = 101;
 

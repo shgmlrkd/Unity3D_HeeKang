@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss : FlashDamagedMonster
+public class Boss : FlashDamagedEffect
 {
     private enum BossState
     {
-        Idle, Run, Attack, Rush, Intro, Dead, Roar, None
+        Idle, Trace, Attack, Rush, Intro, Dead, Roar, None    
     }
 
     private enum BossAttack
@@ -105,8 +105,8 @@ public class Boss : FlashDamagedMonster
                 _monsterCurrentState = MonsterStatus.Idle;
                 HandleIdleState();
                 break;
-            case BossState.Run:
-                _monsterCurrentState = MonsterStatus.Run;
+            case BossState.Trace:
+                _monsterCurrentState = MonsterStatus.Trace;
                 if (CanMove())
                 {
                     Move();
@@ -204,7 +204,7 @@ public class Boss : FlashDamagedMonster
             }
             _monsterAnimator.SetTrigger("Run");
             // Run 실행 bossStateTracker = [0, 1, 0, 0]
-            _bossStateTracker[(int)BossState.Run]++;
+            _bossStateTracker[(int)BossState.Trace]++;
         }
 
         // 플레이어 방향으로 이동, 회전
@@ -220,7 +220,7 @@ public class Boss : FlashDamagedMonster
         {
             _timer = 0.0f;
             _monsterAnimator.speed = 1.0f;
-            TransitionFromState((int)BossState.Run);
+            TransitionFromState((int)BossState.Trace);
         }
     }
 
@@ -458,10 +458,8 @@ public class Boss : FlashDamagedMonster
             InitBossStateTracker();
             // 보스가 포효하는 동안 플레이어 스킬은 다시 잠궈놓음
             _playerSkill.DisablePlayerSkills();
-            // 보스 월드 위치 -> 스크린 위치 변환
-            Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
             // 레이디얼 블러 위치 넘겨주기
-            InGameUIManager.Instance.SetRadialBlurImage(pos);
+            InGameUIManager.Instance.SetRadialBlurImage(transform.position);
         }
 
         // 슬로우된 시간에 영향을 안받게
@@ -524,19 +522,18 @@ public class Boss : FlashDamagedMonster
 
     private void TransitionFromState(int prevState)
     {
-        // 상태 바뀌면 일단 bool형 변수들 리셋 시킴
+        // 상태 바뀌면 bool형 변수들 리셋 시킴
         ResetStateFlags();
-
         // 이미 실행된 상태를 뺀 나머지 목록을 생성
         List<int> availableStates = new List<int>();
         for (int i = 0; i < _bossStateTracker.Length; i++)
         {
-            if (_bossStateTracker[i] == 0) // 이미 실행된 상태는 제외
+            // 실행되지 않은 State라면 리스트에 포함
+            if (_bossStateTracker[i] == 0) 
             {
                 availableStates.Add(i);
             }
         }
-
         // 나머지 상태에서 랜덤으로 선택
         if (availableStates.Count > 0)
         {
@@ -546,23 +543,23 @@ public class Boss : FlashDamagedMonster
             // 이전에 실행된 상태를 0으로 초기화
             _bossStateTracker[prevState] = 0; // 이전 상태 0으로 초기화
             _bossStateTracker[selectedState]++; // 새 상태 +1
-
             _bossState = (BossState)selectedState;
+            print((BossState)selectedState);
         }
     }
 
-    // 포효 후 보스 상태 선택을 리셋하기 위해 보스 상태 배열 초기화
     private void InitBossStateTracker()
     {
+        // 포효 후 보스 상태 배열 초기화
         for (int i = 0; i < _bossStateTracker.Length; i++)
         {
             _bossStateTracker[i] = 0;
         }
     }
 
-    // bool형 변수들 리셋
     private void ResetStateFlags()
     {
+        // bool형 변수들 리셋
         _isIdleState = false;
         _isRunState = false;
         _isRushState = false;

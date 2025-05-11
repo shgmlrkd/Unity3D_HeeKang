@@ -48,7 +48,6 @@ public class PlayerStatus : MonoBehaviour
         _maxExp = _playerData.Exp;
         _playerStatus.Speed = _playerData.Speed;
 
-
         // Ω∫≈≥ ∆–≥Œ ø≠±‚
         InGameUIManager.Instance.SkillPanelOn();
         // Ω√∞£ ∏ÿ√„
