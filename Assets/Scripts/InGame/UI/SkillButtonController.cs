@@ -52,7 +52,7 @@ public class SkillButtonController : MonoBehaviour
         // 초기화
         _skillBtns = new Transform[_skillBtnCount];
 
-        // 스킬 버튼 3개 세팅
+        // 스킬 버튼 3개 초기화 및 클릭 이벤트 등록
         for (int i = 0; i < _skillBtnCount; i++)
         {
             _skillBtns[i] = transform.GetChild(i);
@@ -77,21 +77,20 @@ public class SkillButtonController : MonoBehaviour
 
         // 리스트 딕셔너리에 있는 키값을 리스트의 원소로 초기화
         List<int> availableSkillKeys = new List<int>(_skillLevelDict.Keys);
+        // 중복 방지를 위해 HashSet 사용
         HashSet<int> selectedKeys = new HashSet<int>();
-
-        // 중복 없는 랜덤 키값 뽑기
+        // 중복 없는 랜덤 키값 뽑기 (_skillBtnCount는 버튼 수 버튼은 3개)
         while (selectedKeys.Count < _skillBtnCount)
         {
-            // 스킬 개수 중 랜덤으로 인덱스 추출
+            // 랜덤 인덱스로 스킬 키 선택
             int randIndex = Random.Range(0, availableSkillKeys.Count);
-            // 스킬 키값
             int key = availableSkillKeys[randIndex];
-
+            // 최대 레벨인 스킬은 제외
             if (IsSkillMaxLevel(key))
             {
-                continue; // 만렙인 스킬은 패스
+                continue; 
             }
-
+            // 중복 없이 선택된 키만 추가
             if (selectedKeys.Add(key))
             {
                 _skillKeysCopy.Add(key);

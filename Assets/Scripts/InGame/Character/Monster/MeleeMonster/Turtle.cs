@@ -48,16 +48,20 @@ public class Turtle : Monster
         // 도착 할 때까지 돌진
         if (!_isReached)
         {
+            // 돌진 시간 타이머 증가
             _rushTimer += Time.deltaTime;
-
+            // 플레이어 방향으로 몬스터를 이동시킴 (돌진)
             transform.Translate(_directionToPlayer * _monsterStatus.Speed * _rushSpeedRate * Time.deltaTime, Space.World);
-            
             // 일정 시간 동안 돌진
             if (_rushTimer >= _rushDuration)
             {
+                // 도착 상태로 전환
                 _isReached = true;
+                // 타이머 초기화 (남은 시간 보존 방식)
                 _rushTimer -= _rushDuration;
+                // 몬스터 상태를 추적 상태로 변경
                 _monsterCurrentState = MonsterStatus.Trace;
+                // 애니메이터에 도착 여부 전달
                 _monsterAnimator.SetBool("IsReached", _isReached);
             }
         }
@@ -65,8 +69,8 @@ public class Turtle : Monster
 
     protected override void HandleHitState()
     {
-        // 데미지를 입었으면 돌진 상태 준비 (위치 잡기)
         _isReached = false;
+        // 데미지를 입었으면 돌진 상태 준비 (위치 잡기)
         SetRushState();
     }
 
@@ -77,12 +81,12 @@ public class Turtle : Monster
 
     private void SetRushState()
     {
+        // 플레이어한테 맞았을 때의 플레이어 위치
         _playerPosAtHit = _player.position;
 
         // 플레이어가 있었던 위치 방향 벡터 구함
         _directionToPlayer = (_playerPosAtHit - transform.position).normalized;
         _directionToPlayer.y = 0.0f;
-
         // 플레이어 방향으로 회전
         if (_directionToPlayer != Vector3.zero)
         {

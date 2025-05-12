@@ -15,16 +15,6 @@ public class PlayerStatus : MonoBehaviour
     { 
         get { return _maxExp; }
     }
-    private float _speed;
-    public float Speed
-    { 
-        get { return _speed; } 
-    }
-    private float _maxHp;
-    public float MaxHp
-    {
-        get { return _maxHp; }
-    }
     private int _expLevel = 0;
     public int ExpLevel
     {

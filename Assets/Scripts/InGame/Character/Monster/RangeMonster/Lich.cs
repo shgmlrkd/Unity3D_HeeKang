@@ -104,11 +104,11 @@ public class Lich : FlashDamagedEffect
 
         if (_canFireNow && _fireCoroutine == null)
         {
-            _fireCoroutine = StartCoroutine(FireRoutine(direction));
+            _fireCoroutine = StartCoroutine(ShootFireBallLoop(direction));
         }
     }
 
-    private IEnumerator FireRoutine(Vector3 dir)
+    private IEnumerator ShootFireBallLoop(Vector3 dir)
     {
         _monsterAnimator.SetTrigger("Fire");
         _canFireNow = false; // 발사했으니까 잠깐 막음

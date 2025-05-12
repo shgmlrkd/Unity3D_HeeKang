@@ -52,7 +52,7 @@ public class InGameTime : MonoBehaviour
 
     private void Start()
     {
-        _inGameTimer = 1; //MonsterManager.Instance.InitTime;
+        _inGameTimer = MonsterManager.Instance.InitTime;
         _countupTimer = 0.0f;
         _timerPhase = TimerPhase.Countdown;
         SoundManager.Instance.PlayBGM(SoundKey.NormalBGM, 0.025f);

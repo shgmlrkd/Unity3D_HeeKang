@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ChestMonster : FlashDamagedEffect
+public class Mimic : FlashDamagedEffect
 {
     private float _activeTimer = 0.0f;
 
