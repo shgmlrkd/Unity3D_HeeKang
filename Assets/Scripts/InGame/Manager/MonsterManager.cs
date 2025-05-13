@@ -314,21 +314,23 @@ public class MonsterManager : Singleton<MonsterManager>
 
     public GameObject GetClosestMonster(Vector3 pos)
     {
+        // 가장 가까운 몬스터를 담을 변수
         GameObject closest = null;
+        // 가장 가까운 거리를 담을 변수
         float minDistance = float.MaxValue;
-
         // 몬스터 풀을 돌려서 활성화 된 애들 중 가장 가까운거 찾기
         foreach (KeyValuePair<string, MonsterSpawnerData> monsterPool in _monsterSpawnDataDict)
         {
             foreach (GameObject monster in monsterPool.Value.Pool)
             {
+                // 몬스터가 비활성화 또는 충돌체가 꺼져있다면(예: 죽는 애니메이션 중) 넘어감
                 if (!monster.activeSelf) continue;
                 if (!monster.gameObject.GetComponent<Collider>().enabled) continue;
 
                 // 플레이어와 몬스터의 거리 구하기
                 float dist = Vector3.Distance(pos, monster.transform.position);
 
-                // 더 작으면 갱신
+                // 거리가 기존보다 작으면 갱신
                 if (dist < minDistance)
                 {
                     minDistance = dist;
@@ -336,7 +338,6 @@ public class MonsterManager : Singleton<MonsterManager>
                 }
             }
         }
-
         return closest;
     }
 }
