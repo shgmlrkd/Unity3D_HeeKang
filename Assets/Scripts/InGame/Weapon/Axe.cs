@@ -51,7 +51,7 @@ public class Axe : Weapon
     {
         if (other.CompareTag("Monster") || other.CompareTag("Boss"))
         {
-            SoundManager.Instance.PlayFX(SoundKey.AxeHitSound, 0.04f);
+            SoundManager.Instance.PlayFX(SoundKey.AxeHitSound, 0.7f);
             DamageTextManager.Instance.ShowDamageText(other.transform, _weaponAttackPower, _color);
         }
 

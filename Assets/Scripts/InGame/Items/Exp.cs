@@ -92,7 +92,7 @@ public class Exp : Item
         {
             // 경험치++
             _player.gameObject.GetComponent<PlayerExpBar>().SetPlayerCurExp(_exp);
-            SoundManager.Instance.PlayFX(SoundKey.ExpSound, 0.06f);
+            SoundManager.Instance.PlayFX(SoundKey.ExpSound, 0.7f);
             gameObject.SetActive(false); // 아이템 비활성화
         }
     }

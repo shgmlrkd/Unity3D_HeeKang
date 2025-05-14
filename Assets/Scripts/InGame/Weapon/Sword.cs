@@ -165,7 +165,7 @@ public class Sword : ThrowWeapon
             foreach (Collider targetCollider in _targetColliders)
             {
                 targetCollider.gameObject.GetComponent<Monster>().MonsterGetDamage(_weaponAttackPower);
-                SoundManager.Instance.PlayFX(SoundKey.NormalWeaponHitSound, 0.04f / _overlapCount);
+                SoundManager.Instance.PlayFX(SoundKey.NormalWeaponHitSound, 0.7f / _overlapCount);
                 DamageTextManager.Instance.ShowDamageText(targetCollider.transform, _weaponAttackPower, _color);
             }
 
@@ -195,7 +195,7 @@ public class Sword : ThrowWeapon
             {
                 _triggerStayTimer -= _triggerStayAttackInterval;
                 target.MonsterGetDamage(_weaponAttackPower);
-                SoundManager.Instance.PlayFX(SoundKey.NormalWeaponHitSound, 0.04f / _overlapCount);
+                SoundManager.Instance.PlayFX(SoundKey.NormalWeaponHitSound, 0.7f / _overlapCount);
                 DamageTextManager.Instance.ShowDamageText(target.transform, _weaponAttackPower, _color);
             }
         }

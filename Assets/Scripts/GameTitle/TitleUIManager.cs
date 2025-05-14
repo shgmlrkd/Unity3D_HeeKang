@@ -51,7 +51,7 @@ public class TitleUIManager : MonoBehaviour
 
     private void Start()
     {
-        SoundManager.Instance.PlayBGM(SoundKey.TitleBGM, 0.01f);
+        SoundManager.Instance.PlayBGM(SoundKey.TitleBGM, 0.7f);
 
         _topTenRanks = new GameObject[_rankCount];
 
@@ -186,7 +186,7 @@ public class TitleUIManager : MonoBehaviour
 
     private void OnClickPlayButton()
     {
-        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.04f);
+        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.7f);
         _titleUIs[(int)TitlePanel.SelectPlayerPanel].gameObject.SetActive(true);
         _titleUIs[(int)TitlePanel.SelectPlayerText].gameObject.SetActive(true);
     }
@@ -194,13 +194,13 @@ public class TitleUIManager : MonoBehaviour
     private void OnClickRankButton()
     {
         CurrentRanking();
-        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.04f);
+        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.7f);
         _rankingUIs[(int)RankingPanel.RankingButtonPanel].gameObject.SetActive(true);
     }
 
     private void OnClickRankCloseButton()
     {
-        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.04f);
+        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.7f);
         _rankingUIs[(int)RankingPanel.RankingButtonPanel].gameObject.SetActive(false);
     }
 }

@@ -56,7 +56,7 @@ public class Weapon : MonoBehaviour
     {
         if (other.CompareTag("Monster") || other.CompareTag("Boss"))
         {
-            SoundManager.Instance.PlayFX(SoundKey.NormalWeaponHitSound, 0.04f);
+            SoundManager.Instance.PlayFX(SoundKey.NormalWeaponHitSound, 0.7f);
             DamageTextManager.Instance.ShowDamageText(other.transform, _weaponAttackPower, _color);
         }
     }

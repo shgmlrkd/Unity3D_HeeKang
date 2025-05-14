@@ -36,6 +36,6 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        SoundManager.Instance.PlayFX(SoundKey.SkillButtonClickSound, 0.04f);
+        SoundManager.Instance.PlayFX(SoundKey.SkillButtonClickSound, 0.7f);
     }
 }

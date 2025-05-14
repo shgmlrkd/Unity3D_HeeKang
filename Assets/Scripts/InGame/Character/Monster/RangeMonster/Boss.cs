@@ -226,15 +226,16 @@ public class Boss : FlashDamagedEffect
 
     protected override void HandleRushState()
     {
+        // Rush 상태가 처음 시작되었을 때 한 번만 실행
         if (!_isRushState)
         {
-            _isRushState = true;
-            _monsterAnimator.SetTrigger("Rush");
-            SoundManager.Instance.PlayFX(SoundKey.BossRushSound, 0.025f);
+            _isRushState = true; // Rush 상태 진입 표시 
+            _monsterAnimator.SetTrigger("Rush"); // 돌진 애니메이션 실행
+            SoundManager.Instance.PlayFX(SoundKey.BossRushSound, 0.7f);
             // Rush 실행 bossStateTracker = [0, 0, 0, 1]
             _bossStateTracker[(int)BossState.Rush]++;
 
-            // 이때 저장한 방향으로
+            // Rush로 상태 전환된 순간의 플레이어 위치의 방향을 구함
             _direction = (_player.position - transform.position).normalized;
             _direction.y = 0.0f;
         }
@@ -301,7 +302,7 @@ public class Boss : FlashDamagedEffect
     private void ShootFireballsInCircle(List<GameObject> fireBalls, float offset = 0.0f)
     {
         _monsterAnimator.SetTrigger("BurstFire");
-        SoundManager.Instance.PlayFX(SoundKey.BossAttackSound, 0.04f);
+        SoundManager.Instance.PlayFX(SoundKey.BossAttackSound, 0.7f);
 
         // fireball 중 20개만 발사하기 위해 각도 나누기
         float angleStep = Mathf.PI * 2 / _burstFireBallCount;
@@ -404,7 +405,7 @@ public class Boss : FlashDamagedEffect
                 }
 
                 _monsterFireBallSkill.Fire("BossFireBall", dir);
-                SoundManager.Instance.PlayFX(SoundKey.BossAttackSound, 0.02f);
+                SoundManager.Instance.PlayFX(SoundKey.BossAttackSound, 0.7f);
 
                 // 보스가 포효를 한다면 코루틴도 멈춤
                 if ((!_isRoarEnd && _isBossRoar) || _curHp <= 0.0f)
@@ -451,7 +452,7 @@ public class Boss : FlashDamagedEffect
             _isBossRoar = true;
             _playerMove.IsMoveStop = true;
             _monsterAnimator.Play("Roar");
-            SoundManager.Instance.PlayFX(SoundKey.BossRoarSound, 0.04f);
+            SoundManager.Instance.PlayFX(SoundKey.BossRoarSound, 0.7f);
             Time.timeScale = 0.5f;
             // 다른 상태에서 상태 초기화가 일어나지 않은 상황에서
             // Roar 상태로 넘어올 수가 있음 그래서 초기화 한번 함
@@ -485,7 +486,7 @@ public class Boss : FlashDamagedEffect
             // 다른 state에서 더해지고 있던 _timer 시간 초기화
             _timer = 0.0f;
             _isBossDead = true;
-            SoundManager.Instance.PlayFX(SoundKey.BossDeathSound, 0.04f);
+            SoundManager.Instance.PlayFX(SoundKey.BossDeathSound, 0.7f);
             Time.timeScale = 0.25f;
         }
 
@@ -497,7 +498,7 @@ public class Boss : FlashDamagedEffect
              _timer = 0.0f;
             Time.timeScale = 1.0f;
             SoundManager.Instance.StopBGM();
-            SoundManager.Instance.PlayFX(SoundKey.VictorySound, 0.03f);
+            SoundManager.Instance.PlayFX(SoundKey.VictorySound, 0.7f);
             _bossState = BossState.None;
             _monsterCurrentState = MonsterStatus.None;
         }
@@ -542,7 +543,7 @@ public class Boss : FlashDamagedEffect
 
             // 이전에 실행된 상태를 0으로 초기화
             _bossStateTracker[prevState] = 0; // 이전 상태 0으로 초기화
-            _bossStateTracker[selectedState]++; // 새 상태 +1
+            _bossStateTracker[selectedState]++; // 현재 상태 +1
             _bossState = (BossState)selectedState;
             print((BossState)selectedState);
         }

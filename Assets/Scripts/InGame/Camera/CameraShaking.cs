@@ -17,7 +17,11 @@ public class CameraShaking : MonoBehaviour
     {
         get { return _isShakeEnd; }
     }
-
+    // PerlinNoise를 사용해서 부드러운 랜덤 값을 받음
+    // 흔들림의 X축과 Z축 오프셋을 각각 다르게 계산하여 좀 더 자연스러운 흔들림을 생성
+    /*float offsetX = (Mathf.PerlinNoise(Time.time * _frequency, 0.0f) - _perlinOffset) * _perlinScale * _magnitude * damper;
+            float offsetZ = (Mathf.PerlinNoise(0.0f, Time.time * _frequency) - _perlinOffset) * _perlinScale * _magnitude * damper;
+            */
     private void Update()
     {
         // 카메라 흔들기를 시작하면
@@ -31,12 +35,19 @@ public class CameraShaking : MonoBehaviour
 
             // 흔드는 시간의 흐름에 따라 점점 줄어들게 뎀핑값을 줌
             float damper = 1.0f - Mathf.Clamp01(_shakeElapsed / _shakeTimer); // 감쇠 (0 ~ 1)
-
-            // PerlinNoise를 사용해서 부드러운 랜덤 값을 받음
-            // 흔들림의 X축과 Z축 오프셋을 각각 다르게 계산하여 좀 더 자연스러운 흔들림을 생성
-            float offsetX = (Mathf.PerlinNoise(Time.time * _frequency, 0.0f) - _perlinOffset) * _perlinScale * _magnitude * damper;
-            float offsetZ = (Mathf.PerlinNoise(0.0f, Time.time * _frequency) - _perlinOffset) * _perlinScale * _magnitude * damper;
             
+            // 시간에 따라 X축, Z축 방향의 퍼린 노이즈 값을 계산
+            float perlinX = Mathf.PerlinNoise(Time.time * _frequency, 0.0f);
+            float perlinZ = Mathf.PerlinNoise(0.0f, Time.time * _frequency);
+
+            // 스케일을 적용해 노이즈 강도 조절
+            float noiseX = (perlinX - _perlinOffset) * _perlinScale;
+            float noiseZ = (perlinZ - _perlinOffset) * _perlinScale;
+            
+            // 최종적으로 진폭과 감쇠값을 곱해 흔들림 오프셋 계산
+            float offsetX = noiseX * _magnitude * damper;
+            float offsetZ = noiseZ * _magnitude * damper;
+
             // 원래 위치에 오프셋을 더해 새로운 위치로 이동
             transform.position = _originalPos + new Vector3(offsetX, 0.0f, offsetZ);
 

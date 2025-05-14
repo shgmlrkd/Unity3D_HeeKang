@@ -234,7 +234,7 @@ public class InGameUIManager : Singleton<InGameUIManager>
         GameManager.Instance.PhotonView.RPC("RankingSet", RpcTarget.MasterClient, playerName, _clearTime);
         
         Time.timeScale = 1.0f;
-        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.04f);
+        SoundManager.Instance.PlayFX(SoundKey.ButtonClickSound, 0.7f);
         GameManager.Instance.DestroyGameManager();
         SceneManager.LoadScene("TitleScene");
     }
