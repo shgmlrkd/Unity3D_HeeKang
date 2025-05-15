@@ -15,6 +15,7 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private LayerMask _groundLayer;
 
+    private readonly float _maxDistance = 1000.0f;
     private readonly float _bossSpawnRange = 130.0f;
     private readonly float _bossSpawnOffsetY = 0.5f;
     private readonly float _monstersInactiveTime = 300.0f;
@@ -25,6 +26,8 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private float _inGameTime;
     private float _offset = 0.18f;
+
+    private readonly int _screenSideCount = 4;
 
     private bool _isDeadTime = false;
 
@@ -196,19 +199,22 @@ public class MonsterManager : Singleton<MonsterManager>
         int monsterPoolCount = data.Pool.Count;
         _monsterPool = data.Pool;
 
-        // 원에서 각 몬스터 간 각도 계산 (라디안)
+        // 원형 배치를 위한 각 몬스터 간의 각도 계산 (라디안 기준)
         float angleStep = Mathf.PI * 2 / monsterPoolCount;
 
-        for(int i = 0; i < monsterPoolCount; i++)
+        for (int i = 0; i < monsterPoolCount; i++)
         {
-            // 라디안 anlge
+            // 현재 몬스터의 각도 계산
             float angle = angleStep * i;
 
+            // 해당 각도를 기반으로 x, z 좌표 계산 (원형 위치)
             float x = Mathf.Cos(angle) * data.SpawnData.SpawnRange;
             float z = Mathf.Sin(angle) * data.SpawnData.SpawnRange;
 
+            // 플레이어를 기준으로 한 몬스터의 스폰 위치 설정
             Vector3 newPos = new Vector3(x, 0.0f, z) + _player.position;
 
+            // 비활성화된 몬스터만 위치를 설정하고 활성화
             if (!_monsterPool[i].activeSelf)
             {
                 _monsterPool[i].transform.position = newPos;
@@ -219,37 +225,46 @@ public class MonsterManager : Singleton<MonsterManager>
 
     private Vector3 GetRandomOffscreenWorldPos()
     {
+        // 메인 카메라
         Camera cam = Camera.main;
 
         // 화면 밖 4방향 중 랜덤 선택
-        int side = Random.Range(0, 4);
+        int side = Random.Range(0, _screenSideCount);
+        // 뷰포트 좌표와 월드 좌표 초기화
         Vector2 viewportPos = Vector2.zero;
         Vector3 worldPos = Vector3.zero;
-
+        // 선택된 방향에 따라 뷰포트 위치 계산
         switch ((ScreenSide)side)
         {
+            // 위
             case ScreenSide.Up:
                 viewportPos = new Vector2(Random.value, 1 + _offset); 
                 break; 
+            // 아래
             case ScreenSide.Down: 
                 viewportPos = new Vector2(Random.value, -_offset); 
-                break;    
+                break;
+            // 왼쪽
             case ScreenSide.Left: 
                 viewportPos = new Vector2(-_offset, Random.value); 
                 break;
+            // 오른쪽
             case ScreenSide.Right: 
                 viewportPos = new Vector2(1 + _offset, Random.value); 
                 break; 
         }
 
+        // 뷰포트 좌표를 기준으로 Ray 생성
         Ray ray = cam.ViewportPointToRay(new Vector3(viewportPos.x, viewportPos.y, 0));
         RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 1000.0f, _groundLayer))
+        
+        // 땅 레이어에 Ray를 쏴서 충돌 지점을 얻음
+        if (Physics.Raycast(ray, out hit, _maxDistance, _groundLayer))
         {
+            // 충돌 지점의 월드 좌표 저장
             worldPos = hit.point;
         }
-
+        // 최종 스폰 위치 반환
         return worldPos;
     }
     

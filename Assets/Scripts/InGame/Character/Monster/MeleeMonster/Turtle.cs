@@ -50,8 +50,10 @@ public class Turtle : Monster
         {
             // 돌진 시간 타이머 증가
             _rushTimer += Time.deltaTime;
-            // 플레이어 방향으로 몬스터를 이동시킴 (돌진)
-            transform.Translate(_directionToPlayer * _monsterStatus.Speed * _rushSpeedRate * Time.deltaTime, Space.World);
+            // 실제 이동 속도 계산
+            Vector3 moveVelocity = _directionToPlayer * _monsterStatus.Speed * _rushSpeedRate;
+            // 플레이어 방향으로 몬스터를 돌진
+            transform.Translate(moveVelocity * Time.deltaTime, Space.World);
             // 일정 시간 동안 돌진
             if (_rushTimer >= _rushDuration)
             {
@@ -100,6 +102,7 @@ public class Turtle : Monster
             PlayParticle();
         }
 
+        // 상태 전환
         _monsterCurrentState = MonsterStatus.Rush;
     }
 

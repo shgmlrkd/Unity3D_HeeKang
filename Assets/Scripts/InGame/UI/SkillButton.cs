@@ -25,9 +25,10 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler
         _skillLevel = _skillBtn[(int)SkillUI.Level].GetComponent<TextMeshProUGUI>();
     }
 
-    // 키 값에 따른 스킬 UI 세팅
+    
     public void SetSkillUI(int key, int levelKey)
     {
+        // 키 값에 따른 스킬 UI 세팅
         WeaponData data = WeaponDataManager.Instance.GetWeaponData(key);
         _skillIcon.sprite = Resources.Load<Sprite>(data.UIPath);
         _skillText.text = data.Description;

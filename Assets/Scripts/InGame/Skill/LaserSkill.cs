@@ -8,7 +8,7 @@ public class LaserSkill : Skill
     private HashSet<int> _selectedIndexes;
 
     private int _laserIndexKey = 325;
-
+    private float _effectSound = 0.7f;
     private void Awake()
     {
         _selectedIndexes = new HashSet<int>();
@@ -41,7 +41,8 @@ public class LaserSkill : Skill
     private void Fire()
     {
         // 플레이어 기준 범위 내의 몬스터들 Collider 찾기
-        Collider[] targetColliders = Physics.OverlapSphere(transform.position, _weaponData.AttackRange, LayerMask.GetMask("Monster"));
+        Collider[] targetColliders = 
+          Physics.OverlapSphere(transform.position, _weaponData.AttackRange, LayerMask.GetMask("Monster"));
 
         if (targetColliders.Length == 0)
             return;
@@ -59,13 +60,21 @@ public class LaserSkill : Skill
             _selectedIndexes.Add(randomIndex); // <- HashSet으로 중복 자동 제거
         }
 
-        // 선택된 몬스터들에게 발사
+        // 선택된 몬스터들에게 레이저 발사 및 피격 처리
         foreach (int index in _selectedIndexes)
         {
             Collider target = targetColliders[index];
+
+            // 대상 위치에 레이저 이펙트 생성
             WeaponManager.Instance.LaserFire(target.transform.position, _weaponData);
+
+            // 몬스터에게 데미지 적용
             target.gameObject.GetComponent<Monster>().MonsterGetDamage(_weaponData.AttackPower);
-            SoundManager.Instance.PlayFX(SoundKey.LaserHitSound, 0.7f / projectileCount);
+
+            // 피격 사운드 출력 (레이저 수에 따라 볼륨 조정)
+            SoundManager.Instance.PlayFX(SoundKey.LaserHitSound, _effectSound / projectileCount);
+
+            // 데미지 텍스트 출력
             DamageTextManager.Instance.ShowDamageText(target.transform, _weaponData.AttackPower, Color.white);
         }
     }
@@ -83,5 +92,11 @@ public class LaserSkill : Skill
             StopCoroutine(_fireCoroutine);
             _fireCoroutine = null;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _weaponData.AttackRange);
     }
 }

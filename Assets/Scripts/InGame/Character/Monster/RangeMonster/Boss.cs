@@ -159,7 +159,7 @@ public class Boss : FlashDamagedEffect
             if (_timer >= _introDuration)
             {
                 _timer = 0.0f;
-                _bossState = BossState.Attack;
+                _bossState = BossState.Trace;
             }
         }
     }
@@ -269,15 +269,17 @@ public class Boss : FlashDamagedEffect
 
             // 보스 fireball 가져오기
             List<GameObject> fireballs = WeaponManager.Instance.GetObjects("BossFireBall");
-
+            // 랜덤 공격
             int randomAttack = Random.Range(0, (int)BossAttack.BossAttackCount);
 
             switch((BossAttack)randomAttack)
             {
+                // 한번에 360도 발사
                 case BossAttack.BurstFireBall:
                     if (_attackRoutine == null)
                         _attackRoutine = StartCoroutine(FireballSequence(fireballs));
                     break;
+                // 순차적으로 회전하면서 발사
                 case BossAttack.SpinFireBall:
                     if (_attackRoutine == null)
                         _attackRoutine = StartCoroutine(SpinFireballSequence(fireballs));
@@ -312,19 +314,27 @@ public class Boss : FlashDamagedEffect
 
         foreach (GameObject fireball in fireBalls)
         {
+            // 비활성화된 파이어볼이면
             if (!fireball.activeSelf)
             {
+                // 현재 파이어볼이 발사될 각도 계산
                 float angle = offset + angleStep * fireBallCount;
 
-                float x = Mathf.Cos(angle);
-                float z = Mathf.Sin(angle);
+                // 각도를 기반으로 X,Z 방향 계산
+                float x = Mathf.Cos(angle); 
+                float z = Mathf.Sin(angle); 
 
+                // XZ 평면에서 방향 벡터 생성 및 정규화
                 Vector3 dir = new Vector3(x, 0.0f, z).normalized;
 
+                // 해당 방향으로 파이어볼 발사
                 _monsterFireBallSkill.Fire("BossFireBall", dir);
 
-                fireBallCount++;
-                if (fireBallCount >= _burstFireBallCount)
+                // 발사된 파이어볼 개수 증가
+                fireBallCount++; 
+
+                // 목표 개수만큼 발사했으면 종료
+                if (fireBallCount >= _burstFireBallCount) 
                     break;
             }
         }
@@ -336,7 +346,8 @@ public class Boss : FlashDamagedEffect
         {
             // 포효 전 fireball 발사
             _monsterAnimator.SetTrigger("BurstFire");
-            ShootFireballsInCircle(fireBalls);  // 포효 전 발사
+            // 360도 방향으로 파이어볼 발사
+            ShootFireballsInCircle(fireBalls);
             yield return null;
         }
         else
@@ -352,10 +363,18 @@ public class Boss : FlashDamagedEffect
                     yield break;
                 }
 
+                // 애니메이션 실행
                 _monsterAnimator.SetTrigger("BurstFire");
-                float offset = (i == 1) ? angleStep * 0.5f : 0.0f;
+
+                // angleStep의 절반 값 (짝수/홀수 배열 균형을 맞추기 위한 값)
+                float halfAngleStep = angleStep * 0.5f;
+
+                // i가 1일 때 각도를 반 칸 오프셋을 줘 방향 조정
+                float offset = (i == 1) ? halfAngleStep : 0.0f;
+                // 360도 방향으로 파이어볼 발사
                 ShootFireballsInCircle(fireBalls, offset);
-                yield return new WaitForSeconds(_shootFireInterval);  // 두 번째 발사 사이에 잠시 대기
+                // 두 번째 발사 사이에 잠시 대기
+                yield return new WaitForSeconds(_shootFireInterval);  
             }
         }
 
@@ -384,11 +403,14 @@ public class Boss : FlashDamagedEffect
                 // 플레이어 방향 기준 각도 계산
                 float startAngle = Mathf.Atan2(directionToPlayer.z, directionToPlayer.x); 
 
+                // 각 파이어볼의 각도 계산
                 float angle = startAngle + angleStep * fireBallCount;
-
+               
+                // 각도를 기반으로 X,Z 방향 계산
                 float x = Mathf.Cos(angle);
                 float z = Mathf.Sin(angle);
 
+                // XZ 평면에서 방향 벡터 생성 및 정규화
                 Vector3 dir = new Vector3(x, 0.0f, z).normalized;
 
                 // 지금 위치에서 targetRot까지 보간을 이용해서 회전
@@ -397,6 +419,7 @@ public class Boss : FlashDamagedEffect
 
                 float lerpTimer = 0.0f;
                 
+                // 보간을 이용해 자연스럽게 회전
                 while (lerpTimer < _one)
                 {
                     lerpTimer += Time.deltaTime / _spinRotDuration;
@@ -404,6 +427,7 @@ public class Boss : FlashDamagedEffect
                     yield return null;
                 }
 
+                // 파이어볼 발사
                 _monsterFireBallSkill.Fire("BossFireBall", dir);
                 SoundManager.Instance.PlayFX(SoundKey.BossAttackSound, 0.7f);
 
@@ -418,12 +442,19 @@ public class Boss : FlashDamagedEffect
 
                 if (_isRoar)
                 {
-                    // 좌우 방향 (±120도 회전)
+                    // 포효 상태일 경우: 총 3갈래로 파이어볼 발사 (정면 + 좌우)
+                    // 좌우 방향 각도 오프셋을 라디안으로 변환 (예: ±120도)
                     float angleOffset = _fireballAngleOffset * Mathf.Deg2Rad;
 
-                    Vector3 leftDir = new Vector3(Mathf.Cos(angle - angleOffset), 0.0f, Mathf.Sin(angle - angleOffset)).normalized;
-                    Vector3 rightDir = new Vector3(Mathf.Cos(angle + angleOffset), 0.0f, Mathf.Sin(angle + angleOffset)).normalized;
+                    // 정면 기준 각도에서 왼쪽,오른쪽 방향 계산
+                    float leftAngle = angle - angleOffset;
+                    float rightAngle = angle + angleOffset;
 
+                    // 각도를 기준으로 방향 벡터 계산
+                    Vector3 leftDir = new Vector3(Mathf.Cos(leftAngle), 0.0f, Mathf.Sin(leftAngle)).normalized;
+                    Vector3 rightDir = new Vector3(Mathf.Cos(rightAngle), 0.0f, Mathf.Sin(rightAngle)).normalized;
+
+                    // 좌우 방향으로 파이어볼 2발 추가 발사
                     _monsterFireBallSkill.Fire("BossFireBall", leftDir);
                     _monsterFireBallSkill.Fire("BossFireBall", rightDir);
                 }
