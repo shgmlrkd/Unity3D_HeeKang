@@ -18,7 +18,7 @@ public class Axe : Weapon
         float x = Mathf.Cos(_angle) * _weaponRange;
         float z = Mathf.Sin(_angle) * _weaponRange;
 
-        Vector3 newPosition = new Vector3(x, 0, z) + center;
+        Vector3 newPosition = new Vector3(x, 0.0f, z) + center;
         transform.position = newPosition;
 
         // (회전)자전 속도

@@ -175,5 +175,6 @@ public class FireBall : ThrowWeapon
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _weaponRange);
+        Gizmos.DrawWireSphere(transform.position, 0.5f);
     }
 }

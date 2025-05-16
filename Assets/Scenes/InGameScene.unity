@@ -3362,7 +3362,7 @@ MonoBehaviour:
   - name: TurtleShell
     size: 30
   - name: ChestMonster
-    size: 36
+    size: 30
   - name: Lich
     size: 30
   - name: Boss

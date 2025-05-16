@@ -35,11 +35,14 @@ public class AxeSkill : Skill
     {
         ClearSpinAxe();
 
-        Vector3 center = transform.position; // 중심은 플레이어 위치
+        // 플레이어 위치를 중심으로 설정
+        Vector3 center = transform.position;
         center.y = 0.0f;
 
-        float radius = _weaponData.AttackRange; // 도는 반지름
-        float angleStep = Mathf.PI * 2 / _weaponData.ProjectileCount; // 라디안 값
+        // 회전 반경 설정
+        float distance = _weaponData.AttackRange;
+        // 각도 간격 계산
+        float angleStep = Mathf.PI * 2 / _weaponData.ProjectileCount;
 
         for (int i = 0; i < _weaponData.ProjectileCount; i++)
         {
@@ -47,11 +50,11 @@ public class AxeSkill : Skill
             float angle = angleStep * i;
 
             // 각도를 기준으로 위치 계산
-            float x = Mathf.Cos(angle) * radius;
-            float z = Mathf.Sin(angle) * radius;
-            // 스폰 위치
+            float x = Mathf.Cos(angle) * distance;
+            float z = Mathf.Sin(angle) * distance;
+            // 회전 위치 계산
             Vector3 spawnPos = new Vector3(x, 0.0f, z) + center;
-            // 플레이어 기준으로 스폰 후 움직이기 때문에 transform도 전달
+            // 플레이어 중심으로 회전시키기 위해 transform 전달
             WeaponManager.Instance.StartAxeSpin(transform, spawnPos, _weaponData);
         }
 
@@ -71,21 +74,22 @@ public class AxeSkill : Skill
     {
         while (true)
         {
+            // 도끼들을 활성화하고 페이드 인 연출 시작
             foreach (GameObject axe in axes)
             {
                 axe.SetActive(true);
-                StartCoroutine(FadeAxe(axe, _minAlphaValue, _maxAlphaValue, _fadeLerpTime)); // 0.5초 동안 페이드 인
+                StartCoroutine(FadeAxe(axe, _minAlphaValue, _maxAlphaValue, _fadeLerpTime));
             }
             yield return new WaitForSeconds(lifeTime);
             
+            // 도끼들을 페이드 아웃
             foreach (GameObject axe in axes)
             {
-                StartCoroutine(FadeAxe(axe, _maxAlphaValue, _minAlphaValue, _fadeLerpTime)); // 0.5초 동안 페이드 아웃
+                StartCoroutine(FadeAxe(axe, _maxAlphaValue, _minAlphaValue, _fadeLerpTime));
             }
-
             yield return new WaitForSeconds(_fadeLerpTime);
 
-
+            // 일정 시간 동안 비활성화 처리
             foreach (GameObject axe in axes)
             {
                 axe.SetActive(false);
@@ -108,18 +112,21 @@ public class AxeSkill : Skill
             materials.Add(renderer.material); // 각각 인스턴스 확보
         }
 
-        // 일정 시간동안 보간으로 페이드 인 or 페이드 아웃
-        float elapsed = 0f;
+        // 일정 시간 동안 알파 값을 선형 보간해 페이드 인/아웃 처리
+        float elapsed = 0.0f;
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             float t = elapsed / duration;
+
             foreach (Material mat in materials)
             {
                 Color color = mat.color;
-                color.a = Mathf.Lerp(fromAlpha, toAlpha, t);
+                // 알파 값을 보간
+                color.a = Mathf.Lerp(fromAlpha, toAlpha, t); 
                 mat.color = color;
             }
+
             yield return null;
         }
 

@@ -42,7 +42,7 @@ public abstract class Skill : MonoBehaviour
 
     public virtual void LevelUp()
     {
-        _level++;
+        _level = 2;
 
         if (_level > 4)
             _level = 4;

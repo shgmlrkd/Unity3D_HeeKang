@@ -43,8 +43,7 @@ public class PlayerSkill : MonoBehaviour
                 _skillLevel.Add(0);
             }
 
-            _skills[5].enabled = true;
-            _skills[5].LevelUp();
+            _skills[0].enabled = true;
             //_skillLevel[GameManager.Instance.SkillIndex]++;
         }
     }

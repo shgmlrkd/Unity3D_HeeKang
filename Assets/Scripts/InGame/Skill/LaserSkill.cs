@@ -96,7 +96,7 @@ public class LaserSkill : Skill
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _weaponData.AttackRange);
+        /*Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _weaponData.AttackRange);*/
     }
 }

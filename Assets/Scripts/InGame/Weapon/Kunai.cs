@@ -30,13 +30,16 @@ public class Kunai : ThrowWeapon
     {
         base.OnTriggerEnter(other);
 
+        // 충돌체가 몬스터라면
         if(other.CompareTag("Monster"))
         {
+            // 현재 관통 횟수가 최대 관통 횟수라면 비활성화
             if ( _pierce == _weaponPierce)
             {
                 gameObject.SetActive(false);
             }
 
+            // 관통 횟수 ++
             _pierce++;
         }
 

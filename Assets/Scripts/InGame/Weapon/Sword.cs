@@ -139,18 +139,21 @@ public class Sword : ThrowWeapon
     private IEnumerator GrowSword()
     {
         float timer = 0.0f;
-        float growDuration = _weaponLifeTimer * 0.5f; // 검이 커지는 데 걸리는 시간
-
+        // 검이 커지는 데 걸리는 시간 (무기 수명 절반)
+        float growDuration = _weaponLifeTimer * 0.5f;
+        // 현재 크기 저장
         Vector3 startScale = transform.localScale;
-
+        // 일정 시간 동안 크기를 선형 보간하여 키움
         while (timer < growDuration)
         {
             timer += Time.deltaTime;
-            float t = timer / growDuration; // 0 ~ 1로 변함
+            // 0 ~ 1로 변함
+            float t = timer / growDuration; 
+            // 목표 크기까지 점점 커짐
             transform.localScale = Vector3.Lerp(startScale, Vector3.one * _weaponRange, t);
             yield return null;
         }
-
+        // 최종 크기 고정
         transform.localScale = Vector3.one * _weaponRange;
     }
 
